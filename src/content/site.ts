@@ -6,7 +6,7 @@ export const site = {
   initials: "LH",
   email: "lhernandez025cz@gmail.com",
   location: { city: "Querétaro", country: "MX", timeZone: "America/Mexico_City" },
-  url: "https://luishernandez.dev",
+  url: "https://portfolio-luis-eduardo-hernandez-cruz-s-projects.vercel.app",
   links: {
     github: "https://github.com/LittlePitza",
     linkedin: "https://www.linkedin.com/in/lhernandez25",
