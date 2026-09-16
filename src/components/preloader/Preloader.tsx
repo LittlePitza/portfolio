@@ -60,6 +60,12 @@ export function Preloader({ label }: { label: string }) {
 
   return (
     <div ref={root} className="fixed inset-0 z-50 overflow-hidden bg-bg" aria-hidden>
+      {/* Runs while the HTML is parsed: if this session already saw the opening, hide the curtain before the first paint. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `try{if(sessionStorage.getItem(${JSON.stringify(SESSION_KEY)})==="1"){document.currentScript.parentElement.style.display="none"}}catch(e){}`,
+        }}
+      />
       <div data-group className="absolute inset-y-0 left-0 flex" style={{ width: `calc(100vw + ${CHARACTER_WIDTH}px)` }}>
         <div className="relative flex shrink-0 items-center justify-end" style={{ width: CHARACTER_WIDTH }}>
           <div data-char className="w-[180px] translate-x-3 md:w-[200px]">

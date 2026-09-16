@@ -40,9 +40,9 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       gsap
         .timeline()
         .set(overlay.current, { pointerEvents: "auto" })
-        .fromTo(overlay.current, { yPercent: 100 }, { yPercent: 0, duration: 0.65, ease: "expo.inOut" })
-        .fromTo("[data-transition-label]", { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: "expo.out" }, "-=0.3")
-        .call(() => router.push(href), [], "-=0.15");
+        .fromTo(overlay.current, { yPercent: 100 }, { yPercent: 0, duration: 0.5, ease: "expo.inOut" })
+        .fromTo("[data-transition-label]", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out" }, "-=0.25")
+        .call(() => router.push(href), [], "-=0.1");
     },
     [pathname, router],
   );
@@ -52,10 +52,11 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     if (!pending.current || !overlay.current) return;
     pending.current = null;
     scrollTo(0, { immediate: true });
+    // Label and curtain leave together, so the screen is never plain black.
     gsap
-      .timeline({ delay: 0.2 })
-      .to("[data-transition-label]", { yPercent: -110, duration: 0.5, ease: "expo.in" })
-      .to(overlay.current, { yPercent: -100, duration: 0.7, ease: "expo.inOut" }, "-=0.25")
+      .timeline({ delay: 0.05 })
+      .to("[data-transition-label]", { yPercent: -110, duration: 0.45, ease: "expo.in" })
+      .to(overlay.current, { yPercent: -100, duration: 0.55, ease: "expo.inOut" }, "-=0.4")
       .set(overlay.current, { pointerEvents: "none", yPercent: 100 });
   }, [pathname]);
 
