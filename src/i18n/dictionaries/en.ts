@@ -24,6 +24,7 @@ const en = {
     stamp: "Querétaro · UTC-6",
   },
   tab: ["Come back →", "The systems are still running."] as [string, string],
+  update: { message: "A new version of this site is live", action: "Refresh" },
   ticker: ["Selected work", "06 projects", "1,050 automated tests", "93% response SLA", "100% availability", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
   work: {
     selected: "Selected work",

@@ -120,6 +120,25 @@ Animation is a client concern and is isolated to four components.
 - `Reveal`, `CountUp` and `Marquee` are the small reusable pieces behind
   scroll-in sections, counting figures and the ticker strips.
 
+## Always on the latest version
+
+Pages are served with `max-age=0, must-revalidate` and Vercel keeps a separate
+cache per deployment, so a fresh load is always current. What went stale was
+an already open tab: Vercel's skew protection keeps serving a tab from the
+deployment it was loaded from, for up to twelve hours, so navigating inside it
+showed the old site.
+
+- `next.config.ts` inlines the deployment id into the build, and
+  `/api/version` answers, uncached, which deployment is live. That request
+  carries no deployment header, so skew protection does not pin it.
+- `src/lib/version.ts` compares the two, at most once every fifteen seconds.
+- `UpdateWatcher` reloads when the visitor returns to the tab, focuses the
+  window or restores the page from the back/forward cache and a newer
+  deployment is live; if they stay on the page it offers a one-tap refresh.
+- `PageTransition` asks while its panel comes up and, if the site has moved
+  on, loads the destination as a full page instead of a client navigation.
+  The language switch does the same.
+
 ## Chrome
 
 `Frame` is fixed, pointer-events-none, and painted with

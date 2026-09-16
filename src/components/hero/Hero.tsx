@@ -46,9 +46,10 @@ export function Hero({ eyebrow, tagline, sub, ctaWork, ctaContact, stamp, contac
   return (
     <section ref={root} className="relative flex min-h-svh flex-col justify-center px-4 pb-24 pt-32 md:px-6" aria-label={site.fullName}>
       <div className="mx-auto flex w-full max-w-[1600px] items-end justify-center gap-2 md:gap-6">
-        <h1 className="display text-accent" style={{ fontSize: "clamp(4.5rem, 19vw, 21rem)" }}>
+        {/* Sized to leave room for the character beside it, so "HERNÁNDEZ" never breaks onto two lines. */}
+        <h1 className="display text-accent" style={{ fontSize: "clamp(4.5rem, min(19vw, calc(20.7vw - 20px)), 21rem)" }}>
           {site.heroName.map((line) => (
-            <span key={line} className="-mt-[0.14em] block overflow-hidden pb-[0.06em] pt-[0.14em]">
+            <span key={line} className="-mt-[0.14em] block overflow-hidden whitespace-nowrap pb-[0.06em] pt-[0.14em]">
               <span data-line className="block">
                 {Array.from(line).map((ch, i) => (
                   <span key={i} className="inline-block transition-transform duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-[0.06em] hover:text-ink">

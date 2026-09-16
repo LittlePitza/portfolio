@@ -6,6 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { scrollTo } from "@/lib/scroll";
 import { markNavigated } from "@/lib/navigation";
+import { checkForUpdate, isStale } from "@/lib/version";
 import { Character } from "@/components/preloader/Character";
 
 interface Ctx {
@@ -108,6 +109,20 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
     }
   }, [paint]);
 
+  /** Navigate inside the app, unless a newer deployment is live: then load it for real. */
+  const navigate = useCallback(
+    async (href: string, update: Promise<boolean>) => {
+      const newer = await Promise.race([update, new Promise<boolean>((resolve) => window.setTimeout(() => resolve(isStale()), 700))]);
+      if (newer) {
+        window.clearTimeout(safety.current);
+        window.location.assign(new URL(href, window.location.origin));
+        return;
+      }
+      router.push(href);
+    },
+    [router],
+  );
+
   const go = useCallback(
     (href: string, text: string) => {
       const el = panel.current;
@@ -115,9 +130,12 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
       if (pending.current) return;
       if (path === pathname || !el || prefersReducedMotion()) {
         markNavigated();
-        router.push(href);
+        if (isStale()) window.location.assign(new URL(href, window.location.origin));
+        else router.push(href);
         return;
       }
+      // Ask the live site for its version while the panel comes up.
+      const update = checkForUpdate();
 
       markNavigated();
       pending.current = href;
@@ -163,7 +181,7 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
         .to(sel("[data-t-label]"), { yPercent: 0, duration: 0.55, ease: "expo.out" }, 0.3)
         .to(sel("[data-t-progress]"), { y: 0, autoAlpha: 1, duration: 0.4, ease: "back.out(2)" }, 0.36)
         .to(progress.current, { value: 0.6, duration: 0.45, ease: "power1.out", onUpdate: paint }, 0.4)
-        .call(() => router.push(href), [], 0.42);
+        .call(() => void navigate(href, update), [], 0.42);
       if (main) tl.to(main, { opacity: 0.3, duration: 0.5, ease: "power2.out" }, 0);
 
       window.clearTimeout(safety.current);
@@ -172,7 +190,7 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
         if (entered.current) reveal();
       }, SAFETY_MS);
     },
-    [domain, pathname, paint, reveal, router],
+    [domain, navigate, pathname, paint, reveal, router],
   );
 
   // A route change finished rendering.

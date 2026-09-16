@@ -11,6 +11,7 @@ import { Footer } from "@/components/chrome/Footer";
 import { TabTitle } from "@/components/chrome/TabTitle";
 import { Cursor } from "@/components/ui/Cursor";
 import { PageTransition } from "@/components/chrome/PageTransition";
+import { UpdateWatcher } from "@/components/chrome/UpdateWatcher";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -63,6 +64,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
         </SmoothScroll>
         <Cursor />
         <TabTitle messages={t.tab} />
+        <UpdateWatcher message={t.update.message} action={t.update.action} />
       </body>
     </html>
   );

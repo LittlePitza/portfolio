@@ -26,6 +26,7 @@ const es: typeof en = {
     stamp: "Querétaro · UTC-6",
   },
   tab: ["Vuelve →", "Los sistemas siguen corriendo."],
+  update: { message: "Hay una versión nueva del sitio", action: "Actualizar" },
   ticker: ["Trabajo seleccionado", "06 proyectos", "1,050 pruebas automatizadas", "93% de SLA en respuesta", "100% de disponibilidad", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
   work: {
     selected: "Trabajo seleccionado",
