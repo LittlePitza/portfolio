@@ -40,6 +40,8 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
           items={headItems.map((h) => ({ icon: h.icon, title: h.title[locale], story: h.story[locale], signature: h.signature[locale] }))}
           question={t.about.headQuestion}
           hint={t.about.headHint}
+          hintOpen={t.about.headHintOpen}
+          openLabel={t.about.headOpen}
           close={t.about.close}
           left={{ value: "05", label: t.about.headLeft }}
           right={{ value: "36", label: t.about.headRight }}
