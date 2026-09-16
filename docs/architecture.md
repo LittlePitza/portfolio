@@ -101,7 +101,7 @@ Animation is a client concern and is isolated to four components.
 - `ContactOverlay` listens for a `contact:open` event on `window`, so the
   menu, the hero button or anything else can open the two floating cards
   without sharing state. The `/contact` route still exists for direct links.
-- `InsideHead` on About: hover or tap lifts the cap and floats the objects
+- `InsideHead` on About: hover or tap lifts the top of the head and floats the objects
   from `src/content/head.ts` out of the head; each one opens a tilted card
   with its story. Content is data, so adding an object is one entry.
 - `TabTitle` alternates two lines in the document title while the tab is

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { Icon } from "@/components/ui/Icons";
 import type { HeadIcon } from "@/content/head";
+import { Head } from "./Head";
 
 export interface HeadItemView {
   icon: HeadIcon;
@@ -23,20 +24,20 @@ interface Props {
 
 /** Where each object settles once it has floated out, relative to the head's centre. */
 const SPOTS = [
-  { x: -160, y: -150, r: -14 },
-  { x: -50, y: -215, r: 6 },
-  { x: 80, y: -205, r: 12 },
-  { x: 190, y: -120, r: 18 },
-  { x: -215, y: -40, r: -22 },
-  { x: 175, y: -10, r: 9 },
-  { x: -100, y: -90, r: -6 },
-  { x: 40, y: -120, r: 4 },
+  { x: -190, y: -150, r: -16 },
+  { x: -70, y: -250, r: 8 },
+  { x: 70, y: -270, r: -6 },
+  { x: 200, y: -170, r: 18 },
+  { x: -230, y: -20, r: -24 },
+  { x: 225, y: -40, r: 12 },
+  { x: -120, y: -60, r: -8 },
+  { x: 120, y: -90, r: 6 },
 ];
 
 /**
- * A big head with a cap. Hover (or tap) and the cap lifts while the objects
- * that occupy his mind float out. Click one and it tells its own story on a
- * tilted card. Two giant figures flank the scene.
+ * A big illustrated head. Hover (or tap) and the top of the skull lifts with
+ * the cap while the objects that occupy his mind float out and the face
+ * lights up. Click one and it tells its own story on a tilted card.
  */
 export function InsideHead({ items, question, hint, close, left, right }: Props) {
   const root = useRef<HTMLDivElement>(null);
@@ -46,27 +47,44 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
   useGSAP(
     () => {
       const reduce = prefersReducedMotion();
-      const cap = "[data-cap]";
+      const d = (n: number) => (reduce ? 0 : n);
       const objects = gsap.utils.toArray<HTMLElement>("[data-object]");
+      const face = { calm: "[data-eyes-calm], [data-mouth-calm]", lit: "[data-eyes-spark], [data-mouth-grin], [data-inside], [data-lines], [data-underside]" };
+
       if (open) {
-        gsap.to(cap, { y: -56, rotate: -10, x: -12, duration: reduce ? 0 : 0.7, ease: "back.out(1.8)", transformOrigin: "20% 100%" });
+        gsap.to("[data-lid]", { y: -118, x: -16, rotate: -12, duration: d(0.8), ease: "back.out(1.6)", transformOrigin: "30% 100%" });
+        gsap.to(face.calm, { autoAlpha: 0, duration: d(0.2) });
+        gsap.to(face.lit, { autoAlpha: 1, duration: d(0.35), delay: d(0.2) });
+        gsap.to("[data-brows]", { y: -10, duration: d(0.5), ease: "back.out(2)", delay: d(0.15) });
         objects.forEach((el, i) => {
           const spot = SPOTS[i % SPOTS.length]!;
           gsap.killTweensOf(el);
           gsap.fromTo(
             el,
-            { x: 0, y: 0, scale: 0.2, rotate: 0, autoAlpha: 0 },
-            { x: spot.x, y: spot.y, scale: 1, rotate: spot.r, autoAlpha: 1, duration: reduce ? 0 : 0.9, delay: reduce ? 0 : 0.05 * i, ease: "back.out(1.4)",
+            { x: 0, y: -40, scale: 0.2, rotate: 0, autoAlpha: 0 },
+            {
+              x: spot.x,
+              y: spot.y,
+              scale: 1,
+              rotate: spot.r,
+              autoAlpha: 1,
+              duration: d(1),
+              delay: d(0.12 + 0.06 * i),
+              ease: "back.out(1.5)",
               onComplete: () => {
-                if (!reduce) gsap.to(el, { y: spot.y - 10, duration: 1.6 + (i % 3) * 0.3, ease: "sine.inOut", yoyo: true, repeat: -1 });
-              } },
+                if (!reduce) gsap.to(el, { y: spot.y - 12, rotate: spot.r + 3, duration: 1.8 + (i % 3) * 0.35, ease: "sine.inOut", yoyo: true, repeat: -1 });
+              },
+            },
           );
         });
       } else {
-        gsap.to(cap, { y: 0, rotate: 0, x: 0, duration: reduce ? 0 : 0.5, ease: "power3.inOut", transformOrigin: "20% 100%" });
+        gsap.to("[data-lid]", { y: 0, x: 0, rotate: 0, duration: d(0.55), ease: "power3.inOut", transformOrigin: "30% 100%" });
+        gsap.to(face.lit, { autoAlpha: 0, duration: d(0.2) });
+        gsap.to(face.calm, { autoAlpha: 1, duration: d(0.3), delay: d(0.2) });
+        gsap.to("[data-brows]", { y: 0, duration: d(0.4), ease: "power3.inOut" });
         objects.forEach((el) => {
           gsap.killTweensOf(el);
-          gsap.to(el, { x: 0, y: 0, scale: 0.2, autoAlpha: 0, duration: reduce ? 0 : 0.4, ease: "power3.in" });
+          gsap.to(el, { x: 0, y: -40, scale: 0.2, autoAlpha: 0, duration: d(0.4), ease: "power3.in" });
         });
       }
     },
@@ -83,10 +101,10 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
   const current = card !== null ? items[card] : null;
 
   return (
-    <div ref={root} className="relative grid min-h-[80svh] grid-cols-1 items-center gap-8 overflow-hidden px-4 py-16 md:grid-cols-[1fr_auto_1fr] md:px-6">
+    <div ref={root} className="relative grid min-h-[90svh] grid-cols-1 items-center gap-8 overflow-hidden px-4 py-20 md:grid-cols-[1fr_auto_1fr] md:px-6 md:py-28">
       {/* Left figure */}
-      <div className="hidden md:block">
-        <p className="display outline text-[15vw] leading-[0.8]">{left.value}</p>
+      <div className="hidden md:block md:self-end">
+        <p className="display outline text-[14vw] leading-[0.8]">{left.value}</p>
         <p className="label mt-3 text-muted">{left.label}</p>
       </div>
 
@@ -100,7 +118,7 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
       >
         <button
           type="button"
-          className="brutal absolute -top-20 left-1/2 z-10 w-max max-w-[17rem] -translate-x-1/2 -rotate-2 bg-ink px-5 py-4 text-left text-bg lg:-left-72 lg:top-10 lg:translate-x-0"
+          className="brutal absolute -top-24 left-1/2 z-10 w-max max-w-[17rem] -translate-x-1/2 -rotate-2 bg-ink px-5 py-4 text-left text-bg lg:-left-72 lg:-top-6 lg:translate-x-0"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           data-cursor="?"
@@ -109,8 +127,8 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
           <span className="label mt-2 block text-bg/60">{hint}</span>
         </button>
 
-        <div className="relative mt-16 h-[320px] w-[280px] md:mt-0">
-          {/* Objects, start hidden at the centre of the head */}
+        <div className="relative mt-24 h-[380px] w-[310px] md:mt-8 md:h-[480px] md:w-[390px]">
+          {/* Objects, start hidden inside the head */}
           {items.map((item, i) => (
             <button
               key={item.title}
@@ -119,47 +137,20 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
               data-cursor={item.title}
               onClick={() => setCard(i)}
               aria-label={item.title}
-              className="brutal absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-paper text-ink opacity-0 transition-colors hover:bg-accent"
+              className="absolute left-1/2 top-1/2 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl border-[3px] border-ink bg-paper text-ink opacity-0 shadow-[5px_5px_0_var(--ink)] transition-colors hover:bg-accent"
               style={{ zIndex: 5 }}
             >
-              <Icon name={item.icon} className="h-9 w-9" />
+              <Icon name={item.icon} className="h-11 w-11 [&_*]:stroke-[3]" />
             </button>
           ))}
 
-          {/* Head */}
-          <svg viewBox="0 0 280 320" className="absolute inset-0 h-full w-full" fill="none" stroke="var(--ink)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            {/* neck and shoulders */}
-            <path d="M110 250v30M170 250v30" />
-            <path d="M40 320c10-30 40-40 100-40s90 10 100 40" fill="var(--accent)" />
-            {/* face */}
-            <path d="M70 150c0-70 30-100 70-100s70 30 70 100c0 55-30 100-70 100s-70-45-70-100z" fill="var(--bg)" />
-            {/* ears */}
-            <path d="M70 160c-12-4-18 6-14 16s12 12 18 8M210 160c12-4 18 6 14 16s-12 12-18 8" fill="var(--bg)" />
-            {/* glasses */}
-            <rect x="88" y="150" width="40" height="30" rx="4" />
-            <rect x="152" y="150" width="40" height="30" rx="4" />
-            <path d="M128 162h24M70 160l18-6M210 160l-18-6" />
-            <circle cx="108" cy="165" r="3" fill="var(--ink)" />
-            <circle cx="172" cy="165" r="3" fill="var(--ink)" />
-            {/* nose and mouth */}
-            <path d="M140 172v18l-8 4" />
-            <path d="M118 212c10 10 34 10 44 0" />
-            {/* hair sides */}
-            <path d="M70 140c0-20 5-40 20-52M210 140c0-20-5-40-20-52" strokeWidth="6" />
-            {/* cap, its own group so it can lift */}
-            <g data-cap>
-              <path d="M62 110c0-45 35-78 78-78s78 33 78 78v6H62z" fill="var(--ink)" />
-              <path d="M56 116h180l30 12H40z" fill="var(--ink)" />
-              <path d="M140 32v84" stroke="var(--bg)" strokeWidth="3" />
-              <circle cx="140" cy="30" r="6" fill="var(--accent)" stroke="none" />
-            </g>
-          </svg>
+          <Head className="absolute inset-0 h-full w-full" />
         </div>
       </div>
 
       {/* Right figure */}
-      <div className="hidden text-right md:block">
-        <p className="display outline text-[15vw] leading-[0.8]">{right.value}</p>
+      <div className="hidden text-right md:block md:self-end">
+        <p className="display outline text-[14vw] leading-[0.8]">{right.value}</p>
         <p className="label mt-3 text-muted">{right.label}</p>
       </div>
 
@@ -181,8 +172,8 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
           <button type="button" className="absolute inset-0 bg-bg/70" aria-label={close} onClick={() => setCard(null)} />
           <div className="brutal relative w-full max-w-md -rotate-2 bg-paper p-6 md:p-8">
             <div className="flex items-start justify-between gap-4">
-              <div className="brutal flex h-20 w-20 shrink-0 items-center justify-center bg-accent">
-                <Icon name={current.icon} className="h-12 w-12" />
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-[3px] border-ink bg-accent shadow-[5px_5px_0_var(--ink)]">
+                <Icon name={current.icon} className="h-12 w-12 [&_*]:stroke-[3]" />
               </div>
               <button type="button" className="btn btn-square" onClick={() => setCard(null)} aria-label={close}>
                 ×
