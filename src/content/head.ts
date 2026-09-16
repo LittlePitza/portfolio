@@ -66,8 +66,8 @@ export const headItems: HeadItem[] = [
     icon: "headphones",
     title: { en: "Music", es: "Música" },
     story: {
-      en: "On for every long debugging session and every late migration. The playlist changes with the task; the volume does not.",
-      es: "Puesta en cada sesión larga de depuración y cada migración nocturna. La playlist cambia con la tarea; el volumen no.",
+      en: "On for every long debugging session and every late migration. The playlist jumps from bbno$ to Siddhartha to Imagine Dragons without warning; the volume stays where it is.",
+      es: "Puesta en cada sesión larga de depuración y cada migración nocturna. La playlist salta de bbno$ a Siddhartha y a Imagine Dragons sin avisar; el volumen se queda donde está.",
     },
     signature: { en: "The headphones, always nearby", es: "Los audífonos, siempre cerca" },
   },
@@ -75,8 +75,8 @@ export const headItems: HeadItem[] = [
     icon: "gamepad",
     title: { en: "Video games", es: "Videojuegos" },
     story: {
-      en: "The other way he unwinds. He reads a new game's systems with the same patience he reads a contract, and enjoys the first hours, when everything is still to be figured out, the most.",
-      es: "Su otra forma de desconectar. Lee los sistemas de un juego nuevo con la misma paciencia con la que lee un contrato, y disfruta más las primeras horas, cuando todo está por descubrirse.",
+      en: "The other way he unwinds. Life is Strange for the story, Cyberpunk 2077 for the city, Fallout for the wasteland. He reads a new game's systems with the same patience he reads a contract.",
+      es: "Su otra forma de desconectar. Life is Strange por la historia, Cyberpunk 2077 por la ciudad, Fallout por el yermo. Lee los sistemas de un juego nuevo con la misma paciencia con la que lee un contrato.",
     },
     signature: { en: "The controller, charged", es: "El control, cargado" },
   },
