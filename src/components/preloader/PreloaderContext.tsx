@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 interface Ctx {
   done: boolean;
@@ -11,7 +11,9 @@ const PreloaderContext = createContext<Ctx>({ done: true, finish: () => {} });
 
 export function PreloaderProvider({ children }: { children: React.ReactNode }) {
   const [done, setDone] = useState(false);
-  return <PreloaderContext.Provider value={{ done, finish: () => setDone(true) }}>{children}</PreloaderContext.Provider>;
+  const finish = useCallback(() => setDone(true), []);
+  const value = useMemo(() => ({ done, finish }), [done, finish]);
+  return <PreloaderContext.Provider value={value}>{children}</PreloaderContext.Provider>;
 }
 
 export function usePreloader() {

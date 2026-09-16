@@ -4,7 +4,7 @@
   --bg: #ecece9;
   --paper: #f6f6f3;
   --ink: #141414;
-  --muted: rgba(20, 20, 20, 0.52);
+  --muted: #65655f;
   --line: rgba(20, 20, 20, 0.14);
   --accent: #ff4a1c;
 }
@@ -26,6 +26,7 @@ html {
   background: var(--bg);
   color: var(--ink);
   scroll-behavior: auto;
+  scrollbar-gutter: stable;
 }
 
 html.is-loading {
@@ -43,7 +44,14 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
+
+button, summary, a { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), summary { cursor: pointer; }
+button, a { touch-action: manipulation; }
+main:focus, #work:focus { outline: none; }
+section[id], #work { scroll-margin-top: 7rem; }
 
 ::selection {
   background: var(--accent);
@@ -249,9 +257,8 @@ body {
     filter 0.35s var(--ease-out-expo),
     opacity 0.35s var(--ease-out-expo);
 }
-.nav:hover .nav-item:not(:hover) {
-  filter: blur(2.5px);
-  opacity: 0.45;
+.nav:hover .nav-item:not(:hover):not(:focus-visible) {
+  opacity: 0.7;
 }
 .nav-arrow {
   display: inline-block;
@@ -264,6 +271,7 @@ body {
     margin 0.35s var(--ease-out-expo);
 }
 .nav-item:hover .nav-arrow,
+.nav-item:focus-visible .nav-arrow,
 .nav-item[aria-current="page"] .nav-arrow {
   max-width: 1.4em;
   opacity: 1;

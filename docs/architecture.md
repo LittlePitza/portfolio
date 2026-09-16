@@ -36,7 +36,7 @@ flowchart LR
   subgraph Motion["client components"]
     PL[Preloader]:::client
     HE[Hero]:::client
-    WC[WorkCarousel]:::client
+    WC[DiscStage · WorkCarousel]:::client
     SS[SmoothScroll · Lenis]:::client
   end
 
@@ -84,11 +84,14 @@ Animation is a client concern and is isolated to four components.
 - `Preloader` runs a GSAP timeline once per session: the character walks in,
   strains, and pushes the black curtain off-screen. It flips a context flag
   that `Hero` waits for before revealing the name.
-- `WorkCarousel` pins a full-viewport stage and maps scroll progress to an
-  index with snapping. A second effect animates covers, metadata and the
-  vertical wheel whenever that index changes. Below `lg` and under
-  `prefers-reduced-motion` the same slides render as a plain list; the stage
-  is never mounted.
+- `DiscStage` is the home. It pins a full-viewport stage and turns scroll
+  progress into a position on a wheel whose hub sits far off the bottom-right
+  corner, so each project's cover rolls in from the bottom left, settles in
+  front and rolls out to the top right. Every frame places the covers from
+  that one number; a change of project swaps the details, rolls the names and
+  ticks the counter. Below `lg` and under `prefers-reduced-motion` it renders
+  a simple stack instead. `WorkCarousel` is the long catalogue on Playground,
+  and `slides.ts` feeds both from the same content.
 - All GSAP work goes through `useGSAP` with a scope, so selectors stay local
   and tweens are reverted on unmount.
 

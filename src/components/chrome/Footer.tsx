@@ -8,7 +8,7 @@ import { Mark } from "@/components/ui/Mark";
 export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
   return (
     <footer className="bg-ink text-bg">
-      <Marquee items={t.ticker} className="label border-y-2 border-ink bg-accent py-3 text-sm text-ink" duration={35} />
+      <Marquee items={t.ticker} lang={locale} className="label border-y-2 border-ink bg-accent py-3 text-sm text-ink" duration={35} />
 
       <div className="grid gap-12 px-4 py-16 md:grid-cols-12 md:px-6 md:py-24">
         <div className="md:col-span-7">

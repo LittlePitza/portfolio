@@ -39,9 +39,9 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Pr
     creator: site.fullName,
     alternates: {
       canonical: `/${locale}`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
+      languages: { ...Object.fromEntries(locales.map((l) => [l, `/${l}`])), "x-default": "/en" },
     },
-    openGraph: { type: "website", locale, siteName: site.name, title: t.meta.title, description: t.meta.description, url: `/${locale}` },
+    openGraph: { type: "website", locale: locale === "es" ? "es_MX" : "en_US", alternateLocale: [locale === "es" ? "en_US" : "es_MX"], siteName: site.name, title: t.meta.title, description: t.meta.description, url: `/${locale}` },
     twitter: { card: "summary_large_image", title: t.meta.title, description: t.meta.description },
     robots: { index: true, follow: true },
   };
@@ -58,7 +58,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
         <SmoothScroll>
           <PageTransition domain={site.domain}>
             <Frame locale={locale} t={t} />
-            <main className="flex-1">{children}</main>
+            <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
             <Footer locale={locale} t={t} />
           </PageTransition>
         </SmoothScroll>

@@ -1,0 +1,64 @@
+.root { position: relative; display: grid; grid-template-columns: 1fr 1.6fr .7fr; gap: 3rem; align-items: center; padding: 4rem clamp(1rem, 3vw, 3.5rem) 5rem; }
+.caption { align-self: center; }
+.question { margin-top: 1.5rem; font-family: var(--font-display); font-size: clamp(2rem, 3.4vw, 4rem); line-height: 1.05; max-width: 12ch; text-wrap: balance; }
+.toggle { display: inline-flex; align-items: center; gap: .8rem; margin-top: 1.8rem; min-height: 44px; font-family: var(--font-mono); text-transform: uppercase; font-size: .7rem; }
+.toggleIcon { display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid var(--ink); font-family: var(--font-sans); font-size: 1.5rem; transition: background .2s, transform .3s; }
+.toggle:hover .toggleIcon { background: var(--accent); transform: rotate(90deg); }
+.hint { margin-top: .9rem; color: var(--muted); max-width: 27ch; font-size: .75rem; line-height: 1.6; }
+.stage { display: flex; justify-content: center; padding-top: 5rem; }
+.scene { --head-size: clamp(200px, 27vw, 370px); position: relative; width: var(--head-size); height: calc(var(--head-size) * 1.28); }
+.head { position: absolute; width: 100%; height: 100%; }
+.ring { position: absolute; width: 125%; aspect-ratio: 1; top: 0; left: -12.5%; border: 1px solid var(--line); border-radius: 50%; transition: transform .7s var(--ease-out-expo), border-color .7s; }
+.ring::after { content: "+"; position: absolute; top: 50%; right: -5px; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); }
+.scene[data-open="true"] .ring { transform: scale(1.1) rotate(45deg); border-color: var(--accent); }
+.faceButton { position: absolute; inset: 12% 18% 0; border-radius: 45%; cursor: pointer; }
+.scene [data-lid] { transform-origin: 30% 40%; transition: transform .7s cubic-bezier(.34, 1.56, .64, 1); }
+.scene [data-eyes-calm], .scene [data-mouth-calm], .scene [data-eyes-spark], .scene [data-mouth-grin], .scene [data-inside], .scene [data-lines], .scene [data-underside] { transition: opacity .3s; }
+.scene [data-brows] { transition: transform .5s; }
+.scene[data-open="true"] [data-lid] { transform: translate(-16px, -118px) rotate(-12deg); }
+.scene[data-open="true"] [data-eyes-calm], .scene[data-open="true"] [data-mouth-calm] { opacity: 0; }
+.scene[data-open="true"] [data-eyes-spark], .scene[data-open="true"] [data-mouth-grin], .scene[data-open="true"] [data-inside], .scene[data-open="true"] [data-lines], .scene[data-open="true"] [data-underside] { opacity: 1; }
+.scene[data-open="true"] [data-brows] { transform: translateY(-10px); }
+.object { position: absolute; z-index: 2; left: 50%; top: 45%; display: grid; place-items: center; width: clamp(44px, 4.6vw, 62px); aspect-ratio: 1; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 14px; box-shadow: 3px 3px 0 var(--ink); opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(.3); transition: transform .65s cubic-bezier(.34, 1.56, .64, 1), opacity .2s, visibility .2s, background .2s; }
+.scene[data-open="true"] .object { opacity: 1; visibility: visible; transform: translate(calc(-50% + var(--x) * var(--head-size)), calc(-50% + var(--y) * var(--head-size))) rotate(var(--rotation)); transition-delay: var(--delay); }
+.object:hover, .object:focus-visible { background: var(--accent); z-index: 4; }
+.icon { width: 62%; height: 62%; }
+.tooltip { position: absolute; left: 50%; top: calc(100% + 10px); width: max-content; max-width: 150px; transform: translateX(-50%) rotate(calc(-1 * var(--rotation))); padding: .4rem .6rem; color: var(--bg); background: var(--ink); font-family: var(--font-mono); font-size: .625rem; pointer-events: none; opacity: 0; transition: opacity .2s; }
+.object:hover .tooltip, .object:focus-visible .tooltip { opacity: 1; }
+.signature { position: absolute; bottom: -2.2rem; left: 50%; transform: translateX(-50%); color: var(--muted); white-space: nowrap; }
+.figures { display: flex; flex-direction: column; gap: 2rem; }
+.figure { padding-bottom: 1.3rem; border-bottom: 1px solid var(--line); }
+.number { font-family: var(--font-display); font-size: clamp(5rem, 9vw, 9rem); line-height: 1; }
+.number > span { font-family: var(--font-sans); font-size: 1.2rem; color: var(--accent); vertical-align: top; display: inline-block; margin-top: 1.3rem; margin-left: .5rem; }
+.figure > p:last-child { max-width: 19ch; }
+.dialog { position: fixed; inset: 0; margin: auto; width: min(90vw, 480px); max-height: 85svh; padding: 0; color: var(--ink); border: 1px solid var(--ink); overflow: auto; box-shadow: 8px 8px 0 var(--accent); background: var(--paper); }
+.dialog::backdrop { background: rgb(20 20 20 / .55); }
+.dialog[open] { animation: story-in .3s var(--ease-out-expo); }
+.story { padding: clamp(1.3rem, 4vw, 2.5rem); }
+.storyTop { display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem; }
+.storyIcon { width: 64px; height: 64px; padding: 8px; border: 1px solid var(--ink); background: var(--accent); transform: rotate(-5deg); }
+.storyTitle { font-family: var(--font-display); font-size: 3rem; margin: .5rem 0 1rem; line-height: 1; }
+.storyText { line-height: 1.8; font-size: .95rem; }
+.storySignature { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1.8rem; color: var(--muted); font-family: var(--font-mono); font-size: .65rem; }
+@keyframes story-in { from { opacity: 0; transform: translateY(16px) rotate(-2deg); } to { opacity: 1; transform: none; } }
+@media (max-width: 900px) {
+  .root { grid-template-columns: 1fr 1.6fr; gap: 2rem; }
+  .figures { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; margin-top: 2rem; }
+  .figure { display: flex; align-items: center; gap: 1rem; width: 45%; }
+  .number { font-size: 5rem; }
+  .number > span { display: none; }
+}
+@media (max-width: 600px) {
+  .root { grid-template-columns: 1fr; gap: 1rem; padding-block: 3rem; }
+  .caption { position: relative; }
+  .question { font-size: 2.5rem; max-width: 15ch; margin-top: 1rem; padding-right: 2rem; }
+  .toggle { position: absolute; right: 0; bottom: 1rem; }
+  .toggle > span:last-child { display: none; }
+  .hint { max-width: 29ch; padding-right: 1rem; }
+  .stage { padding-top: 7rem; padding-bottom: 3rem; }
+  .scene { --head-size: min(58vw, 250px); }
+  .figures { margin-top: 0; gap: 1rem; }
+  .figure { display: block; width: 50%; }
+  .number { font-size: 4.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { .scene *, .toggleIcon { transition: none !important; } .dialog[open] { animation: none; } }

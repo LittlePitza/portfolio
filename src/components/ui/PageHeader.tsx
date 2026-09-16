@@ -37,7 +37,7 @@ export function PageHeader({ title, kicker, children }: { title: string; kicker?
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="label mb-8 flex items-center gap-3 text-muted">
+    <h2 className="label mb-8 flex items-center gap-3 opacity-75">
       <span aria-hidden className="h-2 w-2 bg-accent" />
       {children}
     </h2>

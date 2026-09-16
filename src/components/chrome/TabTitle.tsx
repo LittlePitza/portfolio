@@ -3,34 +3,29 @@
 import { useEffect } from "react";
 
 /**
- * When the visitor switches to another tab, the title takes turns between two
- * short lines until they come back. The original title is restored on return.
+ * A single quiet farewell replaces repeated timers in background tabs.
  */
 export function TabTitle({ messages }: { messages: [string, string] }) {
   useEffect(() => {
     let original = document.title;
-    let timer: number | undefined;
-    let flip = 0;
+    let awayTitle: string | null = null;
 
     const onChange = () => {
-      if (document.hidden) {
+      if (document.hidden && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         original = document.title;
-        const tick = () => {
-          document.title = messages[flip % 2]!;
-          flip += 1;
-          timer = window.setTimeout(tick, 1600);
-        };
-        tick();
-      } else {
-        window.clearTimeout(timer);
-        document.title = original;
+        awayTitle = messages[0];
+        document.title = awayTitle;
+      } else if (awayTitle) {
+        // Do not overwrite metadata if a route changed while this tab was hidden.
+        if (document.title === awayTitle) document.title = original;
+        awayTitle = null;
       }
     };
 
     document.addEventListener("visibilitychange", onChange);
     return () => {
       document.removeEventListener("visibilitychange", onChange);
-      window.clearTimeout(timer);
+      if (awayTitle && document.title === awayTitle) document.title = original;
     };
   }, [messages]);
 

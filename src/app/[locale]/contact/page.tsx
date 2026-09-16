@@ -6,12 +6,20 @@ import { site } from "@/content/site";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CopyEmail } from "@/components/ui/CopyEmail";
 import { Reveal } from "@/components/ui/Reveal";
+import { localizedPageMetadata } from "@/lib/metadata";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/contact">): Promise<Metadata> {
   const { locale } = await params;
   if (!hasLocale(locale)) return {};
   const t = getDictionary(locale);
-  return { title: t.contact.title, alternates: { canonical: `/${locale}/contact` } };
+  return localizedPageMetadata({
+    locale,
+    path: "/contact",
+    title: t.contact.title,
+    description: locale === "es"
+      ? `Contacta a ${site.name}, desarrollador de software en Querétaro, México. Proyectos, colaboraciones, código y currículum.`
+      : `Get in touch with ${site.name}, a software developer in Querétaro, Mexico. Projects, collaborations, code, and résumé.`,
+  });
 }
 
 export default async function ContactPage({ params }: PageProps<"/[locale]/contact">) {

@@ -40,7 +40,7 @@ runtime data layer at all.
     </td>
     <td width="33%" valign="top">
       <strong>Selected work</strong><br>
-      Six projects on a scroll-pinned stage: metadata columns on the left, cover in the centre, a vertical wheel on the right and a counter. On phones it becomes a plain list.
+      The home is one idea: six projects on a wheel that spins with the scroll, rolling in from the bottom left and away to the top right like records, with details, names, a counter and controls around it. On phones it becomes a simple stack. Playground holds the long version: the portrait hero and every project in depth.
     </td>
     <td width="33%" valign="top">
       <strong>Small details</strong><br>
@@ -101,7 +101,7 @@ flowchart LR
   subgraph Motion["client components"]
     PL[Preloader]:::client
     HE[Hero]:::client
-    WC[WorkCarousel]:::client
+    WC[DiscStage · WorkCarousel]:::client
     SS[SmoothScroll]:::client
   end
   X --> L
@@ -122,7 +122,7 @@ src/
 │   ├── chrome/          Frame, NavLinks, PageTransition, ContactOverlay, TabTitle, Clock, LocaleSwitch, Footer
 │   ├── preloader/       Preloader, Character, PreloaderContext
 │   ├── hero/            Hero
-│   ├── work/            WorkCarousel, Cover, types
+│   ├── work/            DiscStage (home), WorkCarousel (Playground catalogue), Cover, slides, types
 │   ├── about/           InsideHead
 │   └── ui/              Mark, Icons, Cursor, Reveal, CountUp, Marquee, PageHeader, CopyEmail
 ├── content/             site.ts, projects.ts, profile.ts, head.ts
@@ -187,7 +187,7 @@ analysis of what makes it work, and what this site does differently, is kept in
 
 - Final illustration for the character, optionally animated in Rive
 - Real, anonymised screenshots of the internal systems
-- A playground section for open-source work and experiments
+- Experiments and open-source toys inside Playground
 
 <br>
 

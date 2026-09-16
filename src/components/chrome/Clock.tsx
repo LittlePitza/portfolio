@@ -7,20 +7,29 @@ interface Props {
   timeZone: string;
 }
 
-/** Local time in the author's city, refreshed every 30 seconds. */
+/** Update at minute boundaries and pause completely in background tabs. */
 export function Clock({ locale, timeZone }: Props) {
   const [time, setTime] = useState<string | null>(null);
 
   useEffect(() => {
-    const fmt = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", hour12: false, timeZone });
-    const update = () => setTime(fmt.format(new Date()));
+    const fmt = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone });
+    let timer: number | undefined;
+    const update = () => {
+      window.clearTimeout(timer);
+      if (document.hidden) return;
+      setTime(fmt.format(new Date()));
+      timer = window.setTimeout(update, 60_000 - (Date.now() % 60_000));
+    };
     update();
-    const id = window.setInterval(update, 30_000);
-    return () => window.clearInterval(id);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", update);
+    };
   }, [locale, timeZone]);
 
   return (
-    <span className="tabular-nums" suppressHydrationWarning>
+    <span className="inline-block min-w-[5ch] tabular-nums" suppressHydrationWarning>
       {time ?? "--:--"}
     </span>
   );

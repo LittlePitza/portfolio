@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 /**
  * Luis, full body, leaning hard into a push. Cartoon proportions: a big head
  * in profile facing right, torso angled forward, both arms out, back leg
@@ -28,6 +30,9 @@ function Sneaker({ x, y, rotate }: { x: number; y: number; rotate: number }) {
 }
 
 export function Character({ className = "" }: { className?: string }) {
+  const id = useId();
+  const knitId = `character-knit-${id}`;
+  const dotsId = `character-dots-${id}`;
   const ink = "var(--ink)";
   const paper = "var(--bg)";
   const accent = "var(--accent)";
@@ -36,12 +41,12 @@ export function Character({ className = "" }: { className?: string }) {
   const shirt = "M176 178 C186 164 224 160 242 176 L200 274 C182 282 150 280 138 264 Z";
 
   return (
-    <svg viewBox="0 0 340 420" className={className} role="img" aria-label="Illustrated Luis pushing" fill="none" stroke={ink} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
+    <svg viewBox="0 0 340 420" className={className} aria-hidden="true" focusable="false" fill="none" stroke={ink} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
       <defs>
-        <pattern id="chKnit" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(-24)">
+        <pattern id={knitId} width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(-24)">
           <path d="M0 5 H10" stroke={ink} strokeWidth="1.6" strokeOpacity="0.35" />
         </pattern>
-        <pattern id="chDots" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+        <pattern id={dotsId} width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
           <circle cx="4.5" cy="4.5" r="1.5" fill={paper} stroke="none" />
         </pattern>
       </defs>
@@ -69,7 +74,7 @@ export function Character({ className = "" }: { className?: string }) {
 
       {/* Torso: orange overshirt leaning forward, black tee at the chest, chain */}
       <path d={shirt} fill={accent} />
-      <path d={shirt} fill="url(#chKnit)" stroke="none" />
+      <path d={shirt} fill={`url(#${knitId})`} stroke="none" />
       <path d="M222 168 L246 178 L232 224 L206 206 Z" fill={ink} stroke="none" />
       <path d="M222 168 L206 206 M246 178 L232 224" strokeWidth="5" />
       <path d="M232 180 C234 194 236 202 240 208" stroke={paper} strokeWidth="2.5" />
@@ -91,7 +96,7 @@ export function Character({ className = "" }: { className?: string }) {
       <path d="M198 98 C198 62 222 46 252 50 C282 54 298 84 292 114 C290 128 284 138 276 144 C258 158 232 158 216 146 C204 136 198 118 198 98 Z" fill={paper} />
       {/* Beard */}
       <path d={beard} fill={ink} />
-      <path d={beard} fill="url(#chDots)" stroke="none" />
+      <path d={beard} fill={`url(#${dotsId})`} stroke="none" />
       {/* Gritted teeth */}
       <path d="M262 132 L282 126" stroke={paper} strokeWidth="6" />
       <path d="M267 130 L268 134 M274 128 L275 132" strokeWidth="2" />

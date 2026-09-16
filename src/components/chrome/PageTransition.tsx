@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { scrollTo } from "@/lib/scroll";
-import { markNavigated } from "@/lib/navigation";
+import { focusPageContent, markNavigated, shouldHandleNavigation } from "@/lib/navigation";
 import { checkForUpdate, isStale } from "@/lib/version";
 import { Character } from "@/components/preloader/Character";
 
@@ -50,12 +50,15 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
   const pending = useRef<string | null>(null);
   const entered = useRef(false);
   const routeReady = useRef(false);
+  const revealing = useRef(false);
   const lastPath = useRef(pathname);
   const walk = useRef<gsap.core.Timeline | null>(null);
   const creep = useRef<gsap.core.Tween | null>(null);
   const progress = useRef({ value: 0 });
   const trackWidth = useRef(0);
   const safety = useRef<number | undefined>(undefined);
+  const scene = useRef<gsap.core.Timeline | null>(null);
+  const mounted = useRef(true);
 
   /** Draw the loading bar and move the character to its leading edge. */
   const paint = useCallback(() => {
@@ -70,9 +73,9 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
 
   const reveal = useCallback(() => {
     const el = panel.current;
-    if (!el || !pending.current) return;
+    if (!el || !pending.current || revealing.current) return;
     const href = pending.current;
-    pending.current = null;
+    revealing.current = true;
     entered.current = false;
     routeReady.current = false;
     window.clearTimeout(safety.current);
@@ -80,12 +83,14 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
 
     const sel = gsap.utils.selector(el);
     const main = document.querySelector("main");
-    const hash = href.includes("#") ? href.split("#")[1] : "";
+    const hash = new URL(href, window.location.origin).hash.slice(1);
     scrollTo(0, { immediate: true });
 
     const tl = gsap.timeline({
       defaults: { ease: "expo.inOut" },
       onComplete: () => {
+        pending.current = null;
+        revealing.current = false;
         walk.current?.kill();
         walk.current = null;
         gsap.set(el, { visibility: "hidden", pointerEvents: "none" });
@@ -94,31 +99,36 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
         ScrollTrigger.refresh();
         if (hash) {
           const target = document.getElementById(hash);
-          if (target) scrollTo(target);
+          if (target) scrollTo(target, { immediate: prefersReducedMotion() });
         }
+        focusPageContent(hash);
       },
     });
 
-    tl.to(progress.current, { value: 1, duration: 0.3, ease: "power2.out", onUpdate: paint }, 0)
-      .to(sel("[data-t-route]"), { yPercent: -120, autoAlpha: 0, duration: 0.35, ease: "expo.in" }, 0.12)
-      .to(sel("[data-t-label]"), { yPercent: -115, duration: 0.45, ease: "expo.in" }, 0.12)
-      .to(sel("[data-t-progress]"), { y: -24, autoAlpha: 0, duration: 0.35, ease: "power2.in" }, 0.2)
-      .to(el, { yPercent: -OFF, duration: 0.75 }, 0.22);
+    scene.current = tl;
+    tl.to(progress.current, { value: 1, duration: 0.18, ease: "power2.out", onUpdate: paint }, 0)
+      .to(sel("[data-t-route]"), { yPercent: -120, autoAlpha: 0, duration: 0.2, ease: "expo.in" }, 0.05)
+      .to(sel("[data-t-label]"), { yPercent: -115, duration: 0.25, ease: "expo.in" }, 0.05)
+      .to(sel("[data-t-progress]"), { y: -16, autoAlpha: 0, duration: 0.2, ease: "power2.in" }, 0.08)
+      .to(el, { yPercent: -OFF, duration: 0.45 }, 0.12);
     if (main) {
-      tl.fromTo(main, { opacity: 0, y: 56 }, { opacity: 1, y: 0, duration: 0.85, ease: "expo.out", clearProps: "opacity,transform" }, 0.42);
+      tl.fromTo(main, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out", clearProps: "opacity,transform" }, 0.2);
     }
   }, [paint]);
 
   /** Navigate inside the app, unless a newer deployment is live: then load it for real. */
   const navigate = useCallback(
     async (href: string, update: Promise<boolean>) => {
-      const newer = await Promise.race([update, new Promise<boolean>((resolve) => window.setTimeout(() => resolve(isStale()), 700))]);
+      let timeout: number | undefined;
+      const newer = await Promise.race([update, new Promise<boolean>((resolve) => { timeout = window.setTimeout(() => resolve(isStale()), 180); })]);
+      window.clearTimeout(timeout);
+      if (!mounted.current) return;
       if (newer) {
         window.clearTimeout(safety.current);
         window.location.assign(new URL(href, window.location.origin));
         return;
       }
-      router.push(href);
+      router.push(href, { scroll: false });
     },
     [router],
   );
@@ -126,12 +136,20 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
   const go = useCallback(
     (href: string, text: string) => {
       const el = panel.current;
-      const path = href.split("#")[0]!;
+      const destination = new URL(href, window.location.origin);
+      const path = destination.pathname;
       if (pending.current) return;
       if (path === pathname || !el || prefersReducedMotion()) {
         markNavigated();
         if (isStale()) window.location.assign(new URL(href, window.location.origin));
-        else router.push(href);
+        else {
+          router.push(href);
+          if (path === pathname) {
+            const target = destination.hash ? document.getElementById(destination.hash.slice(1)) : 0;
+            if (target !== null) scrollTo(target, { immediate: prefersReducedMotion() });
+            focusPageContent(destination.hash.slice(1));
+          }
+        }
         return;
       }
       // Ask the live site for its version while the panel comes up.
@@ -141,6 +159,7 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
       pending.current = href;
       entered.current = false;
       routeReady.current = false;
+      revealing.current = false;
       setLabel(text);
       setRoute(`${domain}${path}`);
 
@@ -171,18 +190,20 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
           }
         },
       });
+      scene.current?.kill();
+      scene.current = tl;
 
       tl.set(el, { visibility: "visible", pointerEvents: "auto", yPercent: OFF })
         .set(sel("[data-t-route]"), { yPercent: 120, autoAlpha: 0 })
         .set(sel("[data-t-label]"), { yPercent: 115 })
         .set(sel("[data-t-progress]"), { y: 24, autoAlpha: 0 })
-        .to(el, { yPercent: 0, duration: 0.62 }, 0)
-        .to(sel("[data-t-route]"), { yPercent: 0, autoAlpha: 1, duration: 0.4, ease: "expo.out" }, 0.26)
-        .to(sel("[data-t-label]"), { yPercent: 0, duration: 0.55, ease: "expo.out" }, 0.3)
-        .to(sel("[data-t-progress]"), { y: 0, autoAlpha: 1, duration: 0.4, ease: "back.out(2)" }, 0.36)
-        .to(progress.current, { value: 0.6, duration: 0.45, ease: "power1.out", onUpdate: paint }, 0.4)
-        .call(() => void navigate(href, update), [], 0.42);
-      if (main) tl.to(main, { opacity: 0.3, duration: 0.5, ease: "power2.out" }, 0);
+        .to(el, { yPercent: 0, duration: 0.38 }, 0)
+        .to(sel("[data-t-route]"), { yPercent: 0, autoAlpha: 1, duration: 0.28, ease: "expo.out" }, 0.1)
+        .to(sel("[data-t-label]"), { yPercent: 0, duration: 0.3, ease: "expo.out" }, 0.12)
+        .to(sel("[data-t-progress]"), { y: 0, autoAlpha: 1, duration: 0.24, ease: "power3.out" }, 0.16)
+        .to(progress.current, { value: 0.6, duration: 0.24, ease: "power1.out", onUpdate: paint }, 0.18)
+        .call(() => void navigate(href, update), [], 0.18);
+      if (main) tl.to(main, { opacity: 0.3, duration: 0.28, ease: "power2.out" }, 0);
 
       window.clearTimeout(safety.current);
       safety.current = window.setTimeout(() => {
@@ -198,12 +219,26 @@ export function PageTransition({ children, domain }: { children: React.ReactNode
     if (lastPath.current === pathname) return;
     lastPath.current = pathname;
     markNavigated();
-    if (!pending.current) return;
+    if (!pending.current) {
+      focusPageContent(window.location.hash.slice(1));
+      return;
+    }
     routeReady.current = true;
     if (entered.current) reveal();
   }, [pathname, reveal]);
 
-  useEffect(() => () => window.clearTimeout(safety.current), []);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      window.clearTimeout(safety.current);
+      scene.current?.kill();
+      creep.current?.kill();
+      walk.current?.kill();
+      const main = document.querySelector("main");
+      if (main) gsap.set(main, { clearProps: "opacity,transform" });
+    };
+  }, []);
 
   const size = "text-[clamp(3rem,12vw,12rem)]";
 
@@ -259,9 +294,10 @@ export function TransitionLink({ label, onClick, href, children, ...rest }: Prop
       {...rest}
       onClick={(e) => {
         onClick?.(e);
-        if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        if (!shouldHandleNavigation(e)) return;
         e.preventDefault();
-        go(typeof href === "string" ? href : String(href), label);
+        const target = new URL(e.currentTarget.href);
+        go(`${target.pathname}${target.search}${target.hash}`, label);
       }}
     >
       {children}

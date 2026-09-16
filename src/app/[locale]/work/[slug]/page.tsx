@@ -7,6 +7,7 @@ import { Cover } from "@/components/work/Cover";
 import { Reveal } from "@/components/ui/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
 import { TransitionLink } from "@/components/chrome/PageTransition";
+import { localizedPageMetadata } from "@/lib/metadata";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/work/[sl
   const { locale, slug } = await params;
   const project = getProject(slug);
   if (!hasLocale(locale) || !project) return {};
-  return { title: project.name, description: project.summary[locale], alternates: { canonical: `/${locale}/work/${slug}` } };
+  return localizedPageMetadata({ locale, path: `/work/${slug}`, title: project.name, description: project.summary[locale] });
 }
 
 export default async function ProjectPage({ params }: PageProps<"/[locale]/work/[slug]">) {

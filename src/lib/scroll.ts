@@ -8,10 +8,12 @@ export function setLenis(instance: Lenis | null) {
 }
 
 export function scrollTo(target: number | HTMLElement, options: { immediate?: boolean; offset?: number } = {}) {
+  if (typeof window === "undefined") return;
+  const immediate = options.immediate || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (lenis) {
-    lenis.scrollTo(target, { immediate: options.immediate, offset: options.offset ?? 0, duration: 1.1 });
+    lenis.scrollTo(target, { immediate, offset: options.offset ?? 0, duration: 0.85 });
     return;
   }
   const top = typeof target === "number" ? target : target.getBoundingClientRect().top + window.scrollY;
-  window.scrollTo({ top: top + (options.offset ?? 0), behavior: options.immediate ? "auto" : "smooth" });
+  window.scrollTo({ top: top + (options.offset ?? 0), behavior: immediate ? "instant" : "smooth" });
 }

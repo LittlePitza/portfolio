@@ -6,7 +6,7 @@ const es: typeof en = {
     description:
       "Desarrollador full-stack y responsable de TI en Querétaro, México. Autor único de cinco sistemas en producción sobre Next.js, TypeScript y PostgreSQL.",
   },
-  nav: { work: "Trabajo", about: "Sobre mí", contact: "Contacto", menu: "Menú" },
+  nav: { work: "Trabajo", about: "Sobre mí", playground: "Playground", contact: "Contacto", menu: "Menú" },
   frame: {
     workingFrom: "Trabajando desde",
     city: "Querétaro, MX",
@@ -30,6 +30,7 @@ const es: typeof en = {
   ticker: ["Trabajo seleccionado", "06 proyectos", "1,050 pruebas automatizadas", "93% de SLA en respuesta", "100% de disponibilidad", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
   work: {
     selected: "Trabajo seleccionado",
+    deep: "Cada proyecto, a fondo",
     role: "Rol",
     stack: "Stack",
     launch: "Lanzamiento",
@@ -44,6 +45,10 @@ const es: typeof en = {
     links: "Enlaces",
     about: "Sobre el proyecto",
     hint: "Desliza, usa las flechas o los botones",
+  },
+  playground: {
+    title: "Playground",
+    description: "La versión larga: el retrato, y cada proyecto con su rol, stack, cifras y su propia ilustración.",
   },
   about: {
     title: "Sobre mí",

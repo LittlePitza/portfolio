@@ -4,7 +4,7 @@ const en = {
     description:
       "Full-stack developer and IT lead in Querétaro, Mexico. Sole author of five production systems on Next.js, TypeScript and PostgreSQL.",
   },
-  nav: { work: "Work", about: "About", contact: "Contact", menu: "Menu" },
+  nav: { work: "Work", about: "About", playground: "Playground", contact: "Contact", menu: "Menu" },
   frame: {
     workingFrom: "Working from",
     city: "Querétaro, MX",
@@ -28,6 +28,7 @@ const en = {
   ticker: ["Selected work", "06 projects", "1,050 automated tests", "93% response SLA", "100% availability", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
   work: {
     selected: "Selected work",
+    deep: "Every project, in depth",
     role: "Role",
     stack: "Stack",
     launch: "Launch",
@@ -42,6 +43,10 @@ const en = {
     links: "Links",
     about: "About the project",
     hint: "Scroll, arrow keys or the buttons",
+  },
+  playground: {
+    title: "Playground",
+    description: "The long version: the portrait, and every project with its role, stack, numbers and its own illustration.",
   },
   about: {
     title: "About",

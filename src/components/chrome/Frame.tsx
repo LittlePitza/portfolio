@@ -7,6 +7,7 @@ import { NavLinks } from "./NavLinks";
 import { Mark } from "@/components/ui/Mark";
 import { ContactOverlay } from "./ContactOverlay";
 import { TransitionLink } from "./PageTransition";
+import { ScrollHint } from "./ScrollHint";
 
 interface Props {
   locale: Locale;
@@ -25,6 +26,7 @@ export function Frame({ locale, t }: Props) {
   const nav = [
     { href: `${base}#work`, label: t.nav.work, anchor: "work" },
     { href: `${base}/about`, label: t.nav.about },
+    { href: `${base}/playground`, label: t.nav.playground },
     { href: `${base}/contact`, label: t.nav.contact, overlay: "contact" as const },
   ];
 
@@ -42,8 +44,8 @@ export function Frame({ locale, t }: Props) {
   const credits = {
     title: t.footer.credits,
     rows: [
-      { label: "Type", value: "Instrument Serif · Geist" },
-      { label: "Motion", value: "GSAP · Lenis" },
+      { label: locale === "es" ? "Tipografía" : "Type", value: "Instrument Serif · Geist" },
+      { label: locale === "es" ? "Movimiento" : "Motion", value: "GSAP · Lenis" },
       { label: "Stack", value: "Next.js 16 · TypeScript" },
       { label: t.footer.source, value: "LittlePitza/portfolio", href: site.links.source },
     ],
@@ -51,11 +53,14 @@ export function Frame({ locale, t }: Props) {
 
   return (
     <>
-      <ContactOverlay title={t.contact.title} lead={t.contact.lead} email={site.email} groups={contactGroups} close={t.about.close} credits={credits} />
+      <a href="#main-content" className="label fixed left-4 top-4 z-[70] -translate-y-24 border-2 border-ink bg-accent px-5 py-4 text-ink focus:translate-y-0">
+        {locale === "es" ? "Saltar al contenido" : "Skip to content"}
+      </a>
+      <ContactOverlay title={t.contact.title} lead={t.contact.lead} email={site.email} groups={contactGroups} close={t.about.close} credits={credits} locale={locale} />
 
       {/* Unblended layer: the mark keeps its orange. */}
       <div className="pointer-events-none fixed inset-x-0 top-0 z-40 p-4 md:p-6">
-        <TransitionLink href={base} label={site.name} aria-label={`${site.name}, home`} className="pointer-events-auto inline-block">
+        <TransitionLink href={base} label={site.name} aria-label={`${site.name}, ${locale === "es" ? "inicio" : "home"}`} className="pointer-events-auto inline-block">
           <Mark className="h-10 w-10 transition-transform duration-300 ease-[var(--ease-out-expo)] hover:rotate-[-6deg] md:h-11 md:w-11" />
         </TransitionLink>
       </div>
@@ -70,7 +75,7 @@ export function Frame({ locale, t }: Props) {
           </div>
           <div className="w-10 md:hidden" aria-hidden />
 
-          <nav className="pointer-events-auto justify-self-end md:col-span-3 md:justify-self-start" aria-label="Primary">
+          <nav className="pointer-events-auto justify-self-end md:col-span-3 md:justify-self-start" aria-label={locale === "es" ? "Navegación principal" : "Primary navigation"}>
             <p className="label hidden text-muted md:block">{t.nav.menu}</p>
             <div className="md:mt-1">
               <NavLinks items={nav} home={base} />
@@ -93,9 +98,7 @@ export function Frame({ locale, t }: Props) {
         </div>
 
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 md:p-6">
-          <p className="label text-muted" data-scroll-hint>
-            {t.frame.scroll} <span className="blink">▼</span>
-          </p>
+          <ScrollHint label={t.frame.scroll} />
           <div className="pointer-events-auto flex items-center gap-5">
             <a href={site.cv[locale]} download className="link-draw label">
               {t.frame.cv} ↓

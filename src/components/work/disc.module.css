@@ -1,0 +1,89 @@
+.root { position: relative; }
+
+/* The spinning stage only exists where it can spin; everyone else gets the stack. */
+.stage { display: none; }
+.list { list-style: none; margin: 0; padding: 8.5rem clamp(1rem, 4vw, 2rem) 5rem; display: grid; gap: 3.5rem; }
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .stage { display: block; position: relative; height: 100svh; overflow: hidden; }
+  .list { display: none; }
+}
+
+/* ---------- wheel ---------- */
+
+.wheel { position: absolute; inset: 0; }
+.disc {
+  position: absolute; left: 44%; top: 54%;
+  width: clamp(320px, 33vw, 600px); aspect-ratio: 4 / 3;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  will-change: transform, opacity;
+  box-shadow: 0 34px 60px -34px rgba(20, 20, 20, .5);
+}
+.disc:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+.cover { width: 100%; height: 100%; }
+
+/* ---------- active project details ---------- */
+
+.meta { position: absolute; z-index: 60; left: clamp(1rem, 1.8vw, 1.5rem); top: 30%; width: min(21vw, 19rem); margin: 0; display: grid; gap: 1rem; }
+.row { display: grid; grid-template-columns: 5.25rem minmax(0, 1fr); gap: .75rem; padding-top: .6rem; border-top: 1px solid var(--line); }
+.row dd { margin: 0; }
+
+/* ---------- names ---------- */
+
+.titles {
+  position: absolute; z-index: 60; right: 3.25rem; top: 58%;
+  width: min(23vw, 21rem); height: 450px; transform: translateY(-50%); overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
+}
+.titleList { list-style: none; margin: 0; padding-left: 0; padding-right: 0; padding-bottom: 0; }
+.title { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; opacity: .22; transition: opacity .5s var(--ease-out-expo); }
+.title[data-active="true"] { opacity: 1; }
+.titleName { margin-top: .35rem; font-family: var(--font-display); font-size: clamp(1.8rem, 2.3vw, 2.6rem); line-height: .95; text-transform: uppercase; letter-spacing: -.01em; }
+.titleName:hover { color: var(--accent); }
+.titleSummary { margin-top: .55rem; max-width: 30ch; font-size: .75rem; line-height: 1.5; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.swatches { position: absolute; z-index: 60; right: 1.25rem; top: 58%; transform: translateY(-50%); display: grid; gap: .5rem; list-style: none; margin: 0; padding: 0; }
+.swatch { display: block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--ink); opacity: .35; transition: transform .4s var(--ease-out-expo), opacity .4s; }
+.swatch:hover, .swatch:focus-visible { opacity: .8; }
+.swatch[aria-current="true"] { opacity: 1; transform: scale(1.5); }
+
+/* ---------- counter, controls, progress ---------- */
+
+.counter { position: absolute; z-index: 60; left: clamp(1rem, 1.8vw, 1.5rem); bottom: 5rem; display: flex; align-items: flex-start; gap: 1rem; pointer-events: none; }
+.count { display: flex; align-items: flex-start; font-family: var(--font-display); line-height: .8; }
+.countClip { display: block; overflow: hidden; padding-top: .06em; font-size: clamp(6rem, 11vw, 11rem); }
+.countNumber { display: block; }
+.total { margin-top: .5rem; font-size: clamp(2.5rem, 4vw, 4rem); color: transparent; -webkit-text-stroke: 1px var(--ink); }
+
+.controls { position: absolute; z-index: 60; right: clamp(1rem, 1.8vw, 1.5rem); bottom: 5rem; display: flex; flex-direction: column; align-items: flex-end; gap: .85rem; }
+.buttons { display: flex; gap: .5rem; }
+.arrow { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid var(--ink); border-radius: 50%; background: var(--bg); transition: background-color .25s, color .25s; }
+.arrow:hover:not(:disabled), .arrow:focus-visible { background: var(--ink); color: var(--bg); }
+.arrow:disabled { opacity: .3; cursor: default; }
+.deep { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .06em; text-transform: uppercase; border-bottom: 1px solid currentColor; }
+.deep span { display: inline-block; transition: transform .25s; }
+.deep:hover span { transform: translate(3px, -3px); }
+
+.progress { position: absolute; z-index: 60; left: 0; right: 0; bottom: 0; height: 2px; background: var(--line); }
+.progressFill { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+
+/* ---------- simple stack ---------- */
+
+.item { padding-top: 1rem; border-top: 1px solid var(--line); }
+.itemLink { display: grid; gap: .75rem; color: inherit; }
+.itemCover { width: 100%; aspect-ratio: 4 / 3; transform: rotate(-1.5deg); transition: transform .5s var(--ease-out-expo); box-shadow: 0 24px 40px -28px rgba(20, 20, 20, .45); }
+.item:nth-child(even) .itemCover { transform: rotate(1.5deg); }
+.itemLink:hover .itemCover, .itemLink:focus-visible .itemCover { transform: rotate(0deg); }
+.itemMeta { display: flex; justify-content: space-between; gap: 1rem; margin-top: .75rem; }
+.itemName { font-family: var(--font-display); font-size: clamp(2.4rem, 10vw, 4rem); line-height: .95; text-transform: uppercase; }
+.itemOpen { display: flex; align-items: center; justify-content: space-between; min-height: 44px; border-bottom: 1px solid currentColor; font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .06em; text-transform: uppercase; }
+.deepItem { display: flex; justify-content: flex-end; }
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem 1.5rem; }
+  .deepItem { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .itemCover, .item:nth-child(even) .itemCover { transform: none; transition: none; }
+}

@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { scrollTo } from "@/lib/scroll";
 import { useTransition } from "./PageTransition";
 import { openContact } from "./ContactOverlay";
+import { prefersReducedMotion } from "@/lib/gsap";
+import { shouldHandleNavigation } from "@/lib/navigation";
 
 interface Item {
   href: string;
@@ -25,7 +27,7 @@ export function NavLinks({ items, home }: { items: Item[]; home: string }) {
   const { go } = useTransition();
 
   return (
-    <ul className="nav flex gap-4 md:block md:space-y-1">
+    <ul className="nav grid grid-cols-2 gap-x-4 md:block md:space-y-1">
       {items.map((item) => {
         const path = item.href.split("#")[0]!;
         const isHome = path === home;
@@ -35,8 +37,11 @@ export function NavLinks({ items, home }: { items: Item[]; home: string }) {
             <Link
               href={item.href}
               aria-current={current ? "page" : undefined}
-              className="display flex items-center text-xl leading-none md:text-2xl"
+              aria-haspopup={item.overlay ? "dialog" : undefined}
+              aria-controls={item.overlay ? "contact-dialog" : undefined}
+              className="display flex min-h-11 items-center whitespace-nowrap text-xl leading-none md:min-h-7 md:text-2xl"
               onClick={(e) => {
+                if (!shouldHandleNavigation(e)) return;
                 if (item.overlay === "contact") {
                   e.preventDefault();
                   openContact();
@@ -46,11 +51,13 @@ export function NavLinks({ items, home }: { items: Item[]; home: string }) {
                   const el = document.getElementById(item.anchor);
                   if (el) {
                     e.preventDefault();
-                    scrollTo(el);
+                    window.history.replaceState(window.history.state, "", item.href);
+                    scrollTo(el, { immediate: prefersReducedMotion() });
+                    el.tabIndex = -1;
+                    el.focus({ preventScroll: true });
                   }
                   return;
                 }
-                if (e.metaKey || e.ctrlKey || e.shiftKey) return;
                 e.preventDefault();
                 go(item.href, item.label);
               }}

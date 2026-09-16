@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -12,29 +11,38 @@ interface Props {
   as?: "div" | "section" | "ul" | "ol" | "li";
 }
 
-/** Fades and lifts content in once it scrolls into view. Runs once. */
+/** Progressive enhancement: content remains visible before JS and if motion is disabled. */
 export function Reveal({ children, className, stagger = false, delay = 0, as = "div" }: Props) {
   const ref = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      if (prefersReducedMotion()) return;
-      const el = ref.current!;
-      const targets = stagger ? Array.from(el.children) : el;
-      gsap.from(targets, {
-        y: 28,
-        autoAlpha: 0,
-        duration: 1,
-        delay,
-        ease: "expo.out",
-        stagger: stagger ? 0.08 : 0,
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+  useEffect(() => {
+    const el = ref.current;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!el || media.matches || !("IntersectionObserver" in window)) return;
+    const animations: Animation[] = [];
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      const targets = stagger ? Array.from(el.children) : [el];
+      targets.forEach((target, index) => {
+        animations.push(target.animate(
+          [{ opacity: 0, translate: "0 24px" }, { opacity: 1, translate: "0 0" }],
+          { duration: 760, delay: delay * 1000 + index * 65, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "backwards" },
+        ));
       });
-    },
-    { scope: ref },
-  );
+    }, { rootMargin: "0px 0px -7% 0px" });
+    observer.observe(el);
+    const stop = () => {
+      observer.disconnect();
+      animations.forEach((animation) => animation.cancel());
+    };
+    media.addEventListener("change", stop);
+    return () => {
+      stop();
+      media.removeEventListener("change", stop);
+    };
+  }, [delay, stagger]);
 
   const Tag = as;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <Tag ref={ref as any} className={className}>{children}</Tag>;
+  return <Tag ref={(element: HTMLElement | null) => { ref.current = element; }} className={className}>{children}</Tag>;
 }
