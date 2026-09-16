@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { site } from "@/content/site";
@@ -7,6 +6,7 @@ import { LocaleSwitch } from "./LocaleSwitch";
 import { NavLinks } from "./NavLinks";
 import { Mark } from "@/components/ui/Mark";
 import { ContactOverlay } from "./ContactOverlay";
+import { TransitionLink } from "./PageTransition";
 
 interface Props {
   locale: Locale;
@@ -55,9 +55,9 @@ export function Frame({ locale, t }: Props) {
 
       {/* Unblended layer: the mark keeps its orange. */}
       <div className="pointer-events-none fixed inset-x-0 top-0 z-40 p-4 md:p-6">
-        <Link href={base} aria-label={`${site.name}, home`} className="pointer-events-auto inline-block">
+        <TransitionLink href={base} label={site.name} aria-label={`${site.name}, home`} className="pointer-events-auto inline-block">
           <Mark className="h-10 w-10 transition-transform duration-300 ease-[var(--ease-out-expo)] hover:rotate-[-6deg] md:h-11 md:w-11" />
-        </Link>
+        </TransitionLink>
       </div>
 
       {/* Blended layer: everything typographic. */}

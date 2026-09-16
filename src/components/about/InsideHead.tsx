@@ -24,16 +24,13 @@ interface Props {
 
 /** Where each object settles once it has floated out, relative to the head's centre. */
 const SPOTS = [
-  { x: -240, y: -60, r: -24 },
-  { x: -160, y: -205, r: -16 },
-  { x: -120, y: -245, r: -8 },
-  { x: -20, y: -280, r: 6 },
-  { x: 85, y: -262, r: 12 },
-  { x: 175, y: -200, r: 18 },
-  { x: 232, y: -100, r: 22 },
-  { x: 236, y: 0, r: 10 },
-  { x: -110, y: -120, r: -6 },
-  { x: 110, y: -110, r: 5 },
+  { x: -235, y: -70, r: -18 },
+  { x: -165, y: -200, r: -10 },
+  { x: -80, y: -275, r: -4 },
+  { x: 30, y: -295, r: 6 },
+  { x: 140, y: -255, r: 10 },
+  { x: 220, y: -160, r: 16 },
+  { x: 245, y: -40, r: 20 },
 ];
 
 /**
@@ -51,6 +48,7 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
       const reduce = prefersReducedMotion();
       const d = (n: number) => (reduce ? 0 : n);
       const objects = gsap.utils.toArray<HTMLElement>("[data-object]");
+      const k = window.innerWidth < 768 ? 0.6 : 1;
       const face = { calm: "[data-eyes-calm], [data-mouth-calm]", lit: "[data-eyes-spark], [data-mouth-grin], [data-inside], [data-lines], [data-underside]" };
 
       if (open) {
@@ -59,7 +57,8 @@ export function InsideHead({ items, question, hint, close, left, right }: Props)
         gsap.to(face.lit, { autoAlpha: 1, duration: d(0.35), delay: d(0.2) });
         gsap.to("[data-brows]", { y: -10, duration: d(0.5), ease: "back.out(2)", delay: d(0.15) });
         objects.forEach((el, i) => {
-          const spot = SPOTS[i % SPOTS.length]!;
+          const base = SPOTS[i % SPOTS.length]!;
+          const spot = { x: base.x * k, y: base.y * k, r: base.r };
           gsap.killTweensOf(el);
           gsap.fromTo(
             el,

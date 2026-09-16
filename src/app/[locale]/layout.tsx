@@ -55,7 +55,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
     <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <SmoothScroll>
-          <PageTransition>
+          <PageTransition domain={site.domain}>
             <Frame locale={locale} t={t} />
             <main className="flex-1">{children}</main>
             <Footer locale={locale} t={t} />

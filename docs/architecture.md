@@ -94,10 +94,18 @@ Animation is a client concern and is isolated to four components.
 
 ## Details that make it feel alive
 
-- `PageTransition` wraps every route. A link that goes through it raises a
-  black curtain carrying the destination's name, pushes the route underneath,
-  and lifts the curtain once the new pathname has rendered. Same-page links,
-  modifier clicks and reduced motion bypass it.
+- `PageTransition` wraps every route and runs in two acts. Leaving: the page
+  dims, a tilted orange slab sweeps up, the destination's address types in,
+  its name rises with a hollow echo, and the character walks in pushing a
+  loading bar. Arriving: once the route has rendered and the first act has
+  landed, he pushes the bar to the end, the slab leaves through the top and
+  the new page rises. A slow route keeps the bar creeping; a route that never
+  arrives lifts the panel after six seconds. Only GSAP-set transforms are
+  animated, so nothing is parsed from CSS. Same-page links, modifier clicks
+  and reduced motion bypass it.
+- `src/lib/navigation.ts` knows whether the visitor has moved inside the site,
+  from the transition or from the URL differing from the first document's, so
+  the opening never plays after a client-side route change.
 - `ContactOverlay` listens for a `contact:open` event on `window`, so the
   menu, the hero button or anything else can open the two floating cards
   without sharing state. The `/contact` route still exists for direct links.

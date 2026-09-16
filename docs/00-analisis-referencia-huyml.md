@@ -105,7 +105,7 @@ Hecho y verificado con `next build` (23 páginas estáticas):
 - Sistema de logos: monograma geométrico LH en `icon.svg`, Apple icon y tarjetas OpenGraph por idioma generadas con `next/og`.
 - Toque brutalista: bordes duros, sombras desplazadas, botones mono, sellos rotados, rejilla de ingeniería, números huecos.
 - Navegación más intuitiva: llamadas a la acción en el hero, flecha en la sección actual, desenfoque de los otros ítems del menú, botones, teclado y barra de progreso en el carrusel, puntos de navegación por color.
-- Detalles tomados de huyml: transición de página con telón negro y título, Contacto como tarjetas flotantes con créditos, retrato ilustrado de Luis en About cuya cabeza se abre con objetos y sus historias, título de pestaña que cambia al salir, cursor personalizado, contador en el preloader.
+- Detalles tomados de huyml: transición de página con panel naranja inclinado y título hueco, Contacto como tarjetas flotantes con créditos, retrato ilustrado de Luis en About cuya cabeza se abre con objetos y sus historias, título de pestaña que cambia al salir, cursor personalizado, contador en el preloader.
 
 ## Pendientes
 

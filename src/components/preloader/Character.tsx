@@ -8,7 +8,6 @@
  */
 /** A sneaker in profile facing right, ankle at (x, y): sock, toe cap, sole, laces and a stripe. */
 function Sneaker({ x, y, rotate }: { x: number; y: number; rotate: number }) {
-  const ink = "var(--ink)";
   const paper = "var(--bg)";
   return (
     <g transform={`translate(${x} ${y}) rotate(${rotate})`}>

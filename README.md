@@ -44,7 +44,7 @@ runtime data layer at all.
     </td>
     <td width="33%" valign="top">
       <strong>Small details</strong><br>
-      A black curtain with the destination's name between pages. Contact opens as floating cards instead of a page. Hover the portrait on About and the top of his head lifts while the things on his mind float out, each with its own story. Leave the tab and the title asks you back.
+      Between pages an orange slab sweeps up with the destination's name while the character walks in pushing a loading bar. Contact opens as floating cards instead of a page. Hover the portrait on About and the top of his head lifts while the things on his mind float out, each with its own story. Leave the tab and the title asks you back.
     </td>
   </tr>
   <tr>

@@ -19,12 +19,12 @@ export type HeadIcon =
 export interface HeadItem {
   icon: HeadIcon;
   title: Localized;
-  /** Told by the object itself, huyml-style. Work figures are from the CV; the rest is Luis. */
+  /** Told by the object itself. */
   story: Localized;
   signature: Localized;
 }
 
-/** What floats out when the head opens on the About page. Add, remove or rewrite freely. */
+/** What floats out when the head opens on the About page: the things he actually loves. */
 export const headItems: HeadItem[] = [
   {
     icon: "meeple",
@@ -88,32 +88,5 @@ export const headItems: HeadItem[] = [
       es: "Dibuja la interfaz y escribe la base de datos, y se niega a elegir solo una. Este sitio es la prueba: cada animación a mano, cada texto tipado en TypeScript, y un retrato que pidió redibujar hasta que se pareciera a él.",
     },
     signature: { en: "The editor, always open", es: "El editor, siempre abierto" },
-  },
-  {
-    icon: "database",
-    title: { en: "The database", es: "La base de datos" },
-    story: {
-      en: "Every business rule lives in me. Twenty-seven migrations, 12,990 lines of SQL, and he still won't let the client write a single row. Punches are append-only; I enforce it with a trigger.",
-      es: "Toda regla de negocio vive en mí. Veintisiete migraciones, 12,990 líneas de SQL, y sigue sin dejar que el cliente escriba una sola fila. Las marcas son append-only; lo fuerzo con un trigger.",
-    },
-    signature: { en: "The tables, append-only", es: "Las tablas, append-only" },
-  },
-  {
-    icon: "pipeline",
-    title: { en: "The pipeline", es: "El pipeline" },
-    story: {
-      en: "Five stages before anything ships. 1,050 tests across his repositories, 345 of them SQL assertions against a database I throw away after every run. I fail loudly so that users never have to.",
-      es: "Cinco etapas antes de publicar nada. 1,050 pruebas en sus repositorios, 345 de ellas aserciones SQL contra una base que tiro después de cada corrida. Fallo a gritos para que los usuarios nunca tengan que hacerlo.",
-    },
-    signature: { en: "CI, still green", es: "CI, todavía en verde" },
-  },
-  {
-    icon: "lock",
-    title: { en: "Security", es: "Seguridad" },
-    story: {
-      en: "Someone impersonated the General Director through Teams federation. He read the Entra ID audit logs, reset six accounts, revoked their tokens, blocked the domain, and then wrote the company's cybersecurity policy. I have been busier since.",
-      es: "Alguien suplantó al Director General por federación de Teams. Él leyó los registros de auditoría de Entra ID, restableció seis cuentas, revocó sus tokens, bloqueó el dominio y luego escribió la política de ciberseguridad de la empresa. Desde entonces tengo más trabajo.",
-    },
-    signature: { en: "The padlock, no longer decorative", es: "El candado, ya no decorativo" },
   },
 ];
