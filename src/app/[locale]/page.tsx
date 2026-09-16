@@ -4,10 +4,11 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/content/site";
 import { PreloaderProvider } from "@/components/preloader/PreloaderContext";
 import { Preloader } from "@/components/preloader/Preloader";
+import { Hero } from "@/components/hero/Hero";
 import { DiscStage } from "@/components/work/DiscStage";
 import { projectSlides, workLabels } from "@/components/work/slides";
 
-/** One idea, like huyml: the opening, then the projects spinning past like records. */
+/** One idea, like huyml: the opening, the name, then the projects spinning past like records. */
 export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
@@ -28,6 +29,18 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   return (
     <PreloaderProvider>
       <Preloader label={t.frame.loading} />
+      <Hero
+        eyebrow={t.hero.eyebrow}
+        tagline={t.hero.tagline}
+        sub={t.hero.sub}
+        ctaWork={t.hero.ctaWork}
+        ctaContact={t.hero.ctaContact}
+        stamp={t.hero.stamp}
+        contactHref={`/${locale}/contact`}
+        aboutHref={`/${locale}/about`}
+        aboutLabel={locale === "es" ? "Detrás del código" : "Behind the code"}
+        edition={locale === "es" ? "Portafolio / 2026" : "Portfolio / 2026"}
+      />
       <DiscStage slides={projectSlides(locale)} labels={workLabels(t)} deep={{ href: `/${locale}/playground`, label: t.work.deep }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </PreloaderProvider>

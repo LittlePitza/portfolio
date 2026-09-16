@@ -36,7 +36,7 @@ flowchart LR
   subgraph Motion["client components"]
     PL[Preloader]:::client
     HE[Hero]:::client
-    WC[DiscStage · WorkCarousel]:::client
+    WC[DiscStage · ProjectGallery]:::client
     SS[SmoothScroll · Lenis]:::client
   end
 
@@ -67,8 +67,9 @@ year and benefits from type-checking more than from an editor UI.
 
 - `Localized<T>` is `Record<"en" | "es", T>`. Every user-facing string in the
   content files is one of these, so a missing translation is a compile error.
-- `Project` carries what the carousel columns need: role, stack, launch,
-  status and `numbers`, the verifiable figures that stand in for awards.
+- `Project` carries what the gallery columns need: role, stack, launch,
+  status, `numbers` — the verifiable figures that stand in for awards — and
+  `body`, the case-study paragraphs Playground unfolds in place.
 - `cover` is optional. Without it `Cover.tsx` draws a generated app window in
   the project colour using those same numbers, so the layout looks finished
   before screenshots exist.
@@ -90,8 +91,9 @@ Animation is a client concern and is isolated to four components.
   front and rolls out to the top right. Every frame places the covers from
   that one number; a change of project swaps the details, rolls the names and
   ticks the counter. Below `lg` and under `prefers-reduced-motion` it renders
-  a simple stack instead. `WorkCarousel` is the long catalogue on Playground,
-  and `slides.ts` feeds both from the same content.
+  a simple stack instead. `ProjectGallery` is Playground: every cover in a
+  grid, and the one you click takes the whole row while GSAP Flip carries the
+  others to their new places. `slides.ts` feeds both from the same content.
 - All GSAP work goes through `useGSAP` with a scope, so selectors stay local
   and tweens are reverted on unmount.
 

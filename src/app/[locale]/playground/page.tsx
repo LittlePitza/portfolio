@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { Hero } from "@/components/hero/Hero";
-import { WorkCarousel } from "@/components/work/WorkCarousel";
-import { Marquee } from "@/components/ui/Marquee";
-import { projectSlides, workLabels } from "@/components/work/slides";
+import { ProjectGallery } from "@/components/work/ProjectGallery";
+import { galleryLabels, projectDetails } from "@/components/work/slides";
+import styles from "@/components/work/gallery.module.css";
 import { localizedPageMetadata } from "@/lib/metadata";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/playground">): Promise<Metadata> {
@@ -15,30 +14,31 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/playgrou
   return localizedPageMetadata({ locale, path: "/playground", title: t.playground.title, description: t.playground.description });
 }
 
-/** The long, editorial version: the hero with the portrait, then every project in depth. */
+/** The projects and nothing else: all of them at once, any one of them in full. */
 export default async function PlaygroundPage({ params }: PageProps<"/[locale]/playground">) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const t = getDictionary(locale);
+  const projects = projectDetails(locale);
+  const count = String(projects.length).padStart(2, "0");
 
   return (
-    <>
-      <Hero
-        eyebrow={t.hero.eyebrow}
-        tagline={t.hero.tagline}
-        sub={t.hero.sub}
-        ctaWork={t.hero.ctaWork}
-        ctaContact={t.hero.ctaContact}
-        stamp={t.hero.stamp}
-        contactHref={`/${locale}/contact`}
-        aboutHref={`/${locale}/about`}
-        aboutLabel={locale === "es" ? "Detrás del código" : "Behind the code"}
-        edition={locale === "es" ? "Playground / 2026" : "Playground / 2026"}
-      />
-      <Marquee items={t.ticker} lang={locale} className="label border-y-2 border-ink bg-ink py-3 text-sm text-bg" />
-      <div id="work" tabIndex={-1}>
-        <WorkCarousel slides={projectSlides(locale)} labels={workLabels(t)} />
-      </div>
-    </>
+    <div className={styles.page}>
+      <header className={styles.head}>
+        <div className={styles.headTop}>
+          <p className="label">{t.playground.kicker}</p>
+          <p className="label text-muted">
+            {count} {t.playground.projects}
+          </p>
+        </div>
+        <h1 className={styles.title}>{t.playground.title}</h1>
+        <div className={styles.headBottom}>
+          <p className={styles.lead}>{t.playground.lead}</p>
+          <p className={`label ${styles.hint}`}>{t.playground.hint}</p>
+        </div>
+      </header>
+
+      <ProjectGallery projects={projects} labels={galleryLabels(t)} />
+    </div>
   );
 }

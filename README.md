@@ -40,7 +40,7 @@ runtime data layer at all.
     </td>
     <td width="33%" valign="top">
       <strong>Selected work</strong><br>
-      The home is one idea: six projects on a wheel that spins with the scroll, rolling in from the bottom left and away to the top right like records, with details, names, a counter and controls around it. On phones it becomes a simple stack. Playground holds the long version: the portrait hero and every project in depth.
+      The home opens with the name and then turns into one idea: six projects on a wheel that spins with the scroll, rolling in from the bottom left and away to the top right like records, with details, names, a counter and controls around it. On phones it becomes a simple stack. Playground is the gallery: every cover at once, and the one you click takes the whole row and unfolds its case in place.
     </td>
     <td width="33%" valign="top">
       <strong>Small details</strong><br>
@@ -101,7 +101,7 @@ flowchart LR
   subgraph Motion["client components"]
     PL[Preloader]:::client
     HE[Hero]:::client
-    WC[DiscStage · WorkCarousel]:::client
+    WC[DiscStage · ProjectGallery]:::client
     SS[SmoothScroll]:::client
   end
   X --> L
@@ -122,14 +122,14 @@ src/
 │   ├── chrome/          Frame, NavLinks, PageTransition, ContactOverlay, TabTitle, Clock, LocaleSwitch, Footer
 │   ├── preloader/       Preloader, Character, PreloaderContext
 │   ├── hero/            Hero
-│   ├── work/            DiscStage (home), WorkCarousel (Playground catalogue), Cover, slides, types
+│   ├── work/            DiscStage (home), ProjectGallery (Playground), Cover, slides, types
 │   ├── about/           InsideHead
 │   └── ui/              Mark, Icons, Cursor, Reveal, CountUp, Marquee, PageHeader, CopyEmail
 ├── content/             site.ts, projects.ts, profile.ts, head.ts
 ├── assets/fonts/        TTFs used only for generated images
 ├── i18n/                config, dictionaries/en, dictionaries/es
 ├── lib/gsap.ts          plugin registration, reduced-motion helper
-├── lib/scroll.ts        one Lenis instance shared by carousel, nav and transitions
+├── lib/scroll.ts        one Lenis instance shared by the wheel, nav and transitions
 └── proxy.ts             edge redirect to /en or /es
 ```
 
@@ -156,7 +156,8 @@ npm run dev
 ## Editing content
 
 - **A project** is one object in `src/content/projects.ts`. Add it to the
-  array and it appears in the carousel, gets its own route under `/work/`,
+  array and it appears on the home wheel and in the Playground gallery,
+  gets its own route under `/work/`,
   and lands in the sitemap. Drop a screenshot in `public/covers/` and point
   `cover` at it; until then a generated cover is drawn from the project's
   colour and numbers.

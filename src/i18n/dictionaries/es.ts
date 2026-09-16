@@ -48,7 +48,12 @@ const es: typeof en = {
   },
   playground: {
     title: "Playground",
-    description: "La versión larga: el retrato, y cada proyecto con su rol, stack, cifras y su propia ilustración.",
+    description: "Cada proyecto a fondo: el rol, el stack, las cifras y las decisiones detrás de cada sistema.",
+    kicker: "Índice de proyectos",
+    lead: "Seis sistemas que escribí, entregué y sigo operando. Abre uno y se abre el caso completo.",
+    hint: "Haz clic en un proyecto para leerlo completo",
+    close: "Cerrar",
+    projects: "proyectos",
   },
   about: {
     title: "Sobre mí",

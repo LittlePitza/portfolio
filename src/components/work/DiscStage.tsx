@@ -115,14 +115,23 @@ export function DiscStage({ slides, labels, deep }: Props) {
     { scope: root, dependencies: [n, place] },
   );
 
-  // When the opening finishes at the top of the page, the wheel spins the first disc into place.
+  // The hero comes first, so the wheel holds its discs back and spins them in when the stage arrives.
   useGSAP(
     () => {
-      if (!done || !trigger.current || window.scrollY > 4) return;
+      const st = trigger.current;
+      if (!done || !st || st.progress > 0) return;
       const proxy = { p: -2.4 };
       place(proxy.p);
-      entrance.current = gsap.to(proxy, { p: 0, duration: 1.5, ease: "expo.out", onUpdate: () => place(proxy.p) });
-      gsap.from("[data-enter]", { y: 18, autoAlpha: 0, duration: 0.8, stagger: 0.07, delay: 0.25, ease: "power3.out", clearProps: "opacity,visibility,transform" });
+      const enter = ScrollTrigger.create({
+        trigger: root.current,
+        start: "top 80%",
+        once: true,
+        onEnter: () => {
+          entrance.current = gsap.to(proxy, { p: 0, duration: 1.5, ease: "expo.out", onUpdate: () => place(proxy.p) });
+          gsap.from("[data-enter]", { y: 18, autoAlpha: 0, duration: 0.8, stagger: 0.07, delay: 0.15, ease: "power3.out", clearProps: "opacity,visibility,transform" });
+        },
+      });
+      return () => enter.kill();
     },
     { scope: root, dependencies: [done] },
   );

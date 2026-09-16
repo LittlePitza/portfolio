@@ -26,3 +26,25 @@ export interface WorkLabels {
   next: string;
   hint: string;
 }
+
+/** A project with its full case-study copy, for the Playground gallery. */
+export interface Detail extends Slide {
+  body: string[];
+  links: { label: string; href: string }[];
+}
+
+export interface GalleryLabels {
+  role: string;
+  stack: string;
+  launch: string;
+  numbers: string;
+  status: string;
+  about: string;
+  links: string;
+  view: string;
+  open: string;
+  close: string;
+  prev: string;
+  next: string;
+  hint: string;
+}

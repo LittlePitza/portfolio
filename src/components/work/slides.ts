@@ -1,11 +1,10 @@
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/get-dictionary";
-import { projects } from "@/content/projects";
-import type { Slide, WorkLabels } from "./types";
+import { projects, type Project } from "@/content/projects";
+import type { Detail, GalleryLabels, Slide, WorkLabels } from "./types";
 
-/** Projects resolved to one language, ready for the home discs and the Playground catalogue. */
-export function projectSlides(locale: Locale): Slide[] {
-  return projects.map((p) => ({
+function toSlide(p: Project, locale: Locale): Slide {
+  return {
     slug: p.slug,
     href: `/${locale}/work/${p.slug}`,
     name: p.name,
@@ -18,7 +17,17 @@ export function projectSlides(locale: Locale): Slide[] {
     summary: p.summary[locale],
     color: p.color,
     cover: p.cover,
-  }));
+  };
+}
+
+/** Projects resolved to one language, ready for the home discs. */
+export function projectSlides(locale: Locale): Slide[] {
+  return projects.map((p) => toSlide(p, locale));
+}
+
+/** The same projects with their full copy, for the Playground gallery. */
+export function projectDetails(locale: Locale): Detail[] {
+  return projects.map((p) => ({ ...toSlide(p, locale), body: p.body[locale], links: p.links ?? [] }));
 }
 
 export function workLabels(t: Dictionary): WorkLabels {
@@ -33,5 +42,23 @@ export function workLabels(t: Dictionary): WorkLabels {
     prev: t.work.prev,
     next: t.work.next,
     hint: t.work.hint,
+  };
+}
+
+export function galleryLabels(t: Dictionary): GalleryLabels {
+  return {
+    role: t.work.role,
+    stack: t.work.stack,
+    launch: t.work.launch,
+    numbers: t.work.numbers,
+    status: t.work.status,
+    about: t.work.about,
+    links: t.work.links,
+    view: t.work.view,
+    open: t.work.open,
+    close: t.playground.close,
+    prev: t.work.prev,
+    next: t.work.next,
+    hint: t.playground.hint,
   };
 }

@@ -46,7 +46,12 @@ const en = {
   },
   playground: {
     title: "Playground",
-    description: "The long version: the portrait, and every project with its role, stack, numbers and its own illustration.",
+    description: "Every project in depth: the role, the stack, the numbers and the decisions behind each system.",
+    kicker: "Project index",
+    lead: "Six systems I wrote, shipped and still operate. Open one and the whole case opens with it.",
+    hint: "Click a project to read it whole",
+    close: "Close",
+    projects: "projects",
   },
   about: {
     title: "About",
