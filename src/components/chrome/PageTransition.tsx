@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { scrollTo } from "@/lib/scroll";
+import { markNavigated } from "@/lib/navigation";
 
 interface Ctx {
   /** Cover the screen with the destination's name, then navigate. */
@@ -27,6 +28,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   const overlay = useRef<HTMLDivElement>(null);
   const [label, setLabel] = useState("");
   const pending = useRef<string | null>(null);
+  const firstRender = useRef(true);
 
   const go = useCallback(
     (href: string, text: string) => {
@@ -35,6 +37,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
         router.push(href);
         return;
       }
+      markNavigated();
       setLabel(text);
       pending.current = href;
       gsap
@@ -46,6 +49,15 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     },
     [pathname, router],
   );
+
+  // Any route change after the first render counts as in-site navigation.
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    markNavigated();
+  }, [pathname]);
 
   // The new route has rendered: reveal it.
   useEffect(() => {

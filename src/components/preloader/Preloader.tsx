@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { Character } from "./Character";
 import { usePreloader } from "./PreloaderContext";
+import { hasNavigated } from "@/lib/navigation";
 
 const SESSION_KEY = "portfolio:preloaded";
 const CHARACTER_WIDTH = 300;
@@ -20,7 +21,8 @@ export function Preloader({ label }: { label: string }) {
 
   useGSAP(
     () => {
-      const skip = prefersReducedMotion() || window.sessionStorage.getItem(SESSION_KEY) === "1";
+      // Play only on a real page load of the home, once per session.
+      const skip = hasNavigated() || prefersReducedMotion() || window.sessionStorage.getItem(SESSION_KEY) === "1";
       if (skip) {
         setMounted(false);
         finish();
