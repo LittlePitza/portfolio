@@ -1,17 +1,94 @@
 import type { Localized } from "@/i18n/config";
 
-export type HeadIcon = "database" | "pipeline" | "lock" | "pellet" | "report" | "cube" | "coffee" | "mic";
+export type HeadIcon =
+  | "database"
+  | "pipeline"
+  | "lock"
+  | "pellet"
+  | "report"
+  | "cube"
+  | "coffee"
+  | "mic"
+  | "meeple"
+  | "pizza"
+  | "headphones"
+  | "gamepad"
+  | "knight"
+  | "code";
 
 export interface HeadItem {
   icon: HeadIcon;
   title: Localized;
-  /** Told by the object itself, huyml-style. Every figure is from the CV. */
+  /** Told by the object itself, huyml-style. Work figures are from the CV; the rest is Luis. */
   story: Localized;
   signature: Localized;
 }
 
 /** What floats out when the head opens on the About page. Add, remove or rewrite freely. */
 export const headItems: HeadItem[] = [
+  {
+    icon: "meeple",
+    title: { en: "Board games", es: "Juegos de mesa" },
+    story: {
+      en: "He loves learning a new one almost as much as playing it: the rulebook first, then the table. Catan, Scythe and Root are the favourites, which tells you he likes trading, engines and asymmetric factions in equal measure.",
+      es: "Le encanta aprender uno nuevo casi tanto como jugarlo: primero el reglamento, luego la mesa. Catan, Scythe y Root son los favoritos, lo que dice que le gustan por igual el comercio, los motores y las facciones asimétricas.",
+    },
+    signature: { en: "A meeple, waiting for its turn", es: "Un meeple, esperando su turno" },
+  },
+  {
+    icon: "knight",
+    title: { en: "Chess", es: "Ajedrez" },
+    story: {
+      en: "Everything on the board is public information and he still loves getting out-thought. I am the only piece that jumps, which is probably why I am his favourite.",
+      es: "Todo en el tablero es información pública y aun así le encanta que lo superen pensando. Soy la única pieza que salta, y probablemente por eso soy su favorita.",
+    },
+    signature: { en: "The knight, two squares and one over", es: "El caballo, dos casillas y una de lado" },
+  },
+  {
+    icon: "pizza",
+    title: { en: "Pizza", es: "Pizza" },
+    story: {
+      en: "The reward at the end of a go-live, the fuel during a long game night, and the one thing in this head that needs no justification.",
+      es: "La recompensa al final de un arranque, el combustible en una noche larga de juegos, y lo único en esta cabeza que no necesita justificación.",
+    },
+    signature: { en: "The last slice", es: "La última rebanada" },
+  },
+  {
+    icon: "coffee",
+    title: { en: "Coffee", es: "Café" },
+    story: {
+      en: "Present at every migration, every contract review and every go-live rehearsal. I am the only dependency in this portfolio without a test suite.",
+      es: "Presente en cada migración, cada revisión de contrato y cada ensayo de arranque. Soy la única dependencia de este portafolio sin suite de pruebas.",
+    },
+    signature: { en: "The cup, refilled", es: "La taza, rellenada" },
+  },
+  {
+    icon: "headphones",
+    title: { en: "Music", es: "Música" },
+    story: {
+      en: "On for every long debugging session and every late migration. The playlist changes with the task; the volume does not.",
+      es: "Puesta en cada sesión larga de depuración y cada migración nocturna. La playlist cambia con la tarea; el volumen no.",
+    },
+    signature: { en: "The headphones, always nearby", es: "Los audífonos, siempre cerca" },
+  },
+  {
+    icon: "gamepad",
+    title: { en: "Video games", es: "Videojuegos" },
+    story: {
+      en: "The other way he unwinds. He reads a new game's systems with the same patience he reads a contract, and enjoys the first hours, when everything is still to be figured out, the most.",
+      es: "Su otra forma de desconectar. Lee los sistemas de un juego nuevo con la misma paciencia con la que lee un contrato, y disfruta más las primeras horas, cuando todo está por descubrirse.",
+    },
+    signature: { en: "The controller, charged", es: "El control, cargado" },
+  },
+  {
+    icon: "code",
+    title: { en: "Code & design", es: "Código y diseño" },
+    story: {
+      en: "He draws the interface and writes the database, and refuses to pick just one. This site is the proof: every animation by hand, every string typed in TypeScript, and a portrait he asked to be redrawn until it looked like him.",
+      es: "Dibuja la interfaz y escribe la base de datos, y se niega a elegir solo una. Este sitio es la prueba: cada animación a mano, cada texto tipado en TypeScript, y un retrato que pidió redibujar hasta que se pareciera a él.",
+    },
+    signature: { en: "The editor, always open", es: "El editor, siempre abierto" },
+  },
   {
     icon: "database",
     title: { en: "The database", es: "La base de datos" },
@@ -38,50 +115,5 @@ export const headItems: HeadItem[] = [
       es: "Alguien suplantó al Director General por federación de Teams. Él leyó los registros de auditoría de Entra ID, restableció seis cuentas, revocó sus tokens, bloqueó el dominio y luego escribió la política de ciberseguridad de la empresa. Desde entonces tengo más trabajo.",
     },
     signature: { en: "The padlock, no longer decorative", es: "El candado, ya no decorativo" },
-  },
-  {
-    icon: "pellet",
-    title: { en: "The plant", es: "La planta" },
-    story: {
-      en: "Recycled plastics in Huimilpan, Querétaro. Thirty-six people, sixty-six computing devices, one IT lead. The WiFi now has corporate, guest and IoT VLANs, and the payroll survives a dead hard drive.",
-      es: "Plásticos reciclados en Huimilpan, Querétaro. Treinta y seis personas, sesenta y seis equipos de cómputo, un responsable de TI. El WiFi ahora tiene VLANs corporativa, de invitados y de IoT, y la nómina sobrevive a un disco muerto.",
-    },
-    signature: { en: "A pellet from the floor", es: "Un pellet del piso" },
-  },
-  {
-    icon: "report",
-    title: { en: "The monthly report", es: "El reporte mensual" },
-    story: {
-      en: "August 2026: 93% response within SLA against a target of 85%, 100% availability across six services, spend at 94% of the ceiling. The unflattering number is on the same page: resolution within SLA was 72%. He does not hide it.",
-      es: "Agosto de 2026: 93% de respuesta dentro de SLA contra una meta de 85%, 100% de disponibilidad en seis servicios, gasto al 94% del techo. La cifra incómoda va en la misma página: resolución dentro de SLA, 72%. No la esconde.",
-    },
-    signature: { en: "Generated, not assembled", es: "Generado, no armado a mano" },
-  },
-  {
-    icon: "cube",
-    title: { en: "The ERP", es: "El ERP" },
-    story: {
-      en: "SAP Business One, go-live on 11 December 2026. Before signing he negotiated twenty-seven changes into the contract, including Priority 1 support that now means four hours to resolve, not four hours to start looking.",
-      es: "SAP Business One, arranque el 11 de diciembre de 2026. Antes de firmar negoció veintisiete cambios en el contrato, incluido el soporte de Prioridad 1, que ahora significa cuatro horas para resolver y no cuatro para empezar a mirar.",
-    },
-    signature: { en: "The cube, under contract", es: "El cubo, bajo contrato" },
-  },
-  {
-    icon: "mic",
-    title: { en: "The microphone", es: "El micrófono" },
-    story: {
-      en: "He records his own meetings and transcribes them on the CPU, offline, two audio tracks so I know who said what. Nothing leaves the laptop. 329 tests say so, and the licence is MIT.",
-      es: "Graba sus propias reuniones y las transcribe en el CPU, sin conexión, en dos pistas de audio para que yo sepa quién dijo qué. Nada sale de la laptop. 329 pruebas lo respaldan, y la licencia es MIT.",
-    },
-    signature: { en: "MeetScribe, listening locally", es: "MeetScribe, escuchando en local" },
-  },
-  {
-    icon: "coffee",
-    title: { en: "Coffee", es: "Café" },
-    story: {
-      en: "Present at every migration, every contract review and every go-live rehearsal. I am the only dependency in this portfolio without a test suite.",
-      es: "Presente en cada migración, cada revisión de contrato y cada ensayo de arranque. Soy la única dependencia de este portafolio sin suite de pruebas.",
-    },
-    signature: { en: "The cup, refilled", es: "La taza, rellenada" },
   },
 ];

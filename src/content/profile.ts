@@ -8,8 +8,8 @@ export const facts: Localized<string[]> = {
     "Runs IT for a recycled-plastics plant in Huimilpan",
     "Computer engineering, UAEM, thesis pending",
     "Google Cybersecurity certificate in progress",
-    "TODO: something personal, e.g. what you do off-screen",
-    "TODO: one more, keep it short and true",
+    "Board games, chess and video games, in that order of table space",
+    "Pizza, coffee and music, in no particular order",
   ],
   es: [
     "Responsable único de TI para 36 personas y 66 activos de cómputo",
@@ -17,8 +17,8 @@ export const facts: Localized<string[]> = {
     "Lleva la TI de una planta de reciclado de plásticos en Huimilpan",
     "Ingeniería en Computación, UAEM, titulación en proceso",
     "Certificado Google Cybersecurity en curso",
-    "TODO: algo personal, por ejemplo qué haces fuera de la pantalla",
-    "TODO: una más, corta y verdadera",
+    "Juegos de mesa, ajedrez y videojuegos, en ese orden de espacio en la mesa",
+    "Pizza, café y música, sin orden particular",
   ],
 };
 
