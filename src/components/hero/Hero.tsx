@@ -59,7 +59,7 @@ export function Hero({ eyebrow, tagline, sub, ctaWork, ctaContact, stamp, contac
             </span>
           ))}
         </h1>
-        <div data-char className="mb-1 hidden w-[9vw] max-w-[150px] shrink-0 md:block" style={{ visibility: done ? undefined : "hidden" }}>
+        <div data-char className="mb-1 hidden w-[11vw] max-w-[190px] shrink-0 md:block" style={{ visibility: done ? undefined : "hidden" }}>
           <Character className="h-auto w-full" />
         </div>
       </div>

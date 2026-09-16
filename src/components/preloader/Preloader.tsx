@@ -6,7 +6,7 @@ import { Character } from "./Character";
 import { usePreloader } from "./PreloaderContext";
 
 const SESSION_KEY = "portfolio:preloaded";
-const CHARACTER_WIDTH = 220;
+const CHARACTER_WIDTH = 300;
 
 /**
  * Black curtain that the character walks in and pushes off-screen to the right,
@@ -68,7 +68,7 @@ export function Preloader({ label }: { label: string }) {
       />
       <div data-group className="absolute inset-y-0 left-0 flex" style={{ width: `calc(100vw + ${CHARACTER_WIDTH}px)` }}>
         <div className="relative flex shrink-0 items-center justify-end" style={{ width: CHARACTER_WIDTH }}>
-          <div data-char className="w-[180px] translate-x-3 md:w-[200px]">
+          <div data-char className="w-[230px] translate-x-2 md:w-[290px]">
             <Character className="h-auto w-full" />
           </div>
         </div>
