@@ -7,7 +7,7 @@ export function CopyEmail({ email, copy, copied }: { email: string; copy: string
   return (
     <button
       type="button"
-      className="link-draw label"
+      className={`btn ${done ? "btn-accent" : "btn-ink"}`}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(email);
@@ -18,7 +18,7 @@ export function CopyEmail({ email, copy, copied }: { email: string; copy: string
         }
       }}
     >
-      {done ? copied : copy}
+      {done ? copied : copy} <span aria-hidden>{done ? "✓" : "⧉"}</span>
     </button>
   );
 }

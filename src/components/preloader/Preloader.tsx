@@ -10,9 +10,10 @@ const CHARACTER_WIDTH = 220;
 
 /**
  * Black curtain that the character walks in and pushes off-screen to the right,
- * revealing the hero underneath. Plays once per session; skipped for reduced motion.
+ * revealing the hero underneath, while a counter runs to 100. Plays once per
+ * session; skipped for reduced motion.
  */
-export function Preloader() {
+export function Preloader({ label }: { label: string }) {
   const root = useRef<HTMLDivElement>(null);
   const { finish } = usePreloader();
   const [mounted, setMounted] = useState(true);
@@ -29,6 +30,8 @@ export function Preloader() {
       document.documentElement.classList.add("is-loading");
       const group = root.current!.querySelector<HTMLElement>("[data-group]")!;
       const char = root.current!.querySelector<HTMLElement>("[data-char]")!;
+      const counter = root.current!.querySelector<HTMLElement>("[data-counter]")!;
+      const state = { n: 0 };
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.inOut" },
@@ -41,13 +44,13 @@ export function Preloader() {
       });
 
       tl.set(group, { x: -CHARACTER_WIDTH })
-        // 1. The character walks in; the curtain edge follows the hands.
-        .to(group, { x: 0, duration: 0.9, ease: "power2.out", delay: 0.2 })
-        // 2. Straining: a little bounce before the push.
+        // Counter climbs while the character walks in and gets set.
+        .to(state, { n: 100, duration: 1.7, ease: "power2.out", onUpdate: () => (counter.textContent = String(Math.round(state.n)).padStart(3, "0")) }, 0)
+        .to(group, { x: 0, duration: 0.9, ease: "power2.out", delay: 0.2 }, 0)
         .to(char, { rotate: -3, y: 4, duration: 0.18, ease: "power1.inOut", yoyo: true, repeat: 3, transformOrigin: "50% 100%" })
-        // 3. The push: everything slides off to the right.
         .to(group, { x: () => window.innerWidth + CHARACTER_WIDTH, duration: 1.5 }, "push")
         .to(char, { rotate: -8, duration: 0.5, transformOrigin: "50% 100%" }, "push")
+        .to("[data-hud]", { autoAlpha: 0, duration: 0.3 }, "push")
         .to(root.current, { autoAlpha: 0, duration: 0.2 }, "-=0.1");
     },
     { scope: root },
@@ -64,6 +67,12 @@ export function Preloader() {
           </div>
         </div>
         <div className="h-full grow bg-ink" />
+      </div>
+      <div data-hud className="absolute bottom-6 right-6 text-right text-bg">
+        <p className="label text-bg/60">{label}</p>
+        <p data-counter className="font-display text-7xl leading-none tabular-nums md:text-8xl">
+          000
+        </p>
       </div>
     </div>
   );

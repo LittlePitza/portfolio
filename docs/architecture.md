@@ -92,12 +92,40 @@ Animation is a client concern and is isolated to four components.
 - All GSAP work goes through `useGSAP` with a scope, so selectors stay local
   and tweens are reverted on unmount.
 
+## Details that make it feel alive
+
+- `PageTransition` wraps every route. A link that goes through it raises a
+  black curtain carrying the destination's name, pushes the route underneath,
+  and lifts the curtain once the new pathname has rendered. Same-page links,
+  modifier clicks and reduced motion bypass it.
+- `ContactOverlay` listens for a `contact:open` event on `window`, so the
+  menu, the hero button or anything else can open the two floating cards
+  without sharing state. The `/contact` route still exists for direct links.
+- `InsideHead` on About: hover or tap lifts the cap and floats the objects
+  from `src/content/head.ts` out of the head; each one opens a tilted card
+  with its story. Content is data, so adding an object is one entry.
+- `TabTitle` alternates two lines in the document title while the tab is
+  hidden and restores the original on return.
+- `Cursor` replaces the pointer with a dot that grows into a labelled disc
+  over anything marked `data-cursor`. Fine pointers only.
+- `Reveal`, `CountUp` and `Marquee` are the small reusable pieces behind
+  scroll-in sections, counting figures and the ticker strips.
+
 ## Chrome
 
 `Frame` is fixed, pointer-events-none, and painted with
 `mix-blend-mode: difference` in white. On the light page it reads near-black;
 over the black headers it reads white. That is what lets one component sit on
 top of every route without per-page variants.
+
+## Identity assets
+
+`src/app/icon.svg` is the monogram: L and H built from bars on an orange
+field with a black edge for the curtain. `apple-icon.tsx` and
+`[locale]/opengraph-image.tsx` redraw the same geometry with `next/og`, so
+every icon and social card comes from one source. The two TTFs under
+`src/assets/fonts` exist only for those generated images; the site itself
+loads fonts through `next/font`.
 
 ## Design tokens
 

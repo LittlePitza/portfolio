@@ -21,4 +21,8 @@ export interface WorkLabels {
   launch: string;
   numbers: string;
   view: string;
+  open: string;
+  prev: string;
+  next: string;
+  hint: string;
 }

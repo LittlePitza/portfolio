@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { scrollTo } from "@/lib/scroll";
 import { Cover } from "./Cover";
+import { TransitionLink } from "@/components/chrome/PageTransition";
 import type { Slide, WorkLabels } from "./types";
 
 const ITEM_H = 168; // px, height of one item in the right-hand wheel
@@ -14,10 +16,10 @@ interface Props {
 }
 
 /**
- * Desktop: a pinned, scroll-driven stage in the spirit of huyml.co. The scroll
- * position selects the active project; GSAP animates covers, the metadata
- * columns and the vertical wheel between states. Below `lg` and for reduced
- * motion the same data renders as a plain vertical list.
+ * Desktop: a pinned, scroll-driven stage. Scroll, arrow keys, the buttons or a
+ * click on the wheel select the active project; GSAP animates covers, metadata
+ * and the wheel between states, and a progress bar shows where you are. Below
+ * `lg` and for reduced motion the same data renders as a plain vertical list.
  */
 export function WorkCarousel({ slides, labels }: Props) {
   return (
@@ -30,9 +32,21 @@ export function WorkCarousel({ slides, labels }: Props) {
 
 function Stage({ slides, labels }: Props) {
   const root = useRef<HTMLElement>(null);
+  const trigger = useRef<ScrollTrigger | null>(null);
+  const progress = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const n = slides.length;
   const slide = slides[active]!;
+
+  const goTo = useCallback(
+    (i: number) => {
+      const st = trigger.current;
+      if (!st) return;
+      const clamped = Math.min(n - 1, Math.max(0, i));
+      scrollTo(st.start + ((st.end - st.start) * clamped) / (n - 1));
+    },
+    [n],
+  );
 
   // Scroll → active index.
   useGSAP(
@@ -41,7 +55,7 @@ function Stage({ slides, labels }: Props) {
       mm.add({ desktop: "(min-width: 1024px)", motion: "(prefers-reduced-motion: no-preference)" }, (ctx) => {
         const { desktop, motion } = ctx.conditions as { desktop: boolean; motion: boolean };
         if (!desktop || !motion) return;
-        ScrollTrigger.create({
+        trigger.current = ScrollTrigger.create({
           trigger: root.current,
           start: "top top",
           end: () => `+=${(n - 1) * 100}%`,
@@ -51,13 +65,34 @@ function Stage({ slides, labels }: Props) {
           onUpdate: (self) => {
             const i = Math.min(n - 1, Math.max(0, Math.round(self.progress * (n - 1))));
             setActive((prev) => (prev === i ? prev : i));
+            if (progress.current) progress.current.style.transform = `scaleX(${self.progress})`;
           },
         });
+        return () => {
+          trigger.current = null;
+        };
       });
       return () => mm.revert();
     },
     { scope: root },
   );
+
+  // Keyboard while the stage is pinned.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const st = trigger.current;
+      if (!st || !st.isActive) return;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        goTo(active + 1);
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        goTo(active - 1);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active, goTo]);
 
   // Active index → animated state.
   useGSAP(
@@ -86,7 +121,7 @@ function Stage({ slides, labels }: Props) {
   );
 
   return (
-    <section ref={root} className="relative hidden h-svh overflow-hidden lg:block" aria-label={labels.selected}>
+    <section ref={root} className="relative hidden h-svh overflow-hidden lg:block" aria-label={labels.selected} aria-roledescription="carousel">
       {/* Fan of the other covers, top-right (upcoming) and bottom-left (previous). */}
       {slides.map((s, i) => {
         const offset = (i - active + n) % n;
@@ -98,13 +133,13 @@ function Stage({ slides, labels }: Props) {
           : { bottom: `${-8 + k * 1.5}vh`, left: `${-6 + k * 5}vw`, transform: `rotate(${8 + k * 6}deg)`, zIndex: 10 - k };
         return (
           <div key={s.slug} className="pointer-events-none absolute w-[20vw] transition-all duration-700 ease-[var(--ease-out-expo)]" style={style} aria-hidden>
-            <Cover slide={s} index={i} sizes="20vw" className="aspect-[4/3] opacity-90" />
+            <Cover slide={s} index={i} sizes="20vw" brutal={false} className="aspect-[4/3] border-2 border-ink opacity-90" />
           </div>
         );
       })}
 
       {/* Left column: metadata */}
-      <div className="absolute left-6 top-[38%] w-[22vw] max-w-xs space-y-5">
+      <div className="absolute left-6 top-[36%] w-[22vw] max-w-xs space-y-5">
         <Row label={labels.role} lines={slide.role} />
         <Row label={labels.stack} lines={slide.stack} />
         <Row label={labels.launch} lines={[slide.launch, slide.status]} />
@@ -114,9 +149,19 @@ function Stage({ slides, labels }: Props) {
       {/* Centre: covers stacked, one visible */}
       <div className="absolute left-1/2 top-1/2 aspect-[4/3] w-[38vw] max-w-[640px] -translate-x-1/2 -translate-y-1/2">
         {slides.map((s, i) => (
-          <Link key={s.slug} href={s.href} data-cover className="absolute inset-0 block" tabIndex={i === active ? 0 : -1} aria-label={`${s.name}: ${labels.view}`}>
-            <Cover slide={s} index={i} priority={i === 0} className="h-full w-full" />
-          </Link>
+          <TransitionLink
+            key={s.slug}
+            href={s.href}
+            label={s.name}
+            data-cover
+            data-cursor={labels.open}
+            className="group absolute inset-0 block"
+            tabIndex={i === active ? 0 : -1}
+            aria-label={`${s.name}: ${labels.view}`}
+            aria-hidden={i !== active}
+          >
+            <Cover slide={s} index={i} priority={i === 0} stamp className="h-full w-full transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[12px_12px_0_var(--ink)]" />
+          </TransitionLink>
         ))}
       </div>
 
@@ -129,21 +174,42 @@ function Stage({ slides, labels }: Props) {
           {slides.map((s, i) => (
             <li key={s.slug} data-wheel-item className="flex flex-col justify-center text-center" style={{ height: ITEM_H }}>
               <p className="label text-muted">{s.category}</p>
-              <Link href={s.href} className="display mt-1 text-3xl" tabIndex={i === active ? 0 : -1}>
+              <TransitionLink
+                href={s.href}
+                label={s.name}
+                className="display mt-1 text-3xl transition-colors hover:text-accent"
+                tabIndex={i === active ? 0 : -1}
+                data-cursor={i === active ? labels.open : undefined}
+                onClick={(e) => {
+                  if (i !== active) {
+                    e.preventDefault();
+                    goTo(i);
+                  }
+                }}
+              >
                 {s.name}
-              </Link>
+              </TransitionLink>
               <p className="mx-auto mt-2 max-w-[28ch] text-xs leading-relaxed text-muted">{s.summary}</p>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Swatch */}
-      <div className="absolute right-6 top-1/2 flex -translate-y-1/2 flex-col gap-1.5" aria-hidden>
+      {/* Swatches double as a dot navigation */}
+      <ul className="absolute right-6 top-1/2 flex -translate-y-1/2 flex-col gap-1.5" aria-label={labels.selected}>
         {slides.map((s, i) => (
-          <span key={s.slug} className="h-2 w-2 rounded-full transition-opacity duration-500" style={{ background: s.color, opacity: i === active ? 1 : 0.25 }} />
+          <li key={s.slug}>
+            <button
+              type="button"
+              aria-label={`${String(i + 1).padStart(2, "0")} ${s.name}`}
+              aria-current={i === active ? "true" : undefined}
+              onClick={() => goTo(i)}
+              className="block h-2.5 w-2.5 border-2 border-ink transition-all duration-500"
+              style={{ background: s.color, opacity: i === active ? 1 : 0.35, transform: i === active ? "scale(1.4)" : "none" }}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
 
       {/* Bottom-left: counter */}
       <div className="absolute bottom-16 left-6 flex items-start gap-3">
@@ -154,8 +220,26 @@ function Stage({ slides, labels }: Props) {
               {String(active + 1).padStart(2, "0")}
             </span>
           </span>
-          <span className="label mt-3 text-muted">/{String(n).padStart(2, "0")}</span>
+          <span className="display outline mt-2 text-[4vw] leading-[0.8]">/{String(n).padStart(2, "0")}</span>
         </div>
+      </div>
+
+      {/* Bottom-right: controls */}
+      <div className="absolute bottom-16 right-6 flex flex-col items-end gap-3">
+        <div className="flex gap-3">
+          <button type="button" className="btn btn-square" onClick={() => goTo(active - 1)} disabled={active === 0} aria-label={labels.prev}>
+            ←
+          </button>
+          <button type="button" className="btn btn-square btn-ink" onClick={() => goTo(active + 1)} disabled={active === n - 1} aria-label={labels.next}>
+            →
+          </button>
+        </div>
+        <p className="label text-muted">{labels.hint}</p>
+      </div>
+
+      {/* Progress */}
+      <div className="absolute inset-x-0 bottom-0 h-1 bg-line">
+        <div ref={progress} className="h-full w-full origin-left bg-accent" style={{ transform: "scaleX(0)" }} />
       </div>
     </section>
   );
@@ -163,7 +247,7 @@ function Stage({ slides, labels }: Props) {
 
 function Row({ label, lines }: { label: string; lines: string[] }) {
   return (
-    <div data-meta className="grid grid-cols-[5.5rem_1fr] gap-3">
+    <div data-meta className="grid grid-cols-[5.5rem_1fr] gap-3 border-t-2 border-ink pt-2">
       <p className="label text-muted">{label}</p>
       <ul className="label space-y-0.5">
         {lines.map((line) => (
@@ -177,23 +261,23 @@ function Row({ label, lines }: { label: string; lines: string[] }) {
 /** Plain stacked version for small screens and reduced motion. */
 function List({ slides, labels }: Props) {
   return (
-    <section className="px-4 pb-24 pt-8 lg:hidden motion-reduce:lg:block" aria-label={labels.selected}>
-      <p className="label mb-6 text-muted">{labels.selected}</p>
-      <ul className="space-y-14">
+    <section className="grid-paper px-4 pb-24 pt-10 lg:hidden motion-reduce:lg:block" aria-label={labels.selected}>
+      <p className="label mb-8 text-muted">{labels.selected}</p>
+      <ul className="space-y-16">
         {slides.map((s, i) => (
           <li key={s.slug}>
             <Link href={s.href} className="block">
-              <Cover slide={s} index={i} sizes="100vw" className="aspect-[4/3] w-full" />
+              <Cover slide={s} index={i} sizes="100vw" stamp className="aspect-[4/3] w-full" />
             </Link>
-            <div className="mt-4 flex items-baseline justify-between gap-4">
+            <div className="mt-6 flex items-baseline justify-between gap-4">
               <p className="label text-muted">{s.category}</p>
               <p className="label text-muted">
                 {String(i + 1).padStart(2, "0")}/{String(slides.length).padStart(2, "0")}
               </p>
             </div>
-            <Link href={s.href} className="display mt-1 block text-4xl">
+            <TransitionLink href={s.href} label={s.name} className="display mt-1 block text-4xl">
               {s.name}
-            </Link>
+            </TransitionLink>
             <p className="mt-3 text-sm leading-relaxed text-muted">{s.summary}</p>
             <ul className="label mt-4 flex flex-wrap gap-x-4 gap-y-1">
               {s.numbers.map((m) => (
@@ -202,6 +286,9 @@ function List({ slides, labels }: Props) {
                 </li>
               ))}
             </ul>
+            <TransitionLink href={s.href} label={s.name} className="btn mt-5">
+              {labels.open} <span aria-hidden>→</span>
+            </TransitionLink>
           </li>
         ))}
       </ul>

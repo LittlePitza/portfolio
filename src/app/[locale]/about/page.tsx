@@ -3,7 +3,11 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { capabilities, education, experience, facts, numbers, process } from "@/content/profile";
+import { headItems } from "@/content/head";
 import { PageHeader, SectionTitle } from "@/components/ui/PageHeader";
+import { Reveal } from "@/components/ui/Reveal";
+import { CountUp } from "@/components/ui/CountUp";
+import { InsideHead } from "@/components/about/InsideHead";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/about">): Promise<Metadata> {
   const { locale } = await params;
@@ -26,14 +30,26 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
 
   return (
     <article>
-      <PageHeader title={t.about.title}>
+      <PageHeader title={t.about.title} kicker={t.hero.eyebrow}>
         <p className="mt-8 max-w-2xl font-display text-2xl leading-snug text-bg/90 md:text-3xl">{t.about.intro}</p>
       </PageHeader>
 
-      {/* Facts, scattered uppercase lines like huyml's "plant daddy" wall */}
+      {/* Inside the head */}
+      <section className="grid-paper border-b-2 border-ink" aria-label={t.about.headQuestion}>
+        <InsideHead
+          items={headItems.map((h) => ({ icon: h.icon, title: h.title[locale], story: h.story[locale], signature: h.signature[locale] }))}
+          question={t.about.headQuestion}
+          hint={t.about.headHint}
+          close={t.about.close}
+          left={{ value: "05", label: t.about.headLeft }}
+          right={{ value: "36", label: t.about.headRight }}
+        />
+      </section>
+
+      {/* Facts, scattered uppercase lines */}
       <section className="px-4 py-20 md:px-6 md:py-28">
         <SectionTitle>{t.about.facts}</SectionTitle>
-        <ul className="display flex flex-wrap gap-x-[4vw] gap-y-3 text-[clamp(1.5rem,3.6vw,3.5rem)]">
+        <Reveal as="ul" stagger className="display flex flex-wrap gap-x-[4vw] gap-y-3 text-[clamp(1.5rem,3.6vw,3.5rem)]">
           {facts[locale]
             .filter((f) => !f.startsWith("TODO"))
             .map((f, i) => (
@@ -41,78 +57,81 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
                 {f}
               </li>
             ))}
-        </ul>
+        </Reveal>
       </section>
 
       {/* Numbers instead of awards */}
-      <section className="border-t hairline px-4 py-20 md:px-6 md:py-28">
+      <section className="border-t-2 border-ink bg-ink px-4 py-20 text-bg md:px-6 md:py-28">
         <SectionTitle>{t.about.numbersTitle}</SectionTitle>
-        <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        <Reveal as="ul" stagger className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {numbers.map((n) => (
-            <li key={n.label[locale]}>
-              <p className="display text-6xl md:text-7xl">{n.value}</p>
-              <p className="label mt-3 max-w-[22ch] text-muted">{n.label[locale]}</p>
+            <li key={n.label[locale]} className="border-t-2 border-bg/30 pt-4">
+              <CountUp value={n.value} className="display block text-6xl text-accent md:text-7xl" />
+              <p className="label mt-3 max-w-[22ch] text-bg/60">{n.label[locale]}</p>
             </li>
           ))}
-        </ul>
+        </Reveal>
       </section>
 
-      {/* Capabilities */}
-      <section className="border-t hairline px-4 py-20 md:px-6 md:py-28">
+      {/* Capabilities as cards */}
+      <section className="grid-paper border-t-2 border-ink px-4 py-20 md:px-6 md:py-28">
         <SectionTitle>{t.about.capabilities}</SectionTitle>
-        <div className="grid gap-10 md:grid-cols-5">
-          {capabilities[locale].map((c) => (
-            <div key={c.title}>
+        <Reveal stagger className="grid gap-6 md:grid-cols-3 lg:grid-cols-5">
+          {capabilities[locale].map((c, i) => (
+            <div key={c.title} className={`brutal p-6 ${i % 2 === 0 ? "bg-paper" : "bg-accent"}`}>
               <h3 className="display text-3xl">{c.title}</h3>
-              <ul className="label mt-4 space-y-1 text-muted">
+              <ul className="label mt-4 space-y-1 text-ink/70">
                 {c.items.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* Process, P1..P6 */}
-      <section className="border-t hairline px-4 py-20 md:px-6 md:py-28">
+      <section className="border-t-2 border-ink px-4 py-20 md:px-6 md:py-28">
         <SectionTitle>{t.about.process}</SectionTitle>
-        <ol className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+        <Reveal as="ol" stagger className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           {process[locale].map((p) => (
-            <li key={p.step} className="grid grid-cols-[3rem_1fr] gap-4">
-              <span className="font-display text-2xl text-accent">{p.step}.</span>
+            <li key={p.step} className="grid grid-cols-[4.5rem_1fr] gap-4 border-t-2 border-ink pt-4">
+              <span className="display outline text-5xl">{p.step}</span>
               <div>
                 <h3 className="display text-3xl">{p.title}</h3>
                 <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">{p.text}</p>
               </div>
             </li>
           ))}
-        </ol>
+        </Reveal>
       </section>
 
       {/* Experience */}
-      <section className="border-t hairline px-4 py-20 md:px-6 md:py-28">
+      <section className="border-t-2 border-ink px-4 py-20 md:px-6 md:py-28">
         <SectionTitle>{t.about.experience}</SectionTitle>
-        <ol>
+        <Reveal as="ol" stagger>
           {experience.map((r) => (
-            <li key={r.company + r.from} className="grid gap-2 border-t hairline py-5 md:grid-cols-12 md:items-baseline">
-              <p className="display text-3xl md:col-span-4">{r.company}</p>
+            <li key={r.company + r.from} className="group grid gap-2 border-t-2 border-ink py-5 transition-colors hover:bg-paper md:grid-cols-12 md:items-baseline">
+              <p className="display text-3xl transition-transform group-hover:translate-x-2 md:col-span-4">{r.company}</p>
               <p className="text-sm md:col-span-4">{r.title[locale]}</p>
               <p className="label text-muted md:col-span-2">{r.place}</p>
               <p className="label text-muted md:col-span-2 md:text-right">{formatRange(r.from, r.to, locale, t.about.present)}</p>
             </li>
           ))}
-        </ol>
+        </Reveal>
       </section>
 
       {/* Education */}
-      <section className="border-t hairline px-4 py-20 md:px-6 md:py-28">
+      <section className="border-t-2 border-ink px-4 py-20 md:px-6 md:py-28">
         <SectionTitle>{t.about.education}</SectionTitle>
-        <ul className="max-w-2xl space-y-3 text-sm leading-relaxed">
+        <Reveal as="ul" stagger className="max-w-2xl space-y-3 text-sm leading-relaxed">
           {education[locale].map((e) => (
-            <li key={e}>{e}</li>
+            <li key={e} className="flex gap-3">
+              <span aria-hidden className="mt-1.5 h-2 w-2 shrink-0 bg-accent" />
+              {e}
+            </li>
           ))}
-        </ul>
+        </Reveal>
       </section>
     </article>
   );

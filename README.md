@@ -11,7 +11,7 @@
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/code-MIT-141414?style=flat-square&labelColor=141414&color=0FA3B1"></a>
 </p>
 
-<h3 align="center">Personal portfolio of Luis Hernández</h3>
+<h3 align="center"><a href="https://lhernandez.dev">lhernandez.dev</a></h3>
 <p align="center">Full-stack developer and IT lead in Querétaro, Mexico.<br>A site where the recognition column holds numbers, not awards.</p>
 
 <br>
@@ -43,8 +43,22 @@ runtime data layer at all.
       Six projects on a scroll-pinned stage: metadata columns on the left, cover in the centre, a vertical wheel on the right and a counter. On phones it becomes a plain list.
     </td>
     <td width="33%" valign="top">
+      <strong>Small details</strong><br>
+      A black curtain with the destination's name between pages. Contact opens as floating cards instead of a page. Hover the head on About and the cap lifts while the things on his mind float out, each with its own story. Leave the tab and the title asks you back.
+    </td>
+  </tr>
+  <tr>
+    <td width="33%" valign="top">
       <strong>Two languages</strong><br>
       <code>/en</code> and <code>/es</code>, chosen at the edge from a cookie or the browser. Every content string is typed as <code>Localized&lt;T&gt;</code>; a missing translation fails the build.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Brutalist kit</strong><br>
+      Hard 2px borders, offset shadows, mono uppercase labels, rotated stamps and an engineering grid. One accent, international orange. The monogram is pure geometry so it survives a 16px tab icon.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Generated images</strong><br>
+      Favicon, Apple icon and per-language OpenGraph cards are built from the same mark with <code>next/og</code>, using the bundled Instrument Serif and Geist Mono.
     </td>
   </tr>
 </table>
@@ -105,14 +119,17 @@ the request path and the reasons behind each omission, is in
 src/
 ├── app/[locale]/        routes: home, about, contact, work/[slug], not-found
 ├── components/
-│   ├── chrome/          Frame, Clock, LocaleSwitch, Footer
+│   ├── chrome/          Frame, NavLinks, PageTransition, ContactOverlay, TabTitle, Clock, LocaleSwitch, Footer
 │   ├── preloader/       Preloader, Character, PreloaderContext
 │   ├── hero/            Hero
 │   ├── work/            WorkCarousel, Cover, types
-│   └── ui/              PageHeader, CopyEmail
-├── content/             site.ts, projects.ts, profile.ts
+│   ├── about/           InsideHead
+│   └── ui/              Mark, Icons, Cursor, Reveal, CountUp, Marquee, PageHeader, CopyEmail
+├── content/             site.ts, projects.ts, profile.ts, head.ts
+├── assets/fonts/        TTFs used only for generated images
 ├── i18n/                config, dictionaries/en, dictionaries/es
 ├── lib/gsap.ts          plugin registration, reduced-motion helper
+├── lib/scroll.ts        one Lenis instance shared by carousel, nav and transitions
 └── proxy.ts             edge redirect to /en or /es
 ```
 
@@ -170,7 +187,6 @@ analysis of what makes it work, and what this site does differently, is kept in
 
 - Final illustration for the character, optionally animated in Rive
 - Real, anonymised screenshots of the internal systems
-- Generated OpenGraph images and a favicon with the initials
 - A playground section for open-source work and experiments
 
 <br>

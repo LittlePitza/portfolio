@@ -32,6 +32,13 @@ html.is-loading {
   overflow: hidden;
 }
 
+/* The custom cursor replaces the native one only on fine pointers. */
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button {
+  cursor: none;
+}
+
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -42,6 +49,13 @@ body {
   background: var(--accent);
   color: var(--bg);
 }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- type ---------- */
 
 /* Small uppercase mono labels used across the chrome and metadata columns. */
 .label {
@@ -61,8 +75,107 @@ body {
   text-transform: uppercase;
 }
 
+/* Hollow display type, for the big index numbers. */
+.outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--ink);
+}
+.outline-bg {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--bg);
+}
+
 .hairline {
   border-color: var(--line);
+}
+
+/* ---------- brutalist kit ---------- */
+
+/* Hard border and offset shadow. */
+.brutal {
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.brutal-accent {
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--accent);
+}
+
+/* Buttons: mono, uppercase, hard shadow that reacts to hover and press. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 2px solid var(--ink);
+  padding: 0.85rem 1.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  transition:
+    transform 0.15s var(--ease-out-expo),
+    box-shadow 0.15s var(--ease-out-expo),
+    background-color 0.15s,
+    color 0.15s;
+}
+.btn:hover,
+.btn:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.btn-accent {
+  background: var(--accent);
+}
+.btn-ink {
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: 4px 4px 0 var(--accent);
+}
+.btn-ink:hover,
+.btn-ink:focus-visible {
+  box-shadow: 6px 6px 0 var(--accent);
+}
+.btn-ink:active {
+  box-shadow: 2px 2px 0 var(--accent);
+}
+.btn-square {
+  padding: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  justify-content: center;
+  font-size: 1rem;
+}
+.btn[disabled] {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Rotated stamp badge. */
+.stamp {
+  display: inline-block;
+  border: 2px solid currentColor;
+  padding: 0.3rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+}
+
+/* Faint engineering grid behind sections. */
+.grid-paper {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 /* Underline that draws in from the left on hover. */
@@ -75,7 +188,7 @@ body {
   position: absolute;
   left: 0;
   bottom: -0.15em;
-  height: 1px;
+  height: 2px;
   width: 100%;
   background: currentColor;
   transform: scaleX(0);
@@ -83,9 +196,35 @@ body {
   transition: transform 0.45s var(--ease-out-expo);
 }
 .link-draw:hover::after,
-.link-draw:focus-visible::after {
+.link-draw:focus-visible::after,
+.link-draw[aria-current="page"]::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* ---------- motion ---------- */
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.blink {
+  animation: blink 1s steps(1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -93,7 +232,40 @@ body {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ---------- navigation ---------- */
+
+/* Hovering one item softly blurs the rest; the current page carries an arrow. */
+.nav-item {
+  transition:
+    filter 0.35s var(--ease-out-expo),
+    opacity 0.35s var(--ease-out-expo);
+}
+.nav:hover .nav-item:not(:hover) {
+  filter: blur(2.5px);
+  opacity: 0.45;
+}
+.nav-arrow {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-width 0.35s var(--ease-out-expo),
+    opacity 0.35s var(--ease-out-expo),
+    margin 0.35s var(--ease-out-expo);
+}
+.nav-item:hover .nav-arrow,
+.nav-item[aria-current="page"] .nav-arrow {
+  max-width: 1.4em;
+  opacity: 1;
+  margin-right: 0.3em;
 }

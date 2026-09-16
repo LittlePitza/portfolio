@@ -99,11 +99,17 @@ Hecho y verificado con `next build` (23 páginas estáticas):
 - Marco fijo con reloj de Querétaro, correo, CV descargable (ES/EN) y toggle de idioma, en `mix-blend-difference` para leerse sobre negro.
 - SEO: metadata por idioma, `alternates`, JSON-LD Person, sitemap y robots.
 
+## Segunda iteración (2026-09-16, tarde)
+
+- Dominio propio: lhernandez.dev, registrado en Vercel y asignado al proyecto.
+- Sistema de logos: monograma geométrico LH en `icon.svg`, Apple icon y tarjetas OpenGraph por idioma generadas con `next/og`.
+- Toque brutalista: bordes duros, sombras desplazadas, botones mono, sellos rotados, rejilla de ingeniería, números huecos.
+- Navegación más intuitiva: llamadas a la acción en el hero, flecha en la sección actual, desenfoque de los otros ítems del menú, botones, teclado y barra de progreso en el carrusel, puntos de navegación por color.
+- Detalles tomados de huyml: transición de página con telón negro y título, Contacto como tarjetas flotantes con créditos, cabeza que se abre en About con objetos y sus historias, título de pestaña que cambia al salir, cursor personalizado, contador en el preloader.
+
 ## Pendientes
 
 1. Ilustración definitiva del personaje (y opcionalmente animación Rive).
 2. Capturas anonimizadas de TI Hub, Asistencia, Mantenimiento y Marketplace.
 3. Completar los dos `TODO` personales en `src/content/profile.ts` (datos tipo "plant daddy").
-4. Dominio real en `site.url` (hoy `luishernandez.dev` como placeholder) y despliegue en Vercel.
-5. Imagen OpenGraph generada y favicon con las iniciales.
-6. Playground / open source como sección propia, si se quiere replicar ese menú de huyml.
+4. Playground / open source como sección propia, si se quiere replicar ese menú de huyml.
