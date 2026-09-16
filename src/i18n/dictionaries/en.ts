@@ -73,7 +73,7 @@ const en = {
   footer: {
     tagline: "Let's build something that survives production.",
     cta: "Write me",
-    made: "Made in Querétaro, shipped from a plastics plant.",
+    made: "Made in Querétaro, Mexico.",
     credits: "Credits",
     builtWith: "Next.js, GSAP and too much coffee. Type: Instrument Serif & Geist.",
     source: "Source on GitHub",

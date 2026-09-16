@@ -75,7 +75,7 @@ const es: typeof en = {
   footer: {
     tagline: "Construyamos algo que sobreviva a producción.",
     cta: "Escríbeme",
-    made: "Hecho en Querétaro, desplegado desde una planta de plásticos.",
+    made: "Hecho en Querétaro, México.",
     credits: "Créditos",
     builtWith: "Next.js, GSAP y demasiado café. Tipografía: Instrument Serif y Geist.",
     source: "Código en GitHub",

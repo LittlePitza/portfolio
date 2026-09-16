@@ -5,7 +5,7 @@ export const facts: Localized<string[]> = {
   en: [
     "Sole IT lead for 36 people and 66 computing assets",
     "Reports straight to the General Director",
-    "Ships to production from a plastics plant in Huimilpan",
+    "Runs IT for a recycled-plastics plant in Huimilpan",
     "Computer engineering, UAEM, thesis pending",
     "Google Cybersecurity certificate in progress",
     "TODO: something personal, e.g. what you do off-screen",
@@ -14,7 +14,7 @@ export const facts: Localized<string[]> = {
   es: [
     "Responsable único de TI para 36 personas y 66 activos de cómputo",
     "Reporta directo a Dirección General",
-    "Despliega a producción desde una planta de plásticos en Huimilpan",
+    "Lleva la TI de una planta de reciclado de plásticos en Huimilpan",
     "Ingeniería en Computación, UAEM, titulación en proceso",
     "Certificado Google Cybersecurity en curso",
     "TODO: algo personal, por ejemplo qué haces fuera de la pantalla",

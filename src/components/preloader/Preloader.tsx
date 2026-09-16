@@ -33,6 +33,15 @@ export function Preloader({ label }: { label: string }) {
       const counter = root.current!.querySelector<HTMLElement>("[data-counter]")!;
       const state = { n: 0 };
 
+      // Walk cycle: legs swing from the hips, the body bobs, sweat keeps popping.
+      // Runs for the whole opening, so he walks in and then keeps pushing.
+      gsap
+        .timeline({ repeat: -1, yoyo: true, defaults: { duration: 0.26, ease: "sine.inOut" } })
+        .fromTo("[data-leg-back]", { rotation: -14, svgOrigin: "150 262" }, { rotation: 20, svgOrigin: "150 262" }, 0)
+        .fromTo("[data-leg-front]", { rotation: 16, svgOrigin: "182 268" }, { rotation: -14, svgOrigin: "182 268" }, 0);
+      gsap.to("[data-body]", { y: -5, rotation: 1.5, svgOrigin: "170 270", duration: 0.13, repeat: -1, yoyo: true, ease: "sine.inOut" });
+      gsap.fromTo("[data-sweat]", { scale: 0.4, autoAlpha: 0, svgOrigin: "300 72" }, { scale: 1, autoAlpha: 1, svgOrigin: "300 72", duration: 0.35, repeat: -1, repeatDelay: 0.5, ease: "back.out(2)" });
+
       const tl = gsap.timeline({
         defaults: { ease: "power3.inOut" },
         onComplete: () => {

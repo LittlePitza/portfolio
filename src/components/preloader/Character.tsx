@@ -6,6 +6,28 @@
  * white socks and sneakers. Thick outlines, flat fills, a little sweat.
  * Used by the preloader, the hero and the contact cards.
  */
+/** A sneaker in profile facing right, ankle at (x, y): sock, toe cap, sole, laces and a stripe. */
+function Sneaker({ x, y, rotate }: { x: number; y: number; rotate: number }) {
+  const ink = "var(--ink)";
+  const paper = "var(--bg)";
+  return (
+    <g transform={`translate(${x} ${y}) rotate(${rotate})`}>
+      {/* sock */}
+      <path d="M-10 -16 L10 -16 L11 2 L-10 2 Z" fill={paper} strokeWidth="5" />
+      <path d="M-8 -9 L9 -9" strokeWidth="2.5" />
+      {/* shoe body */}
+      <path d="M-16 0 C-19 8 -15 16 -6 18 L42 18 C52 18 58 12 56 6 C54 0 46 -3 36 -3 L14 -3 C6 -3 2 -6 0 -10 L-10 -8 Z" fill={paper} />
+      {/* sole */}
+      <path d="M-15 19 L44 19 C54 19 59 14 57 8" strokeWidth="7" />
+      <path d="M-6 19 L44 19" stroke={paper} strokeWidth="2" />
+      {/* laces and stripe */}
+      <path d="M4 1 L12 -1 M11 5 L20 3 M18 8 L26 6" strokeWidth="2.5" />
+      <path d="M22 12 C30 8 40 9 50 14" strokeWidth="3" />
+      <path d="M-12 4 L-4 12" strokeWidth="2.5" />
+    </g>
+  );
+}
+
 export function Character({ className = "" }: { className?: string }) {
   const ink = "var(--ink)";
   const paper = "var(--bg)";
@@ -25,25 +47,20 @@ export function Character({ className = "" }: { className?: string }) {
         </pattern>
       </defs>
 
-      {/* Back leg: stretched, on its toes */}
-      <path d="M150 262 L102 318 L74 372" strokeWidth="26" />
-      <path d="M150 262 L102 318 L74 372" stroke={paper} strokeWidth="1.5" strokeOpacity="0.5" />
-      {/* Front leg: planted, knee bent */}
-      <path d="M182 268 L194 330 L190 372" strokeWidth="28" />
-      <path d="M182 268 L194 330 L190 372" stroke={paper} strokeWidth="1.5" strokeOpacity="0.5" />
-      {/* Socks */}
-      <path d="M70 372 L66 384" stroke={paper} strokeWidth="18" />
-      <path d="M70 372 L66 384" strokeWidth="24" strokeOpacity="0" />
-      <path d="M190 372 L190 384" stroke={paper} strokeWidth="20" />
-      <path d="M58 366 L84 372 M178 368 L204 368" strokeWidth="5" />
-      {/* Sneakers */}
-      <path d="M26 398 L88 398 C98 398 102 390 96 382 L62 378 C50 380 40 386 26 392 Z" fill={paper} />
-      <path d="M26 398 L96 398" strokeWidth="7" />
-      <path d="M50 390 C60 384 74 385 88 390" strokeWidth="3" />
-      <path d="M154 398 L218 398 C228 398 232 390 226 382 L190 378 C178 380 166 386 154 392 Z" fill={paper} />
-      <path d="M154 398 L226 398" strokeWidth="7" />
-      <path d="M178 390 C190 384 204 385 218 390" strokeWidth="3" />
+      {/* Back leg: stretched, pivots at the hip */}
+      <g data-leg-back>
+        <path d="M150 262 L102 318 L74 372" strokeWidth="26" />
+        <path d="M150 262 L102 318 L74 372" stroke={paper} strokeWidth="1.5" strokeOpacity="0.5" />
+        <Sneaker x={74} y={372} rotate={-14} />
+      </g>
+      {/* Front leg: planted, knee bent, pivots at the hip */}
+      <g data-leg-front>
+        <path d="M182 268 L194 330 L190 372" strokeWidth="28" />
+        <path d="M182 268 L194 330 L190 372" stroke={paper} strokeWidth="1.5" strokeOpacity="0.5" />
+        <Sneaker x={190} y={372} rotate={0} />
+      </g>
 
+      <g data-body>
       {/* Far arm, behind the torso, palm flat on the wall */}
       <path d="M214 210 L262 214 L304 202" strokeWidth="24" />
       <path d="M214 210 L262 214" stroke={accent} strokeWidth="15" />
@@ -90,9 +107,12 @@ export function Character({ className = "" }: { className?: string }) {
       {/* Nose */}
       <path d="M290 100 C298 106 298 112 290 116" strokeWidth="5" />
       {/* Sweat and effort */}
-      <path d="M302 74 C298 80 298 86 302 86 C306 86 306 80 302 74 Z" fill={paper} strokeWidth="3" />
-      <path d="M296 56 C292 62 292 68 296 68 C300 68 300 62 296 56 Z" fill={paper} strokeWidth="3" />
+      <g data-sweat>
+        <path d="M302 74 C298 80 298 86 302 86 C306 86 306 80 302 74 Z" fill={paper} strokeWidth="3" />
+        <path d="M296 56 C292 62 292 68 296 68 C300 68 300 62 296 56 Z" fill={paper} strokeWidth="3" />
+      </g>
       <path d="M306 40 L316 30 M314 52 L326 48" strokeWidth="3.5" />
+      </g>
     </svg>
   );
 }
