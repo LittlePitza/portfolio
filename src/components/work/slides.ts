@@ -16,8 +16,6 @@ function toSlide(p: Project, locale: Locale): Slide {
     numbers: p.numbers.map((m) => ({ value: m.value, label: m.label[locale] })),
     summary: p.summary[locale],
     color: p.color,
-    cover: p.cover,
-    coverAlt: p.coverAlt?.[locale],
   };
 }
 

@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Flip } from "gsap/Flip";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { scrollTo } from "@/lib/scroll";
 import { shouldHandleNavigation } from "@/lib/navigation";
 import { TransitionLink } from "@/components/chrome/PageTransition";
 import { CountUp } from "@/components/ui/CountUp";
-import { Cover } from "./Cover";
 import type { Detail, GalleryLabels } from "./types";
 import styles from "./gallery.module.css";
 
@@ -18,6 +17,8 @@ const pad = (value: number) => String(value).padStart(2, "0");
 
 interface Props {
   projects: Detail[];
+  /** Each project's cover, drawn on the server, in the same order as `projects`. */
+  covers: ReactNode[];
   labels: GalleryLabels;
 }
 
@@ -30,7 +31,7 @@ interface Props {
  * screen and slide to their new places, so nothing is ever hidden behind a
  * modal. Without JavaScript each cover is still a plain link to its case study.
  */
-export function ProjectGallery({ projects, labels }: Props) {
+export function ProjectGallery({ projects, covers, labels }: Props) {
   const root = useRef<HTMLOListElement>(null);
   const cards = useRef<(HTMLAnchorElement | null)[]>([]);
   const items = useRef<(HTMLLIElement | null)[]>([]);
@@ -162,13 +163,7 @@ export function ProjectGallery({ projects, labels }: Props) {
               }}
             >
               <span data-flip className={styles.artwork}>
-                <Cover
-                  slide={project}
-                  index={index}
-                  brutal={false}
-                  className={styles.cover}
-                  sizes={isOpen ? "(min-width: 900px) 55vw, 100vw" : "(min-width: 1180px) 33vw, (min-width: 720px) 50vw, 100vw"}
-                />
+                <span className={styles.cover}>{covers[index]}</span>
                 <span className={styles.toggle} aria-hidden>
                   +
                 </span>

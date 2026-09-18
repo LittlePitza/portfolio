@@ -1,0 +1,53 @@
+/* Woodland Setup, with the app's tailwind.config.ts palette: autumn paper, bark ink, Cormorant for display, a book serif for text. */
+
+.root { position: absolute; inset: 0; color: #2b1810; font-family: Lora, Georgia, "Times New Roman", serif; }
+.eyebrow { display: block; font-family: var(--font-sans); font-size: .42em; letter-spacing: .3em; text-transform: uppercase; color: #6b4d3a; }
+.result, .promise {
+  background:
+    radial-gradient(circle at 20% 20%, rgb(139 90 43 / 7%), transparent 50%),
+    radial-gradient(circle at 80% 60%, rgb(101 67 33 / 6%), transparent 50%),
+    #f4e8d0;
+}
+
+.result { left: 5%; top: 13.5%; width: 50%; padding: 1.05em 1.15em 1.1em; border-radius: .6em; text-align: center; --rest: rotate(-1.5deg); --lift: rotate(-.5deg) translate(-.3em, -.25em); }
+.title { display: block; margin: .3em 0 .1em; font-size: 1.6em; font-weight: 600; line-height: 1.05; }
+.map { display: block; font-size: .52em; color: #3f2a1e; }
+.map b { font-weight: 600; }
+
+.meter { display: block; margin-top: .75em; padding: .6em .7em .55em; border: .08em solid rgb(43 24 16 / 15%); border-radius: .45em; background: rgb(250 243 229 / 70%); text-align: left; }
+.meterHead { display: flex; align-items: baseline; justify-content: space-between; }
+.total { font-size: 1.15em; font-weight: 600; line-height: 1; color: #4a6b3a; }
+.total span { font-size: .6em; font-weight: 400; color: #6b4d3a; }
+.track { position: relative; display: block; height: .42em; margin-top: .35em; border-radius: 1em; background: rgb(217 199 158 / 50%); box-shadow: inset 0 .08em .15em rgb(43 24 16 / 12%); }
+.level { position: absolute; inset: 0 auto 0 0; width: 66.67%; border-radius: inherit; background: linear-gradient(90deg, rgb(74 107 58 / 80%), #4a6b3a); transform-origin: left; }
+.threshold { position: absolute; z-index: 1; left: 60%; top: 0; bottom: 0; width: .08em; background: rgb(43 24 16 / 40%); }
+.threshold::before { content: ""; position: absolute; left: 50%; top: -.14em; width: .24em; height: .24em; translate: -50% 0; rotate: 45deg; background: rgb(43 24 16 / 60%); }
+.balanced { display: block; margin-top: .35em; font-family: var(--font-sans); font-size: .42em; color: #4a6b3a; }
+
+.factions { display: grid; gap: .38em; margin-top: .7em; text-align: left; }
+.faction { display: flex; align-items: center; justify-content: space-between; gap: .6em; padding: .4em .55em .4em .65em; border: .08em solid rgb(43 24 16 / 15%); border-top: .22em solid var(--faction); border-radius: .4em; background: #faf3e5; box-shadow: 0 .1em .3em rgb(43 24 16 / 12%); }
+.factionText { display: grid; min-width: 0; gap: .12em; }
+.factionName { display: flex; align-items: center; gap: .3em; font-size: .8em; font-weight: 600; line-height: 1.1; white-space: nowrap; }
+.symbol { color: var(--faction); font-family: "Segoe UI Symbol", "Apple Symbols", var(--font-sans); font-size: .95em; }
+.factionKind { font-family: var(--font-sans); font-size: .34em; letter-spacing: .12em; text-transform: uppercase; color: #6b4d3a; white-space: nowrap; }
+.reach { display: grid; place-items: center; align-content: center; flex: none; width: 2.1em; height: 2.1em; border: .1em solid var(--faction); border-radius: 50%; color: var(--faction); font-size: .95em; font-weight: 600; line-height: 1; }
+.reach small { margin-top: .12em; font-family: var(--font-sans); font-size: .3em; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+
+.promise { right: 4.5%; top: 12.5%; width: 40%; font-size: 1.06em; padding: 1em 1.1em 1.2em; border-radius: .6em; text-align: center; --rest: rotate(2.5deg); --lift: rotate(4deg) translate(.35em, -.3em); }
+.ornaments { display: block; margin-bottom: .6em; font-family: "Segoe UI Symbol", "Apple Symbols", var(--font-sans); font-size: .5em; letter-spacing: .5em; color: rgb(107 68 35 / 55%); }
+.headline { display: block; margin: .35em 0 .65em; font-size: 1.7em; font-weight: 400; line-height: 1; }
+.headline em { color: #b5482e; }
+.start { display: inline-grid; place-items: center; padding: .85em 1.6em; border-radius: .35em; background: #2b1810; color: #f4e8d0; box-shadow: 0 .15em .5em rgb(43 24 16 / 18%); font-family: var(--font-sans); font-size: .55em; font-weight: 500; }
+
+.actions { right: 6%; bottom: 10%; width: 40%; font-size: 1.2em; display: flex; gap: .45em; padding: .55em; border-radius: .55em; background: #eadcbc; --rest: rotate(-2deg); --lift: rotate(-3.5deg) translate(.3em, .35em); }
+.reroll, .save { flex: 1; display: grid; place-items: center; grid-auto-flow: column; gap: .4em; height: 2.5em; border-radius: .3em; font-family: var(--font-sans); font-size: .52em; font-weight: 500; white-space: nowrap; }
+.reroll { border: .14em solid rgb(43 24 16 / 30%); background: #f4e8d0; }
+.save { background: #2b1810; color: #f4e8d0; }
+.die { display: inline-block; transition: transform .9s var(--ease-out-expo); }
+
+/* Re-roll: the die turns over. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .die { transform: rotate(360deg); }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .level { animation: fill .9s var(--ease-out-expo) both; }
+}
+@keyframes fill { from { transform: scaleX(.2); } }

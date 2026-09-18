@@ -2,9 +2,11 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/content/site";
+import { projects } from "@/content/projects";
 import { PreloaderProvider } from "@/components/preloader/PreloaderContext";
 import { Preloader } from "@/components/preloader/Preloader";
 import { Hero } from "@/components/hero/Hero";
+import { Cover } from "@/components/work/Cover";
 import { DiscStage } from "@/components/work/DiscStage";
 import { projectSlides, workLabels } from "@/components/work/slides";
 
@@ -41,7 +43,12 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         aboutLabel={locale === "es" ? "Detrás del código" : "Behind the code"}
         edition={locale === "es" ? "Portafolio / 2026" : "Portfolio / 2026"}
       />
-      <DiscStage slides={projectSlides(locale)} labels={workLabels(t)} deep={{ href: `/${locale}/playground`, label: t.work.deep }} />
+      <DiscStage
+        slides={projectSlides(locale)}
+        covers={projects.map((project, index) => <Cover key={project.slug} project={project} index={index} locale={locale} />)}
+        labels={workLabels(t)}
+        deep={{ href: `/${locale}/playground`, label: t.work.deep }}
+      />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </PreloaderProvider>
   );

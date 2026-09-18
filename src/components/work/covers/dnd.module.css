@@ -1,0 +1,58 @@
+/* The D&D companion's dark table theme, with the tokens of the app's src/styles/tokens.css: Plus Jakarta Sans, red, gold, arcane. */
+
+.root { position: absolute; inset: 0; color: #e8eaed; }
+
+.console { left: 4.5%; top: 14%; width: 60%; padding: .9em 1em 1em; border-radius: .8em; background: #0b0d10; --rest: rotate(-1.5deg); --lift: rotate(-.5deg) translate(-.3em, -.25em); }
+.header { display: flex; align-items: center; gap: .6em; }
+.avatar { display: grid; place-items: center; flex: none; width: 2em; height: 2em; border-radius: .5em; background: #f04352; color: #fff; font-size: .95em; font-weight: 800; }
+.name { display: block; font-size: 1em; font-weight: 800; line-height: 1.1; letter-spacing: -.03em; }
+.meta { display: block; margin-top: .2em; font-size: .42em; color: #9aa1ac; white-space: nowrap; }
+.tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: .2em; margin-top: .75em; padding: .2em; border: .07em solid #262b33; border-radius: .6em; background: #14171c; }
+.tabs span { display: grid; place-items: center; height: 2.5em; border-radius: .5em; font-size: .44em; font-weight: 500; color: #9aa1ac; }
+.tabs .tabOn { background: #f04352; color: #fff; font-weight: 700; }
+.vitals { display: flex; gap: .35em; margin-top: .55em; }
+.vital { position: relative; display: grid; gap: .15em; padding: .38em .55em .42em; overflow: hidden; border: .07em solid #262b33; border-radius: .45em; background: #14171c; }
+.vitalLabel { font-size: .32em; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9aa1ac; white-space: nowrap; }
+.vitalValue { font-size: .72em; font-weight: 800; line-height: 1; white-space: nowrap; }
+.vitalValue small { margin-left: .15em; font-size: .6em; font-weight: 500; color: #9aa1ac; }
+.hp::after { content: ""; position: absolute; left: .55em; right: .55em; bottom: .18em; height: .12em; border-radius: 1em; background: #34d399; }
+.armor { border-color: rgb(240 67 82 / 32%); background: rgb(240 67 82 / 14%); }
+.armor .vitalLabel, .armor .vitalValue { color: #f04352; }
+.arcane { border-color: rgb(155 138 251 / 32%); background: rgb(155 138 251 / 14%); }
+.arcane .vitalLabel, .arcane .vitalValue { color: #9b8afb; }
+.question { display: block; margin-top: .8em; font-size: .95em; font-weight: 800; letter-spacing: -.03em; }
+.hint { display: block; margin-top: .25em; font-size: .42em; color: #9aa1ac; }
+.situations { display: grid; grid-template-columns: 1fr 1fr; gap: .4em; margin-top: .6em; }
+.situation { padding: .7em .85em; border: .12em solid #262b33; border-radius: .9em; background: #14171c; font-size: .54em; font-weight: 700; line-height: 1.3; }
+.kind { display: block; margin-bottom: .3em; font-size: .7em; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #f04352; }
+
+.spell { right: 4.5%; top: 12.5%; width: 34%; padding: .85em .95em .95em; border-radius: .7em; background: #1b1f26; --rest: rotate(3deg); --lift: rotate(4.5deg) translate(.35em, -.3em); }
+.spellLevel { display: block; font-size: .4em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #e0a33e; }
+.spellName { display: block; margin: .25em 0 .15em; font-size: .98em; font-weight: 800; letter-spacing: -.03em; }
+.spellText { display: block; font-size: .46em; color: #9aa1ac; }
+.slots { display: flex; align-items: center; gap: .55em; margin-top: .75em; padding-top: .6em; border-top: .07em solid #262b33; }
+.slotsLabel { font-size: .38em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9aa1ac; }
+.pips { display: flex; gap: .28em; }
+.pips i { width: .7em; height: .7em; border-radius: .22em; background: #f04352; transition: background-color .45s, box-shadow .45s; }
+.slotCount { display: grid; margin-left: auto; font-size: .46em; font-variant-numeric: tabular-nums; color: #9aa1ac; }
+.slotCount span { grid-area: 1 / 1; text-align: right; transition: opacity .45s, transform .45s; }
+.slotCount span + span { opacity: 0; transform: translateY(.7em); }
+.cast { display: grid; place-items: center; height: 2.4em; margin-top: .75em; border-radius: .55em; background: #f04352; color: #fff; font-size: .56em; font-weight: 700; box-shadow: 0 .4em 1.2em -.4em rgb(240 67 82 / 45%); }
+
+.log { right: 6%; bottom: 8%; width: 40%; padding: .7em .85em .5em; border-radius: .7em; background: #14171c; --rest: rotate(-2deg); --lift: rotate(-3.5deg) translate(.3em, .35em); }
+.logTitle { display: flex; align-items: center; gap: .8em; margin-bottom: .3em; font-size: .38em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9aa1ac; }
+.logTitle::after { content: ""; flex: 1; height: .12em; background: #262b33; }
+.entry { display: flex; align-items: center; gap: .6em; padding: .45em 0; }
+.entry + .entry { border-top: .07em solid #262b33; }
+.value { flex: none; min-width: 1.5em; font-size: 1.1em; font-weight: 800; letter-spacing: -.03em; text-align: center; color: #e0a33e; }
+.entryBody { display: grid; gap: .15em; min-width: 0; }
+.entryTitle { font-size: .5em; font-weight: 700; }
+.entryDetail { font-size: .42em; color: #9aa1ac; }
+.time { margin-left: auto; font-size: .38em; color: #6a717c; font-variant-numeric: tabular-nums; }
+
+/* Cast it: one level-3 slot goes. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .spent { background: transparent; box-shadow: inset 0 0 0 .1em #353c46; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .slotCount span:first-child { opacity: 0; transform: translateY(-.7em); }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .slotCount span + span { opacity: 1; transform: none; }
+}

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { projects as content } from "@/content/projects";
+import { Cover } from "@/components/work/Cover";
 import { ProjectGallery } from "@/components/work/ProjectGallery";
 import { galleryLabels, projectDetails } from "@/components/work/slides";
 import styles from "@/components/work/gallery.module.css";
@@ -38,7 +40,11 @@ export default async function PlaygroundPage({ params }: PageProps<"/[locale]/pl
         </div>
       </header>
 
-      <ProjectGallery projects={projects} labels={galleryLabels(t)} />
+      <ProjectGallery
+        projects={projects}
+        covers={content.map((project, index) => <Cover key={project.slug} project={project} index={index} locale={locale} />)}
+        labels={galleryLabels(t)}
+      />
     </div>
   );
 }

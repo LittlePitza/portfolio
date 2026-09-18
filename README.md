@@ -122,7 +122,7 @@ src/
 │   ├── chrome/          Frame, NavLinks, PageTransition, ContactOverlay, TabTitle, Clock, LocaleSwitch, Footer
 │   ├── preloader/       Preloader, Character, PreloaderContext
 │   ├── hero/            Hero
-│   ├── work/            DiscStage (home), ProjectGallery (Playground), Cover, slides, types
+│   ├── work/            DiscStage (home), ProjectGallery (Playground), Cover, covers/ (one drawing per project), slides, types
 │   ├── about/           InsideHead
 │   └── ui/              Mark, Icons, Cursor, Reveal, CountUp, Marquee, PageHeader, CopyEmail
 ├── content/             site.ts, projects.ts, profile.ts, head.ts
@@ -158,11 +158,12 @@ npm run dev
 - **A project** is one object in `src/content/projects.ts`. Add it to the
   array and it appears on the home wheel and in the Playground gallery,
   gets its own route under `/work/`,
-  and lands in the sitemap. Put an optimized image in `public/covers/`, point
-  `cover` at it and describe it in both languages with `coverAlt`. The current
-  set combines seven application captures and one editorial illustration; see
-  [cover sources](public/covers/README.md). Without an image, a vector cover
-  uses the project's colour. The ticker counts projects automatically.
+  and lands in the sitemap. Its cover is drawn, not photographed: a component
+  in `src/components/work/covers/`, registered by slug in `covers/index.ts`,
+  recreates two or three pieces of the app in HTML and CSS with demo data.
+  Give it a caption line (`coverCaption`) and a description (`coverAlt`) in
+  both languages. Without a drawing, the cover shows the project's name on
+  its colour. The ticker counts projects automatically.
 - **Facts, capabilities, process and experience** live in
   `src/content/profile.ts`.
 - **UI strings** live in `src/i18n/dictionaries/`. The Spanish file is typed
@@ -176,7 +177,17 @@ npm run dev
 
 The palette is deliberately small: a warm grey page, near-black ink and one
 accent, international orange. Project colours only ever appear inside covers
-and swatches. The fixed chrome is painted white under
+and swatches.
+
+Covers are drawings rather than screenshots. Each one lays two or three pieces
+of the app on a mat of the project's colour, with the site's hard border and
+offset shadow, recreated from the app's own tokens, typefaces and copy, with
+demo data instead of anything that would need hiding. The pieces are chosen to
+say what the project is about, not to show a whole screen: the append-only
+trigger refusing a delete, a ticket running out of SLA, a volume tier being
+repriced. Everything inside is sized from the cover's own box through a
+container query, so a cover is equally sharp on a phone and across a case
+page, and costs no image requests. The fixed chrome is painted white under
 `mix-blend-mode: difference`, which is why it stays legible over both the grey
 page and the black section headers without a second variant.
 

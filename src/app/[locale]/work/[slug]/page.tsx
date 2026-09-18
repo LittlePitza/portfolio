@@ -32,9 +32,6 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
   const num = String(index + 1).padStart(2, "0");
 
   const slide = {
-    slug: project.slug,
-    href: `/${locale}/work/${project.slug}`,
-    name: project.name,
     category: project.category[locale],
     role: project.role[locale],
     stack: project.stack,
@@ -42,9 +39,6 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
     status: project.status[locale],
     numbers: project.numbers.map((m) => ({ value: m.value, label: m.label[locale] })),
     summary: project.summary[locale],
-    color: project.color,
-    cover: project.cover,
-    coverAlt: project.coverAlt?.[locale],
   };
 
   return (
@@ -70,7 +64,9 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
 
       <div className="px-4 pt-10 md:px-6">
         <Reveal>
-          <Cover slide={slide} index={index} sizes="100vw" priority className="aspect-[16/9] w-full" />
+          <div className="aspect-[16/9] w-full">
+            <Cover project={project} index={index} locale={locale} />
+          </div>
         </Reveal>
       </div>
 

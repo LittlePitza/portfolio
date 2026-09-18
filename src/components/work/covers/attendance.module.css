@@ -1,0 +1,91 @@
+/* Attendance, with the tokens of the app's web/src/app.css: Geist, a violet accent and a pastel mesh. */
+
+.root { position: absolute; inset: 0; color: #17171a; font-family: var(--font-sans); font-feature-settings: "zero" 0; }
+
+/* The mesh is five soft blobs in the app; here they are gradients, so nothing on the wheel pays for a blur. */
+.hero {
+  left: 4.5%; top: 14.5%; width: 60%; padding: 1.45em 1.55em 1.5em; border-radius: 1.3em; overflow: hidden; font-size: 1.08em;
+  background:
+    radial-gradient(circle at 10% 14%, rgb(201 184 255 / 55%), transparent 42%),
+    radial-gradient(circle at 90% 6%, rgb(255 184 217 / 50%), transparent 38%),
+    radial-gradient(circle at 74% 96%, rgb(168 200 255 / 50%), transparent 44%),
+    radial-gradient(circle at 6% 98%, rgb(255 215 168 / 50%), transparent 36%),
+    radial-gradient(circle at 48% 46%, rgb(182 240 234 / 35%), transparent 30%),
+    #fff;
+  --rest: rotate(-1.5deg); --lift: rotate(-.5deg) translate(-.3em, -.2em);
+}
+.head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1em; }
+.greeting { display: block; font-size: 1.42em; font-weight: 600; line-height: 1.1; letter-spacing: -.025em; }
+.date { display: block; margin-top: .25em; font-size: .66em; color: #6b6b70; }
+.clock { display: grid; justify-items: end; }
+.time { font-family: var(--font-mono); font-size: 1.05em; font-weight: 500; line-height: 1.2; letter-spacing: -.02em; white-space: nowrap; }
+.zone { font-size: .52em; color: #9b9ba1; }
+
+/* The wall clock keeps time without a line of script: two strips of 00–59 stepped behind a window. */
+.ticker { display: inline-block; height: 1.2em; overflow: hidden; vertical-align: top; }
+.ticker::before {
+  content: "00\A 01\A 02\A 03\A 04\A 05\A 06\A 07\A 08\A 09\A 10\A 11\A 12\A 13\A 14\A 15\A 16\A 17\A 18\A 19\A 20\A 21\A 22\A 23\A 24\A 25\A 26\A 27\A 28\A 29\A 30\A 31\A 32\A 33\A 34\A 35\A 36\A 37\A 38\A 39\A 40\A 41\A 42\A 43\A 44\A 45\A 46\A 47\A 48\A 49\A 50\A 51\A 52\A 53\A 54\A 55\A 56\A 57\A 58\A 59";
+  display: block; white-space: pre;
+  animation: tick var(--period) steps(60) var(--offset) infinite;
+}
+.minutes { --period: 3600s; --offset: -137s; }
+.seconds { --period: 60s; --offset: -17s; }
+@keyframes tick { to { transform: translateY(-100%); } }
+
+.body { display: flex; align-items: center; gap: 1.3em; margin-top: 1em; }
+.ring { position: relative; flex: none; display: grid; place-items: center; width: 6.6em; height: 6.6em; }
+.ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.track { fill: none; stroke: #f1efec; stroke-width: 7; }
+.fill { fill: none; stroke: #15803d; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 264; stroke-dashoffset: 147; }
+.ringInner { position: relative; display: grid; justify-items: center; gap: .1em; }
+.ringValue { font-family: var(--font-mono); font-size: 1.2em; font-weight: 500; letter-spacing: -.03em; }
+.ringOf { font-size: .5em; color: #9b9ba1; }
+.state { display: grid; gap: .35em; min-width: 0; }
+.status { display: inline-flex; align-items: center; gap: .45em; font-size: .98em; font-weight: 600; letter-spacing: -.02em; color: #15803d; }
+.status i { width: .5em; height: .5em; border-radius: 50%; background: currentColor; animation: breathe 2.4s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .35; } }
+.caption { font-size: .64em; color: #6b6b70; }
+.facts { display: flex; gap: 1.2em; margin-top: .2em; }
+.factLabel { display: block; font-size: .46em; letter-spacing: .05em; text-transform: uppercase; color: #9b9ba1; }
+.factValue { display: block; margin-top: .15em; font-family: var(--font-mono); font-size: .74em; }
+.actions { display: flex; gap: .5em; margin-top: 1.05em; }
+.button { flex: 1; display: grid; place-items: center; height: 2.5em; border-radius: .6em; font-size: .66em; font-weight: 500; }
+.outline { border: .09em solid #e8e6e2; background: #fff; }
+.solid { background: #17171a; color: #fff; }
+
+.fortnight { right: 4.5%; top: 36%; width: 37%; padding: .9em 1em .85em; border-radius: 1em; background: #fff; --rest: rotate(2.5deg); --lift: rotate(4deg) translate(.35em, -.3em); }
+.fortnightTitle { display: block; font-size: .74em; font-weight: 600; letter-spacing: -.01em; }
+.bars { display: flex; align-items: flex-end; gap: .22em; height: 5.8em; margin-top: .7em; }
+.bars > span { position: relative; flex: 1; height: 100%; border-radius: .35em; background: #f6f5f3; overflow: hidden; }
+.bars .off { background: repeating-linear-gradient(45deg, #f6f5f3 0 .2em, #f1efec .2em .4em); }
+.bars b { position: absolute; left: 0; right: 0; bottom: 0; height: var(--h); border-radius: .35em; background: #6d5efc; transform-origin: bottom; }
+.bars b.late { background: #b45309; }
+.bars em { position: absolute; left: 0; right: 0; bottom: 84%; height: .1em; background: #9b9ba1; opacity: .55; }
+.key { display: flex; gap: .8em; margin-top: .65em; font-size: .46em; color: #9b9ba1; }
+.key > span { display: inline-flex; align-items: center; gap: .35em; }
+.key i { width: .7em; height: .7em; border-radius: .15em; }
+.keyWorked { background: #6d5efc; }
+.key .keyExpected { height: .14em; background: #9b9ba1; }
+.keyLate { background: #b45309; }
+
+.sql { left: 12%; bottom: 7.5%; z-index: 2; display: grid; padding: .85em 1em .9em; border-radius: .75em; background: #17171a; color: #e8e6e2; font-family: var(--font-mono); font-size: .6em; line-height: 1.6; white-space: nowrap; --rest: rotate(1.5deg); }
+.prompt { color: #9b9ba1; }
+.error { color: #f87171; }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* The fortnight grows back in, and the database says no again. */
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .bars b { animation: grow .8s calc(var(--i) * 35ms) cubic-bezier(.22, 1, .36, 1) both; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .sql { animation: refuse .5s cubic-bezier(.36, .07, .19, .97) both; }
+}
+@keyframes grow { from { transform: scaleY(0); } }
+@keyframes refuse {
+  20% { transform: rotate(1.5deg) translateX(-.45em); }
+  40% { transform: rotate(1.5deg) translateX(.4em); }
+  60% { transform: rotate(1.5deg) translateX(-.3em); }
+  80% { transform: rotate(1.5deg) translateX(.2em); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker::before { animation-play-state: paused; }
+  .status i { animation: none; }
+}

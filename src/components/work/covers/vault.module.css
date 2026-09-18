@@ -1,0 +1,65 @@
+/* Password Vault, with the tokens of the app's src/ui/tokens.css and theme.css: the light popup, the night palette for the scheme. */
+
+.root { position: absolute; inset: 0; color: #16202c; font-family: var(--font-sans); }
+.root svg { flex: none; }
+
+.scheme { left: 4.5%; top: 17%; width: 50%; padding: 1em 1.1em 1.05em; border-radius: .8em; background: #111419; color: #f7f8f5; font-size: 1.08em; --rest: rotate(-2deg); --lift: rotate(-1deg) translate(-.3em, -.25em); }
+.eyebrow { display: block; font-size: .44em; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8a94a3; }
+.diagram { display: grid; grid-template-columns: 1fr 1fr; column-gap: .8em; margin-top: .8em; text-align: center; }
+.source, .kek { justify-self: center; padding: .5em .8em; border-radius: .45em; white-space: nowrap; }
+.source { border: .1em solid #242a33; background: #171b21; font-size: .5em; }
+.kek { border: .1em solid #5d86b9; background: rgb(93 134 185 / 14%); color: #8fb0dd; font-family: var(--font-mono); font-size: .46em; }
+/* A line down the middle of each branch, with the step written beside it. */
+.derive { position: relative; padding: .75em 0 .75em calc(50% + .7em); font-family: var(--font-mono); font-size: .42em; text-align: left; color: #8fb0dd; }
+.derive::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: .24em; translate: -50% 0; background: #242a33; }
+/* Both keys wrap the same data key: the branches meet under it. */
+.merge { position: relative; grid-column: 1 / -1; height: 1.5em; margin: 0 25%; border: .1em solid #242a33; border-top: 0; border-radius: 0 0 .5em .5em; }
+.merge span { position: absolute; left: 50%; bottom: 0; translate: -50% 50%; padding: 0 .6em; background: #111419; font-family: var(--font-mono); font-size: .42em; color: #b0cd75; }
+.merge::after { content: ""; position: absolute; left: 50%; top: 100%; width: .1em; height: 1.1em; translate: -50% 0; background: #242a33; }
+.dek { grid-column: 1 / -1; justify-self: center; margin-top: 1.1em; padding: .45em 1.1em; border-radius: .45em; background: #b0cd75; color: #050608; font-family: var(--font-mono); font-size: .55em; font-weight: 700; }
+.items { position: relative; grid-column: 1 / -1; display: flex; justify-content: center; gap: .4em; margin-top: 1.1em; }
+.items::before { content: ""; position: absolute; left: 50%; bottom: 100%; width: .1em; height: 1.1em; translate: -50% 0; background: #242a33; }
+.items span { padding: .35em .75em; border: .1em solid #242a33; border-radius: .4em; font-family: var(--font-mono); font-size: .4em; color: #8a94a3; }
+.params { display: block; margin-top: 1em; padding-top: .7em; border-top: .1em solid #242a33; font-family: var(--font-mono); font-size: .4em; color: #8a94a3; }
+
+.popup { right: 5.5%; top: 11.5%; width: 36%; height: 84%; display: flex; flex-direction: column; padding: .95em .85em .85em; border-radius: 1.2em; background: #f7f8f5; --rest: rotate(2.5deg); --lift: rotate(4deg) translate(.35em, -.3em); }
+.header { display: flex; align-items: center; gap: .55em; color: #5a6878; }
+.header b { margin-right: auto; font-size: 1.12em; font-weight: 600; letter-spacing: -.02em; color: #16202c; }
+.header svg { width: .78em; height: .78em; }
+.search { display: flex; align-items: center; gap: .6em; height: 4.2em; margin: 1.3em 0; padding: 0 1.5em; border: .14em solid #d8dee4; border-radius: 2.2em; background: #fff; color: #5a6878; font-size: .55em; }
+.search svg { width: 1.3em; height: 1.3em; }
+.panel { display: flex; flex: 1; flex-direction: column; padding: .45em .4em .4em; border: .08em solid #d8dee4; border-radius: .85em; background: #fff; }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); padding: .18em; border-radius: .55em; background: #eef1f4; }
+.tabs span { display: grid; place-items: center; height: 2.2em; border-radius: .4em; font-size: .44em; color: #5a6878; }
+.tabs .tabOn { background: #fff; color: #16202c; font-weight: 600; box-shadow: 0 1px 2px rgb(14 27 46 / 8%); }
+.group { display: block; padding: .9em .7em .3em; font-size: .4em; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #5a6878; }
+.row { position: relative; display: flex; align-items: center; gap: .55em; padding: .45em .5em; border-radius: .6em; transition: background-color .45s; }
+.row::before { content: ""; position: absolute; left: 0; top: .5em; bottom: .5em; width: .14em; border-radius: 1em; background: #294466; transform: scaleY(0); transition: transform .45s var(--ease-out-expo); }
+.chip { display: grid; place-items: center; flex: none; width: 1.9em; height: 1.9em; border-radius: .5em; box-shadow: inset 0 0 0 .07em rgb(var(--tone) / 15%); background: rgb(var(--tone) / 10%); color: rgb(var(--tone)); }
+.chip svg { width: .8em; height: .8em; }
+.login { --tone: 41 68 102; }
+.note { --tone: 6 77 121; }
+.card { --tone: 58 83 24; }
+.rowText { display: grid; min-width: 0; gap: .1em; }
+.rowTitle { display: flex; align-items: center; gap: .3em; font-size: .56em; font-weight: 500; white-space: nowrap; }
+.star { width: .8em; height: .8em; fill: #294466; color: #294466; }
+.rowSub { font-size: .46em; color: #5a6878; white-space: nowrap; }
+.copy { display: flex; gap: .45em; margin-left: auto; color: #5a6878; }
+.copy svg { width: .66em; height: .66em; }
+.footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding: .5em .4em 0; color: #5a6878; }
+.footer > svg { width: .8em; height: .8em; }
+.new { display: flex; align-items: center; gap: .35em; padding: .5em 1em; border-radius: 99px; background: #294466; color: #f7f8f5; font-size: .5em; font-weight: 600; }
+.new svg { width: 1.1em; height: 1.1em; }
+
+.toast { left: 22%; bottom: 10%; width: 44%; overflow: hidden; padding: .75em .95em .95em; border-radius: .6em; background: #16202c; color: #f7f8f5; --rest: rotate(-1.5deg); --lift: rotate(-3deg) translate(-.3em, .35em); }
+.toastText { display: flex; align-items: center; gap: .55em; font-size: .56em; font-weight: 500; }
+.toastText svg { width: 1.2em; height: 1.2em; color: #b0cd75; }
+.drain { position: absolute; left: 0; right: 0; bottom: 0; height: .22em; background: #b0cd75; transform-origin: left; }
+
+/* The copy happens: the row lights up and the notice's three seconds run out. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .live { background: #f1f4f7; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .live::before { transform: none; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .drain { animation: drain 3s linear forwards; }
+}
+@keyframes drain { to { transform: scaleX(0); } }

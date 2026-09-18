@@ -17,11 +17,12 @@ export interface Project {
   summary: Localized;
   body: Localized<string[]>;
   links?: { label: string; href: string }[];
-  /** Accent used on the cover fallback and swatches. */
+  /** The cover's mat and the project's swatch. */
   color: string;
-  /** Screenshot or editorial illustration under /public/covers. */
-  cover?: string;
-  coverAlt?: Localized;
+  /** The project's idea in a few words, after the slug on the cover's caption line. */
+  coverCaption: Localized;
+  /** What the cover shows, for anyone who cannot see it. */
+  coverAlt: Localized;
 }
 
 export const projects: Project[] = [
@@ -62,8 +63,11 @@ export const projects: Project[] = [
     },
     links: [{ label: "github.com/LittlePitza/ti-hub", href: "https://github.com/LittlePitza/ti-hub" }],
     color: "#FF4A1C",
-    cover: "/covers/ti-hub-redacted.webp",
-    coverAlt: { en: "TI Hub's issue reporting form with company branding redacted", es: "Formulario de reporte de TI Hub con la identidad de la empresa censurada" },
+    coverCaption: { en: "portal + SLA engine", es: "portal + motor de SLA" },
+    coverAlt: {
+      en: "TI Hub's issue reporting portal, the desk's average resolution time against its SLA and a ticket about to breach it, recreated with demo data",
+      es: "El portal de reportes de TI Hub, el tiempo promedio de resolución de la mesa contra su SLA y un ticket a punto de vencer, recreados con datos de demostración",
+    },
   },
   {
     slug: "attendance",
@@ -96,8 +100,11 @@ export const projects: Project[] = [
       ],
     },
     color: "#1FA37A",
-    cover: "/covers/attendance-redacted.webp",
-    coverAlt: { en: "Attendance's personal time clock with employee and session data redacted", es: "Checador personal de Attendance con datos del empleado y de sesión censurados" },
+    coverCaption: { en: "the rules live in PostgreSQL", es: "las reglas viven en PostgreSQL" },
+    coverAlt: {
+      en: "Attendance's punch screen four hours into a working day, the last fourteen days, and PostgreSQL refusing to delete a punch, recreated with demo data",
+      es: "La pantalla de marcaje de Attendance a cuatro horas de iniciada la jornada, los últimos catorce días y PostgreSQL negándose a borrar un marcaje, recreados con datos de demostración",
+    },
   },
   {
     slug: "maintenance",
@@ -127,8 +134,11 @@ export const projects: Project[] = [
       ],
     },
     color: "#2757FF",
-    cover: "/covers/maintenance-redacted.webp",
-    coverAlt: { en: "Maintenance work order form and preview with company and personal data redacted", es: "Formulario y vista previa de una orden de mantenimiento con datos corporativos y personales censurados" },
+    coverCaption: { en: "a PWA for the shop floor", es: "PWA para piso de planta" },
+    coverAlt: {
+      en: "The maintenance portal on a phone filing a work order, the order as the team receives it, and the machine it concerns, recreated with demo data",
+      es: "El portal de mantenimiento en un teléfono levantando una orden de trabajo, la orden como la recibe el equipo y la máquina a la que se refiere, recreados con datos de demostración",
+    },
   },
   {
     slug: "marketplace",
@@ -157,8 +167,11 @@ export const projects: Project[] = [
       ],
     },
     color: "#8B3DFF",
-    cover: "/covers/marketplace.webp",
-    coverAlt: { en: "PIMSA Marketplace's recycled-resin storefront", es: "Página de inicio de PIMSA Marketplace para resinas recicladas" },
+    coverCaption: { en: "the server sets the price", es: "el precio lo pone el servidor" },
+    coverAlt: {
+      en: "PIMSA Marketplace's storefront headline, the volume price tiers of a recycled resin with the estimated total, and the SPEI checkout, recreated with demo data",
+      es: "El titular de la tienda de PIMSA Marketplace, las escalas de precio por volumen de una resina reciclada con el total estimado y el pago por SPEI, recreados con datos de demostración",
+    },
   },
   {
     slug: "meetscribe",
@@ -189,8 +202,11 @@ export const projects: Project[] = [
     },
     links: [{ label: "github.com/LittlePitza/meetscribe", href: "https://github.com/LittlePitza/meetscribe" }],
     color: "#0FA3B1",
-    cover: "/covers/meetscribe.webp",
-    coverAlt: { en: "MeetScribe transcription and meeting minutes with demo data", es: "Transcripción y acta de MeetScribe con datos de demostración" },
+    coverCaption: { en: "two tracks, all local", es: "dos pistas, todo local" },
+    coverAlt: {
+      en: "MeetScribe recording a meeting with both audio tracks live, the attributed transcript and minutes written by a local model, recreated with demo data",
+      es: "MeetScribe grabando una reunión con las dos pistas de audio activas, la transcripción atribuida y el acta escrita por un modelo local, recreados con datos de demostración",
+    },
   },
   {
     slug: "password-vault",
@@ -219,8 +235,11 @@ export const projects: Project[] = [
       ],
     },
     color: "#E0245E",
-    cover: "/covers/password-vault.webp",
-    coverAlt: { en: "Illustration of a secure vault and key for Password Vault", es: "Ilustración de una bóveda segura y una llave para Password Vault" },
+    coverCaption: { en: "envelope encryption", es: "cifrado por sobres" },
+    coverAlt: {
+      en: "Password Vault's popup with its saved items, the envelope-encryption scheme where two keys wrap one data key, and the notice that clears the clipboard, recreated with demo data",
+      es: "El popup de Password Vault con sus elementos guardados, el esquema de cifrado por sobres en el que dos llaves envuelven una sola llave de datos y el aviso que limpia el portapapeles, recreados con datos de demostración",
+    },
   },
   {
     slug: "woodland-setup",
@@ -256,8 +275,11 @@ export const projects: Project[] = [
       { label: "github.com/LittlePitza/woodland-setup", href: "https://github.com/LittlePitza/woodland-setup" },
     ],
     color: "#95643F",
-    cover: "/covers/woodland-setup.webp",
-    coverAlt: { en: "Woodland Setup's Spanish homepage and game setup modes", es: "Inicio de Woodland Setup en español y modos de preparación de partida" },
+    coverCaption: { en: "balanced games of Root", es: "partidas de Root balanceadas" },
+    coverAlt: {
+      en: "Woodland Setup's headline, a balanced three-player game of Root with its total Reach, and the buttons to re-roll or save it",
+      es: "El titular de Woodland Setup, una partida de Root a tres jugadores balanceada con su Reach total y los botones para volver a tirar o guardarla",
+    },
   },
   {
     slug: "dnd-companion",
@@ -289,8 +311,11 @@ export const projects: Project[] = [
       ],
     },
     color: "#A63F35",
-    cover: "/covers/dnd-companion.webp",
-    coverAlt: { en: "D&D Companion's combat console with the included example character", es: "Consola de combate de D&D Companion con el personaje de ejemplo incluido" },
+    coverCaption: { en: "the rules inside every roll", es: "las reglas dentro de cada tirada" },
+    coverAlt: {
+      en: "D&D Companion's combat console for its example sorcerer, the Fireball spell with the slots it spends, and the session log of an attack roll",
+      es: "La consola de combate de D&D Companion para su hechicero de ejemplo, el conjuro Bola de Fuego con los espacios que gasta y la bitácora de una tirada de ataque",
+    },
   },
 ];
 

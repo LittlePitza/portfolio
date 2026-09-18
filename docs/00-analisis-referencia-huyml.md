@@ -86,7 +86,7 @@ Luis es desarrollador full-stack y responsable de TI, no diseñador visual. Sus 
 | Identidad de portada | Personaje ilustrado que empuja el telón (por ahora un SVG placeholder en `src/components/preloader/Character.tsx`; Rive se conecta con `site.riveCharacter`). |
 | Nombre en portada | LUIS HERNÁNDEZ |
 | Idioma por defecto | Inglés, con toggle a español. Rutas `/en` y `/es`; `src/proxy.ts` redirige según cookie o `Accept-Language`. |
-| Capturas | Luis capturará y anonimizará las de los sistemas internos. Van en `public/covers/` y se enlazan con `cover` en `src/content/projects.ts`. Mientras no existan, `Cover.tsx` genera una ventana de app con las cifras reales. |
+| Capturas | Luis capturará y anonimizará las de los sistemas internos. Van en `public/covers/` y se enlazan con `cover` en `src/content/projects.ts`. Mientras no existan, `Cover.tsx` genera una ventana de app con las cifras reales. *Reemplazada el 2026-09-18:* las capturas censuradas se veían borrosas y fuera de concepto; ahora cada portada se dibuja en HTML y CSS con datos de demostración (`src/components/work/covers/`). |
 
 ## Estado de la v1 (misma fecha)
 

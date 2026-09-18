@@ -1,11 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { scrollTo } from "@/lib/scroll";
 import { TransitionLink } from "@/components/chrome/PageTransition";
 import { usePreloader } from "@/components/preloader/PreloaderContext";
-import { Cover } from "./Cover";
 import type { Slide, WorkLabels } from "./types";
 import styles from "./disc.module.css";
 
@@ -26,6 +25,8 @@ const STATIC_WHEEL = `${WHEEL_MEDIA} and (prefers-reduced-motion: reduce)`;
 
 interface Props {
   slides: Slide[];
+  /** Each project's cover, drawn on the server, in the same order as `slides`. */
+  covers: ReactNode[];
   labels: WorkLabels;
   /** Link to the long version of every project. */
   deep: { href: string; label: string };
@@ -43,7 +44,7 @@ const pad = (value: number) => String(value).padStart(2, "0");
  * Asked for reduced motion, the wheel stays and the scrolling goes: the same
  * stage, placed straight to each project, moved only by the controls.
  */
-export function DiscStage({ slides, labels, deep }: Props) {
+export function DiscStage({ slides, covers, labels, deep }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
@@ -235,7 +236,7 @@ export function DiscStage({ slides, labels, deep }: Props) {
               aria-label={`${s.name}: ${labels.view}`}
               onClick={spinTo(i)}
             >
-              <Cover slide={s} index={i} brutal={false} className={styles.cover} sizes="34vw" priority={i === 0} />
+              <span className={styles.cover}>{covers[i]}</span>
             </TransitionLink>
           ))}
         </div>
@@ -314,7 +315,7 @@ export function DiscStage({ slides, labels, deep }: Props) {
         {slides.map((s, i) => (
           <li key={s.slug} className={styles.item}>
             <TransitionLink href={s.href} label={s.name} className={styles.itemLink}>
-              <Cover slide={s} index={i} brutal={false} className={styles.itemCover} sizes="(min-width: 640px) 50vw, 100vw" />
+              <span className={styles.itemCover}>{covers[i]}</span>
               <span className={styles.itemMeta}>
                 <span className="label text-muted">
                   {pad(i + 1)} / {s.category}

@@ -11,8 +11,6 @@ export interface Slide {
   numbers: { value: string; label: string }[];
   summary: string;
   color: string;
-  cover?: string;
-  coverAlt?: string;
 }
 
 export interface WorkLabels {
