@@ -6,10 +6,15 @@
 .list { list-style: none; margin: 0; padding: 8.5rem clamp(1rem, 4vw, 2rem) 5rem; display: grid; gap: 3.5rem; }
 
 @media (min-width: 900px) {
-  /* 100vh first: engines without the small-viewport unit would drop the height and
-     collapse a stage whose contents are all absolutely positioned. */
-  .stage { display: block; position: relative; height: 100vh; height: 100svh; overflow: hidden; }
+  .stage { display: block; position: relative; height: 100svh; overflow: hidden; }
   .list { display: none; }
+
+  /* Everything on the stage is positioned absolutely, so an engine that drops the
+     small-viewport unit would leave it with no height at all. Stated as a query the
+     minifier cannot mistake for a redundant duplicate and remove. */
+  @supports not (height: 100svh) {
+    .stage { height: 100vh; }
+  }
 }
 
 /* ---------- wheel ---------- */
