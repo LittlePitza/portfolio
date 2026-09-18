@@ -12,6 +12,7 @@ export interface Slide {
   summary: string;
   color: string;
   cover?: string;
+  coverAlt?: string;
 }
 
 export interface WorkLabels {
@@ -25,6 +26,8 @@ export interface WorkLabels {
   prev: string;
   next: string;
   hint: string;
+  /** The same invitation for a wheel that scrolling does not drive. */
+  hintStatic: string;
 }
 
 /** A project with its full case-study copy, for the Playground gallery. */

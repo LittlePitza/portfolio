@@ -17,10 +17,11 @@ export interface Project {
   summary: Localized;
   body: Localized<string[]>;
   links?: { label: string; href: string }[];
-  /** Accent used on the cover placeholder and swatches. */
+  /** Accent used on the cover fallback and swatches. */
   color: string;
-  /** Optional screenshot under /public/covers. Falls back to a generated cover. */
+  /** Screenshot or editorial illustration under /public/covers. */
   cover?: string;
+  coverAlt?: Localized;
 }
 
 export const projects: Project[] = [
@@ -61,6 +62,8 @@ export const projects: Project[] = [
     },
     links: [{ label: "github.com/LittlePitza/ti-hub", href: "https://github.com/LittlePitza/ti-hub" }],
     color: "#FF4A1C",
+    cover: "/covers/ti-hub-redacted.webp",
+    coverAlt: { en: "TI Hub's issue reporting form with company branding redacted", es: "Formulario de reporte de TI Hub con la identidad de la empresa censurada" },
   },
   {
     slug: "attendance",
@@ -93,6 +96,8 @@ export const projects: Project[] = [
       ],
     },
     color: "#1FA37A",
+    cover: "/covers/attendance-redacted.webp",
+    coverAlt: { en: "Attendance's personal time clock with employee and session data redacted", es: "Checador personal de Attendance con datos del empleado y de sesión censurados" },
   },
   {
     slug: "maintenance",
@@ -122,6 +127,8 @@ export const projects: Project[] = [
       ],
     },
     color: "#2757FF",
+    cover: "/covers/maintenance-redacted.webp",
+    coverAlt: { en: "Maintenance work order form and preview with company and personal data redacted", es: "Formulario y vista previa de una orden de mantenimiento con datos corporativos y personales censurados" },
   },
   {
     slug: "marketplace",
@@ -150,6 +157,8 @@ export const projects: Project[] = [
       ],
     },
     color: "#8B3DFF",
+    cover: "/covers/marketplace.webp",
+    coverAlt: { en: "PIMSA Marketplace's recycled-resin storefront", es: "Página de inicio de PIMSA Marketplace para resinas recicladas" },
   },
   {
     slug: "meetscribe",
@@ -180,6 +189,8 @@ export const projects: Project[] = [
     },
     links: [{ label: "github.com/LittlePitza/meetscribe", href: "https://github.com/LittlePitza/meetscribe" }],
     color: "#0FA3B1",
+    cover: "/covers/meetscribe.webp",
+    coverAlt: { en: "MeetScribe transcription and meeting minutes with demo data", es: "Transcripción y acta de MeetScribe con datos de demostración" },
   },
   {
     slug: "password-vault",
@@ -208,6 +219,78 @@ export const projects: Project[] = [
       ],
     },
     color: "#E0245E",
+    cover: "/covers/password-vault.webp",
+    coverAlt: { en: "Illustration of a secure vault and key for Password Vault", es: "Ilustración de una bóveda segura y una llave para Password Vault" },
+  },
+  {
+    slug: "woodland-setup",
+    name: "Woodland Setup",
+    category: { en: "Board game companion", es: "Asistente de juego de mesa" },
+    role: { en: ["Author", "Game logic", "Interface design"], es: ["Autor", "Lógica de juego", "Diseño de interfaz"] },
+    stack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Zustand", "Framer Motion", "Vitest"],
+    launch: { en: "2026", es: "2026" },
+    status: { en: "Public demo", es: "Demo pública" },
+    numbers: [
+      { value: "14", label: { en: "faction options", es: "opciones de facción" } },
+      { value: "3", label: { en: "selection modes", es: "modos de selección" } },
+      { value: "2–6", label: { en: "players", es: "jugadores" } },
+    ],
+    summary: {
+      en: "A companion for balanced Root games, with faction selection, turn-based drafts, Reach validation and local game history.",
+      es: "Asistente para preparar partidas equilibradas de Root, con selección de facciones, draft por turnos, validación de Reach e historial local.",
+    },
+    body: {
+      en: [
+        "Choose the player count and available expansions, then prepare a game with balanced random selection, a turn-based draft or manual faction selection. The setup checks Reach requirements and faction compatibility before play.",
+        "The faction catalogue covers the base game and four expansions, including the second Vagabond. Game history stays in the browser so the group can revisit earlier combinations.",
+        "The interface supports Spanish and English, with a warm, book-like visual style inspired by the game. The public demo lets visitors explore the setup flow directly.",
+      ],
+      es: [
+        "Elige el número de jugadores y las expansiones disponibles, y prepara la partida mediante selección aleatoria equilibrada, draft por turnos o selección manual. La configuración comprueba los requisitos de Reach y la compatibilidad entre facciones antes de jugar.",
+        "El catálogo de facciones cubre el juego base y cuatro expansiones, incluido el segundo Vagabundo. El historial se guarda en el navegador para que el grupo pueda volver a consultar combinaciones anteriores.",
+        "La interfaz está disponible en español e inglés, con una estética cálida de libro inspirada en el juego. La demo pública permite recorrer directamente el proceso de preparación.",
+      ],
+    },
+    links: [
+      { label: "woodland-setup.vercel.app", href: "https://woodland-setup.vercel.app/" },
+      { label: "github.com/LittlePitza/woodland-setup", href: "https://github.com/LittlePitza/woodland-setup" },
+    ],
+    color: "#95643F",
+    cover: "/covers/woodland-setup.webp",
+    coverAlt: { en: "Woodland Setup's Spanish homepage and game setup modes", es: "Inicio de Woodland Setup en español y modos de preparación de partida" },
+  },
+  {
+    slug: "dnd-companion",
+    name: "D&D Companion",
+    category: { en: "Tabletop RPG companion", es: "Asistente de rol de mesa" },
+    role: { en: ["Author", "Rules modelling", "Interface design"], es: ["Autor", "Modelado de reglas", "Diseño de interfaz"] },
+    stack: ["React 19", "TypeScript", "Vite", "Zustand", "CSS Modules", "Vitest"],
+    launch: { en: "2026", es: "2026" },
+    status: { en: "Personal project", es: "Proyecto personal" },
+    numbers: [
+      { value: "5", label: { en: "tabletop views", es: "vistas de juego" } },
+      { value: "8", label: { en: "journal categories", es: "categorías de bitácora" } },
+      { value: "2024", label: { en: "D&D rules edition", es: "edición de reglas de D&D" } },
+    ],
+    summary: {
+      en: "A D&D 2024 tabletop console with a character sheet, attack rolls, rules-aware spellcasting, resource tracking and a campaign journal.",
+      es: "Consola para partidas de D&D 2024 con hoja de personaje, tiradas de ataque, conjuros que validan reglas y recursos, y bitácora de campaña.",
+    },
+    body: {
+      en: [
+        "Five views keep combat, attacks, spells, the character sheet and campaign memories close at hand. The included character is Soryn Vort, a level-five Wild Magic sorcerer, with character definitions stored as data.",
+        "Attacks and spellcasting bring the relevant rules and resource checks into the action, reducing the need to jump between reference pages during a session.",
+        "Character state and campaign memories persist locally in the browser. The journal groups notes into eight categories, keeping the table's story alongside its combat tools.",
+      ],
+      es: [
+        "Cinco vistas reúnen combate, ataques, conjuros, hoja de personaje y recuerdos de campaña. El personaje incluido es Soryn Vort, un hechicero de Magia Salvaje de nivel cinco, con definiciones de personajes separadas como datos.",
+        "Los ataques y el lanzamiento de conjuros integran las reglas relevantes y la comprobación de recursos en la propia acción, reduciendo los saltos entre páginas de consulta durante la sesión.",
+        "El estado del personaje y los recuerdos de campaña persisten localmente en el navegador. La bitácora organiza las notas en ocho categorías para mantener la historia del grupo junto a sus herramientas de combate.",
+      ],
+    },
+    color: "#A63F35",
+    cover: "/covers/dnd-companion.webp",
+    coverAlt: { en: "D&D Companion's combat console with the included example character", es: "Consola de combate de D&D Companion con el personaje de ejemplo incluido" },
   },
 ];
 

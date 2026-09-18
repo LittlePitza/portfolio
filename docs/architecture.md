@@ -57,7 +57,7 @@ flowchart LR
 3. Every page is a server component. It resolves the content for its locale
    and hands plain strings to client components, so nothing bilingual ships to
    the browser twice.
-4. `generateStaticParams` on the layout and on `work/[slug]` produce all 23
+4. `generateStaticParams` on the layout and on `work/[slug]` produce localized
    routes at build time. There is no runtime data source.
 
 ## Content model
@@ -70,9 +70,10 @@ year and benefits from type-checking more than from an editor UI.
 - `Project` carries what the gallery columns need: role, stack, launch,
   status, `numbers` — the verifiable figures that stand in for awards — and
   `body`, the case-study paragraphs Playground unfolds in place.
-- `cover` is optional. Without it `Cover.tsx` draws a generated app window in
-  the project colour using those same numbers, so the layout looks finished
-  before screenshots exist.
+- `cover` references a local optimized WebP screenshot or editorial
+  illustration. `coverAlt` describes it in both languages. `Cover.tsx` uses
+  `next/image` and preserves the full image across the home wheel, gallery
+  and case studies. Without a cover, it draws a vector illustration.
 - The dictionaries in `src/i18n` hold UI strings only. `es.ts` is typed as
   `typeof en`, which keeps both files in lockstep.
 

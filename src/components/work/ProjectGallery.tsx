@@ -24,7 +24,7 @@ interface Props {
 /**
  * Every project at once, and the whole of one.
  *
- * The grid holds all six covers. Click one and it takes the full width of the
+ * The grid holds every cover. Click one and it takes the full width of the
  * row: the cover grows, the name grows with it, and the case unfolds
  * underneath — role, stack, numbers, and the story. The other covers stay on
  * screen and slide to their new places, so nothing is ever hidden behind a
@@ -35,12 +35,16 @@ export function ProjectGallery({ projects, labels }: Props) {
   const cards = useRef<(HTMLAnchorElement | null)[]>([]);
   const items = useRef<(HTMLLIElement | null)[]>([]);
   const previous = useRef<ReturnType<typeof Flip.getState> | null>(null);
+  const fade = useRef<gsap.core.Tween | null>(null);
   const [open, setOpen] = useState<number | null>(null);
   const base = useId();
   const n = projects.length;
 
   /** Photograph the grid, then let React lay it out again; the layout effect animates the difference. */
   const commit = useCallback((next: number | null) => {
+    // A click that lands while a case is fading out wins over that fade.
+    fade.current?.kill();
+    fade.current = null;
     const el = root.current;
     if (el && !prefersReducedMotion()) previous.current = Flip.getState(el.querySelectorAll("[data-flip]"));
     setOpen(next);
@@ -50,15 +54,17 @@ export function ProjectGallery({ projects, labels }: Props) {
   const collapse = useCallback(
     (index: number, focus = false) => {
       const done = () => {
+        fade.current = null;
         commit(null);
         if (focus) cards.current[index]?.focus({ preventScroll: true });
       };
       const panel = items.current[index]?.querySelector<HTMLElement>("[data-panel]");
-      if (!panel || prefersReducedMotion()) {
+      // A hidden tab has no animation frames, and the close would wait for one.
+      if (!panel || prefersReducedMotion() || document.hidden) {
         done();
         return;
       }
-      gsap.to(panel, { autoAlpha: 0, y: -10, duration: 0.25, ease: "power2.in", onComplete: done });
+      fade.current = gsap.to(panel, { autoAlpha: 0, y: -10, duration: 0.25, ease: "power2.in", onComplete: done });
     },
     [commit],
   );
@@ -161,7 +167,7 @@ export function ProjectGallery({ projects, labels }: Props) {
                   index={index}
                   brutal={false}
                   className={styles.cover}
-                  sizes="(min-width: 1180px) 33vw, (min-width: 720px) 50vw, 100vw"
+                  sizes={isOpen ? "(min-width: 900px) 55vw, 100vw" : "(min-width: 1180px) 33vw, (min-width: 720px) 50vw, 100vw"}
                 />
                 <span className={styles.toggle} aria-hidden>
                   +

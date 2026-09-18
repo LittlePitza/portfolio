@@ -17,8 +17,12 @@ const TILT = -2;
 const SCROLL_PER_PROJECT = 0.85;
 /** Height of one name in the right-hand list, in px. Must match the CSS. */
 const TITLE_H = 150;
-/** Where the pinned, spinning version runs. Everywhere else gets the simple stack. */
-const STAGE_MEDIA = "(min-width: 1024px) and (prefers-reduced-motion: no-preference)";
+/** Where there is room for the wheel at all. Below it, the simple stack. */
+const WHEEL_MEDIA = "(min-width: 900px)";
+/** Scroll drives the wheel only where movement is welcome. */
+const SCROLL_WHEEL = `${WHEEL_MEDIA} and (prefers-reduced-motion: no-preference)`;
+/** The same wheel, placed straight to its resting position and moved by the controls. */
+const STATIC_WHEEL = `${WHEEL_MEDIA} and (prefers-reduced-motion: reduce)`;
 
 interface Props {
   slides: Slide[];
@@ -36,6 +40,8 @@ const pad = (value: number) => String(value).padStart(2, "0");
  * tilting as it goes. Around it: the active project's details, the list of
  * names, a big counter, controls and progress. Scroll, arrow keys, the
  * buttons, the colour dots, a name or a background disc all move the wheel.
+ * Asked for reduced motion, the wheel stays and the scrolling goes: the same
+ * stage, placed straight to each project, moved only by the controls.
  */
 export function DiscStage({ slides, labels, deep }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -44,9 +50,18 @@ export function DiscStage({ slides, labels, deep }: Props) {
   const trigger = useRef<ScrollTrigger | null>(null);
   const entrance = useRef<gsap.core.Tween | null>(null);
   const [active, setActive] = useState(0);
+  /** Which of the two wheels is running. Nothing rendered depends on it, so it never
+      disagrees with the server; it only tells the effects below how to move. */
+  const [driven, setDriven] = useState<"scroll" | "controls">("scroll");
+  /** The project in front, readable from a media context that does not re-run on a new one. */
+  const activeRef = useRef(0);
   const { done } = usePreloader();
   const n = slides.length;
   const slide = slides[active]!;
+
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
 
   /** Put every disc on the wheel for a continuous position `p` between 0 and n - 1. */
   const place = useCallback((p: number) => {
@@ -69,19 +84,22 @@ export function DiscStage({ slides, labels, deep }: Props) {
 
   const goTo = useCallback(
     (i: number) => {
-      const st = trigger.current;
-      if (!st || n < 2) return;
+      if (n < 2) return;
       const clamped = Math.max(0, Math.min(n - 1, i));
-      scrollTo(st.start + ((st.end - st.start) * clamped) / (n - 1));
+      const st = trigger.current;
+      // Scrolling is what turns the wheel; without it the controls set the project directly.
+      if (st) scrollTo(st.start + ((st.end - st.start) * clamped) / (n - 1));
+      else setActive(clamped);
     },
     [n],
   );
 
-  // Scroll drives the wheel.
+  // Scroll drives the wheel where motion is welcome; everywhere else the controls do.
   useGSAP(
     () => {
       const media = gsap.matchMedia();
-      media.add(STAGE_MEDIA, () => {
+      media.add(SCROLL_WHEEL, () => {
+        setDriven("scroll");
         if (n < 2) {
           place(0);
           return;
@@ -110,6 +128,10 @@ export function DiscStage({ slides, labels, deep }: Props) {
           trigger.current = null;
         };
       });
+      media.add(STATIC_WHEEL, () => {
+        setDriven("controls");
+        place(activeRef.current);
+      });
       return () => media.revert();
     },
     { scope: root, dependencies: [n, place] },
@@ -136,21 +158,40 @@ export function DiscStage({ slides, labels, deep }: Props) {
     { scope: root, dependencies: [done] },
   );
 
+  // Without a scroll trigger the wheel is placed outright, and it has to survive a resize.
+  useEffect(() => {
+    if (driven !== "controls") return;
+    const paint = () => {
+      place(active);
+      if (bar.current) bar.current.style.transform = `scaleX(${n < 2 ? 1 : active / (n - 1)})`;
+    };
+    paint();
+    window.addEventListener("resize", paint);
+    return () => window.removeEventListener("resize", paint);
+  }, [driven, active, n, place]);
+
   // A new project in front: its details swap in, the names roll, the counter ticks.
   useGSAP(
     () => {
+      if (driven === "controls") {
+        // The same end state the tweens below reach, arrived at without the journey.
+        gsap.set("[data-titles]", { y: -active * TITLE_H });
+        gsap.set("[data-meta-row], [data-count]", { clearProps: "all" });
+        return;
+      }
       if (!trigger.current) return;
       gsap.fromTo("[data-meta-row]", { y: 8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.45, stagger: 0.04, ease: "power3.out", overwrite: true });
       gsap.fromTo("[data-count]", { yPercent: 45, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: "expo.out", overwrite: true });
       gsap.to("[data-titles]", { y: -active * TITLE_H, duration: 0.7, ease: "expo.out", overwrite: true });
     },
-    { scope: root, dependencies: [active] },
+    { scope: root, dependencies: [active, driven] },
   );
 
-  // Arrow keys while the wheel is on screen.
+  // Arrow keys while the wheel is on screen, or, with no pin to hold it there, while it has focus.
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (!trigger.current?.isActive || event.defaultPrevented || event.altKey || event.metaKey || event.ctrlKey) return;
+      const listening = trigger.current?.isActive ?? stage.current?.contains(document.activeElement);
+      if (!listening || event.defaultPrevented || event.altKey || event.metaKey || event.ctrlKey) return;
       if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable], dialog")) return;
       if (event.key === "ArrowDown" || event.key === "ArrowRight") {
         event.preventDefault();
@@ -164,9 +205,9 @@ export function DiscStage({ slides, labels, deep }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [active, goTo]);
 
-  /** A disc or name that is not in front spins the wheel to it instead of opening. */
+  /** A disc or name that is not in front brings itself to the front instead of opening. */
   const spinTo = (i: number) => (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (i !== active && trigger.current) {
+    if (i !== active && n > 1) {
       event.preventDefault();
       goTo(i);
     }
@@ -259,7 +300,8 @@ export function DiscStage({ slides, labels, deep }: Props) {
               <span aria-hidden>→</span>
             </button>
           </div>
-          <p className="label text-muted">{labels.hint}</p>
+          <p className={`label text-muted ${styles.hintScroll}`}>{labels.hint}</p>
+          <p className={`label text-muted ${styles.hintStatic}`}>{labels.hintStatic}</p>
         </div>
 
         <span className={styles.progress} aria-hidden>
@@ -267,7 +309,7 @@ export function DiscStage({ slides, labels, deep }: Props) {
         </span>
       </div>
 
-      {/* Phones, tablets and reduced motion: the same discs as a simple stack. */}
+      {/* Phones and narrow windows: the same discs as a simple stack. */}
       <ol className={styles.list}>
         {slides.map((s, i) => (
           <li key={s.slug} className={styles.item}>

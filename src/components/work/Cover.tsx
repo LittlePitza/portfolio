@@ -13,15 +13,15 @@ interface Props {
   stamp?: boolean;
 }
 
-/** Original editorial illustrations, not simulated product screenshots. */
+/** Real screenshots and editorial covers, with a vector fallback. */
 export function Cover({ slide, index, sizes = "55vw", className = "", priority, brutal = true, stamp = false }: Props) {
   const label = String(index + 1).padStart(2, "0");
   const frame = brutal ? styles.coverFrame : "";
 
   if (slide.cover) {
     return (
-      <div className={`${styles.cover} ${frame} ${className}`}>
-        <Image src={slide.cover} alt={slide.name} fill sizes={sizes} priority={priority} className="object-cover" />
+      <div className={`${styles.cover} ${styles.imageCover} ${frame} ${className}`}>
+        <Image src={slide.cover} alt={slide.coverAlt ?? slide.name} fill sizes={sizes} priority={priority} className="object-contain" />
         {stamp && <span className={styles.coverStamp}>{slide.status}</span>}
       </div>
     );

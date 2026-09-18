@@ -44,6 +44,7 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
     summary: project.summary[locale],
     color: project.color,
     cover: project.cover,
+    coverAlt: project.coverAlt?.[locale],
   };
 
   return (

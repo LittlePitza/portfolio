@@ -40,13 +40,13 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
           }
         };
         const syncLock = () => {
-          const locked = document.documentElement.classList.contains("is-loading") ||
+          const locked = document.documentElement.hasAttribute("data-intro") ||
             document.documentElement.style.overflow === "hidden" || document.body.style.overflow === "hidden";
           if (locked && !lenis.isStopped) lenis.stop();
           else if (!locked && lenis.isStopped) lenis.start();
         };
         const lockObserver = new MutationObserver(syncLock);
-        lockObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "style"] });
+        lockObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "style", "data-intro"] });
         lockObserver.observe(document.body, { attributes: true, attributeFilter: ["style"] });
         document.addEventListener("visibilitychange", syncVisibility);
         gsap.ticker.lagSmoothing(0);

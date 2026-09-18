@@ -55,7 +55,7 @@ export function InsideHead({ items, question, hint, hintOpen, openLabel, close, 
           if (event.key === "Escape" && card === null) setOpen(false);
         }}>
           <div className={styles.ring} aria-hidden />
-          <Head className={styles.head} />
+          <Head className={styles.head} alive={!open} />
           <button type="button" className={styles.faceButton} aria-label={`${open ? close : openLabel}: ${question}`} aria-expanded={open} aria-controls={objectId} onClick={() => setOpen(!open)} />
           <div id={objectId} inert={!open} aria-hidden={!open}>
             {items.map((item, index) => {

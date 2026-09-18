@@ -1,3 +1,15 @@
+"use client";
+
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
+
+interface Props {
+  className?: string;
+  open?: boolean;
+  /** Turn the breathing, the blinking and the gaze off, e.g. while the head is open. */
+  alive?: boolean;
+}
+
 /**
  * Illustrated portrait of Luis: dark hair swept to one side with volume on
  * top, a full beard, a wide smile, black tee under an orange overshirt and a
@@ -5,8 +17,14 @@
  * skull form one "lid" group (data-lid) so the parent can lift it; the
  * interior, the sparkle eyes, the grin and the speed lines are tagged so they
  * can be faded in while the head is open.
+ *
+ * He is not a still drawing: the head breathes on the neck, the eyes blink at
+ * uneven intervals and, on a mouse, the pupils, the brows and the whole head
+ * follow the pointer. Everything stops off screen, on a hidden tab and under
+ * `prefers-reduced-motion`, and nothing here changes the drawing itself.
  */
-export function Head({ className = "", open = false }: { className?: string; open?: boolean }) {
+export function Head({ className = "", open = false, alive = true }: Props) {
+  const root = useRef<SVGSVGElement>(null);
   const show = (on: boolean) => (on ? 1 : 0);
   const ink = "var(--ink)";
   const paper = "var(--bg)";
@@ -14,8 +32,118 @@ export function Head({ className = "", open = false }: { className?: string; ope
   const beard =
     "M104 218 C102 256 100 300 112 346 C128 396 166 430 212 430 C258 430 296 396 310 348 C320 304 318 258 316 218 C314 252 308 298 294 324 C278 338 258 332 246 322 C236 314 226 314 214 318 C202 314 192 314 180 322 C166 334 148 338 132 324 C116 298 108 252 104 218 Z";
 
+  // Nothing below changes the drawing; it only moves what is already there.
+  useGSAP(
+    () => {
+      const el = root.current;
+      if (!el || !alive) return;
+      const head = el.querySelector<SVGGElement>("[data-head]");
+      const eyes = el.querySelector<SVGGElement>("[data-eyes-calm]");
+      const brows = el.querySelector<SVGGElement>("[data-brows]");
+      const pupils = el.querySelectorAll<SVGCircleElement>("[data-pupil]");
+      if (!head || !eyes || !brows) return;
+
+      let onScreen = true;
+      const awake = () => onScreen && !document.hidden;
+      const media = gsap.matchMedia();
+
+      // He breathes on the neck and blinks at uneven intervals.
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.set(eyes, { svgOrigin: "210 270" });
+        gsap.set(head, { svgOrigin: "210 452" });
+        const shut = { scaleY: 0.06, duration: 0.07, ease: "power2.in" };
+        const lift = { scaleY: 1, duration: 0.12, ease: "power2.out" };
+
+        const breath = gsap.to(head, { y: -2.5, duration: 3, ease: "sine.inOut", repeat: -1, yoyo: true });
+        let blink: gsap.core.Timeline | null = null;
+        let next: gsap.core.Tween | null = null;
+
+        function wink() {
+          blink?.kill();
+          blink = gsap.timeline().to(eyes, shut).to(eyes, lift);
+          // Every so often he blinks twice, which is what reads as a person rather than a loop.
+          if (Math.random() < 0.28) blink.to(eyes, shut, "+=0.12").to(eyes, lift);
+          schedule();
+        }
+        function schedule() {
+          next?.kill();
+          next = gsap.delayedCall(2.4 + Math.random() * 4.6, wink);
+        }
+
+        const sync = () => {
+          if (awake()) {
+            breath.play();
+            if (!next) schedule();
+            return;
+          }
+          breath.pause();
+          next?.kill();
+          next = null;
+        };
+
+        const observer = new IntersectionObserver(([entry]) => {
+          onScreen = entry.isIntersecting;
+          sync();
+        });
+        observer.observe(el);
+        document.addEventListener("visibilitychange", sync);
+        sync();
+
+        return () => {
+          observer.disconnect();
+          document.removeEventListener("visibilitychange", sync);
+          next?.kill();
+          blink?.kill();
+          breath.kill();
+        };
+      });
+
+      // The gaze belongs to a mouse: a finger leaves no pointer to follow.
+      media.add("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)", () => {
+        const pupilX = gsap.quickTo(pupils, "x", { duration: 0.5, ease: "power3.out" });
+        const pupilY = gsap.quickTo(pupils, "y", { duration: 0.5, ease: "power3.out" });
+        const browY = gsap.quickTo(brows, "y", { duration: 0.7, ease: "power3.out" });
+        const turn = gsap.quickTo(head, "rotation", { duration: 0.9, ease: "power3.out" });
+        const lean = gsap.quickTo(head, "x", { duration: 0.9, ease: "power3.out" });
+
+        // Measured once and kept until the page moves under him, so following the
+        // pointer never forces a layout on every single move.
+        let box: DOMRect | null = null;
+        const forget = () => {
+          box = null;
+        };
+        const onMove = (event: PointerEvent) => {
+          if (event.pointerType !== "mouse" || !awake()) return;
+          if (!box) box = el.getBoundingClientRect();
+          if (!box.width) return;
+          // Distance from the face, as a share of its own size, so he reacts the
+          // same whether he is the portrait card or the big head on About.
+          const x = gsap.utils.clamp(-1, 1, (event.clientX - (box.left + box.width / 2)) / (box.width * 1.5));
+          const y = gsap.utils.clamp(-1, 1, (event.clientY - (box.top + box.height * 0.45)) / (box.height * 1.1));
+          pupilX(x * 6.5);
+          pupilY(y * 3.5);
+          browY(y * 2.6);
+          turn(x * 2);
+          lean(x * 3.5);
+        };
+
+        window.addEventListener("pointermove", onMove, { passive: true });
+        window.addEventListener("scroll", forget, { passive: true });
+        window.addEventListener("resize", forget, { passive: true });
+        return () => {
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("scroll", forget);
+          window.removeEventListener("resize", forget);
+        };
+      });
+
+      return () => media.revert();
+    },
+    { scope: root, dependencies: [alive], revertOnUpdate: true },
+  );
+
   return (
-    <svg viewBox="0 0 420 520" overflow="visible" className={className} aria-hidden fill="none" stroke={ink} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
+    <svg ref={root} viewBox="0 0 420 520" overflow="visible" className={className} aria-hidden fill="none" stroke={ink} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
       <defs>
         <pattern id="beardTone" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
           <circle cx="5" cy="5" r="1.6" fill={paper} stroke="none" />
@@ -38,6 +166,8 @@ export function Head({ className = "", open = false }: { className?: string; ope
       <path d="M186 460 C196 500 224 500 234 460" stroke={paper} strokeWidth="3" />
       <rect x="205" y="494" width="10" height="14" rx="2" fill={paper} stroke="none" />
 
+      {/* Everything above the shoulders moves as one: it breathes and turns. */}
+      <g data-head>
       {/* Speed lines, visible only while open */}
       <g data-lines strokeWidth="6" opacity={show(open)}>
         <path d="M40 150 L74 178 M28 210 L66 214 M380 140 L350 170 M396 200 L356 206 M120 22 L136 52 M300 20 L286 52" />
@@ -70,8 +200,8 @@ export function Head({ className = "", open = false }: { className?: string; ope
       <g data-eyes-calm opacity={show(!open)}>
         <path d="M150 272 C160 262 178 262 188 272" strokeWidth="6" />
         <path d="M234 270 C244 260 262 260 272 270" strokeWidth="6" />
-        <circle cx="169" cy="274" r="6" fill={ink} stroke="none" />
-        <circle cx="253" cy="272" r="6" fill={ink} stroke="none" />
+        <circle data-pupil cx="169" cy="274" r="6" fill={ink} stroke="none" />
+        <circle data-pupil cx="253" cy="272" r="6" fill={ink} stroke="none" />
       </g>
       {/* Eyes, sparkling */}
       <g data-eyes-spark opacity={show(open)} fill={ink} stroke="none">
@@ -113,6 +243,7 @@ export function Head({ className = "", open = false }: { className?: string; ope
         <path d="M264 110 C292 126 310 156 314 190" stroke={paper} strokeWidth="5" />
         {/* Cut edge */}
         <path d="M100 209 L320 209" strokeWidth="7" />
+      </g>
       </g>
     </svg>
   );

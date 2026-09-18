@@ -29,8 +29,19 @@ html {
   scrollbar-gutter: stable;
 }
 
-html.is-loading {
+/* The curtain is painted by the stylesheet, so it is already on screen when the
+   document first shows. Only the head script marks a load as an intro, which is
+   why nothing covers the page when scripts never run. */
+html[data-intro] {
   overflow: hidden;
+}
+
+[data-preloader] {
+  visibility: hidden;
+}
+
+html[data-intro] [data-preloader] {
+  visibility: visible;
 }
 
 /* The custom cursor replaces the native one only on fine pointers. */

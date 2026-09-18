@@ -17,6 +17,7 @@ function toSlide(p: Project, locale: Locale): Slide {
     summary: p.summary[locale],
     color: p.color,
     cover: p.cover,
+    coverAlt: p.coverAlt?.[locale],
   };
 }
 
@@ -42,6 +43,7 @@ export function workLabels(t: Dictionary): WorkLabels {
     prev: t.work.prev,
     next: t.work.next,
     hint: t.work.hint,
+    hintStatic: t.work.hintStatic,
   };
 }
 

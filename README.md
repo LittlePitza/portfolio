@@ -25,7 +25,7 @@ can be checked. Tests in CI, migrations, SLA held, availability, spend cut.
 The presentation borrows from the best creative portfolios: a character that
 pushes a black curtain off the screen, a name set in a giant serif, a pinned
 carousel driven by scroll, and a fixed frame with a local clock. Underneath it
-is a static, typed, bilingual Next.js app that builds to 23 pages and ships no
+is a static, typed, bilingual Next.js app with pre-rendered pages and no
 runtime data layer at all.
 
 <br>
@@ -40,7 +40,7 @@ runtime data layer at all.
     </td>
     <td width="33%" valign="top">
       <strong>Selected work</strong><br>
-      The home opens with the name and then turns into one idea: six projects on a wheel that spins with the scroll, rolling in from the bottom left and away to the top right like records, with details, names, a counter and controls around it. On phones it becomes a simple stack. Playground is the gallery: every cover at once, and the one you click takes the whole row and unfolds its case in place.
+      The home opens with the name and then turns into one idea: eight projects on a wheel that spins with the scroll, rolling in from the bottom left and away to the top right like records, with details, names, a counter and controls around it. On phones it becomes a simple stack. Playground is the gallery: every cover at once, and the one you click takes the whole row and unfolds its case in place.
     </td>
     <td width="33%" valign="top">
       <strong>Small details</strong><br>
@@ -148,7 +148,7 @@ npm run dev
 | --- | --- |
 | `npm run dev` | Development server with Turbopack |
 | `npm run check` | ESLint plus a typecheck that regenerates route types first |
-| `npm run build` | Production build, 23 static pages |
+| `npm run build` | Production build with pre-rendered localized pages |
 | `npm start` | Serve the production build |
 
 <br>
@@ -158,9 +158,11 @@ npm run dev
 - **A project** is one object in `src/content/projects.ts`. Add it to the
   array and it appears on the home wheel and in the Playground gallery,
   gets its own route under `/work/`,
-  and lands in the sitemap. Drop a screenshot in `public/covers/` and point
-  `cover` at it; until then a generated cover is drawn from the project's
-  colour and numbers.
+  and lands in the sitemap. Put an optimized image in `public/covers/`, point
+  `cover` at it and describe it in both languages with `coverAlt`. The current
+  set combines seven application captures and one editorial illustration; see
+  [cover sources](public/covers/README.md). Without an image, a vector cover
+  uses the project's colour. The ticker counts projects automatically.
 - **Facts, capabilities, process and experience** live in
   `src/content/profile.ts`.
 - **UI strings** live in `src/i18n/dictionaries/`. The Spanish file is typed

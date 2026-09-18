@@ -28,7 +28,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
 
   return (
     <PreloaderProvider>
-      <Preloader label={t.frame.loading} />
+      <Preloader label={t.frame.loading} skipLabel={t.frame.skip} />
       <Hero
         eyebrow={t.hero.eyebrow}
         tagline={t.hero.tagline}

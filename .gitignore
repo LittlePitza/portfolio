@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+# Private source captures and local-only review files
+/.local/
 
 # debug
 npm-debug.log*

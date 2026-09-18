@@ -1,37 +1,41 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { Character } from "./Character";
 import { usePreloader } from "./PreloaderContext";
 import { hasNavigated } from "@/lib/navigation";
+import { INTRO_ATTR, INTRO_KEY } from "./intro";
 
-const SESSION_KEY = "portfolio:preloaded";
 const CHARACTER_WIDTH = 300;
 
+/**
+ * The head script already ruled on this load, and its mark is read once, here, while
+ * this module first runs in the browser. Reading it inside the effect would miss:
+ * React mounts twice in development, and the first departure clears the mark.
+ */
+const openedWithIntro = typeof document !== "undefined" && document.documentElement.hasAttribute(INTRO_ATTR);
+
 /** A brief, skippable signature moment. Never hides the page without JavaScript. */
-export function Preloader({ label }: { label: string }) {
+export function Preloader({ label, skipLabel }: { label: string; skipLabel: string }) {
   const root = useRef<HTMLDivElement>(null);
   const skip = useRef<() => void>(() => {});
   const { finish } = usePreloader();
   const [mounted, setMounted] = useState(true);
 
   useGSAP(() => {
-    let seen = false;
-    try { seen = window.sessionStorage.getItem(SESSION_KEY) === "1"; } catch { /* Storage can be disabled. */ }
-    if (hasNavigated() || prefersReducedMotion() || seen) {
+    const el = root.current;
+    if (!openedWithIntro || hasNavigated() || !el) {
+      document.documentElement.removeAttribute(INTRO_ATTR);
       setMounted(false);
       finish();
       return;
     }
-
-    const el = root.current;
-    if (!el) { finish(); return; }
+    // Put the mark back: the curtain is on screen from the first paint and stays there.
+    document.documentElement.setAttribute(INTRO_ATTR, "");
     const group = el.querySelector<HTMLElement>("[data-group]")!;
     const char = el.querySelector<HTMLElement>("[data-char]")!;
     const counter = el.querySelector<HTMLElement>("[data-counter]")!;
-    const skipButton = el.querySelector<HTMLButtonElement>("[data-skip]")!;
-    skipButton.textContent = document.documentElement.lang.startsWith("es") ? "Saltar intro ↗" : "Skip intro ↗";
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const state = { n: 0 };
     const loops: gsap.core.Animation[] = [];
@@ -43,8 +47,8 @@ export function Preloader({ label }: { label: string }) {
       window.clearTimeout(safety);
       timeline?.kill();
       loops.forEach((animation) => animation.kill());
-      try { window.sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* The intro still finishes. */ }
-      document.documentElement.classList.remove("is-loading");
+      try { window.sessionStorage.setItem(INTRO_KEY, "1"); } catch { /* The intro still finishes. */ }
+      document.documentElement.removeAttribute(INTRO_ATTR);
       el.style.visibility = "hidden";
       finish();
       setMounted(false);
@@ -58,8 +62,6 @@ export function Preloader({ label }: { label: string }) {
     document.addEventListener("keydown", onKey);
     document.addEventListener("visibilitychange", onVisibility);
     motion.addEventListener("change", complete);
-    document.documentElement.classList.add("is-loading");
-    gsap.set(el, { visibility: "visible" });
     const safety = window.setTimeout(complete, 2600);
 
     loops.push(
@@ -85,7 +87,7 @@ export function Preloader({ label }: { label: string }) {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("visibilitychange", onVisibility);
       motion.removeEventListener("change", complete);
-      document.documentElement.classList.remove("is-loading");
+      document.documentElement.removeAttribute(INTRO_ATTR);
       loops.forEach((animation) => animation.kill());
       timeline?.kill();
       skip.current = () => {};
@@ -95,8 +97,9 @@ export function Preloader({ label }: { label: string }) {
   if (!mounted) return null;
 
   return (
-    <div ref={root} className="fixed inset-0 z-50 overflow-hidden bg-bg" style={{ visibility: "hidden" }}>
-      <div data-group aria-hidden="true" className="absolute inset-y-0 left-0 flex" style={{ width: `calc(100vw + ${CHARACTER_WIDTH}px)` }}>
+    <div ref={root} data-preloader className="fixed inset-0 z-50 overflow-hidden bg-bg">
+      {/* Parked exactly where the timeline starts it, so the painted frame is frame one. */}
+      <div data-group aria-hidden="true" className="absolute inset-y-0 left-0 flex" style={{ width: `calc(100vw + ${CHARACTER_WIDTH}px)`, transform: `translateX(-${CHARACTER_WIDTH}px)` }}>
         <div className="relative flex shrink-0 items-center justify-end" style={{ width: CHARACTER_WIDTH }}>
           <div data-char className="w-[230px] translate-x-2 md:w-[290px]">
             <Character className="h-auto w-full" />
@@ -105,7 +108,7 @@ export function Preloader({ label }: { label: string }) {
         <div className="h-full grow bg-ink" />
       </div>
       <button data-skip type="button" onClick={() => skip.current()} className="label absolute bottom-6 left-6 min-h-11 px-3 text-bg/80 transition-colors hover:text-bg">
-        Skip intro ↗
+        {skipLabel}
       </button>
       <div data-hud aria-hidden="true" className="absolute bottom-6 right-6 text-right text-bg">
         <p className="label text-bg/60">{label}</p>

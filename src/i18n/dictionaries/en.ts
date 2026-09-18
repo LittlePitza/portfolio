@@ -1,3 +1,5 @@
+import { projects } from "@/content/projects";
+
 const en = {
   meta: {
     title: "Luis Hernández — I build the systems I operate",
@@ -14,6 +16,7 @@ const en = {
     copyright: "copyright 2026",
     language: "Language",
     loading: "Loading",
+    skip: "Skip intro ↗",
   },
   hero: {
     eyebrow: "Full-stack developer & IT lead",
@@ -25,7 +28,7 @@ const en = {
   },
   tab: ["Come back →", "The systems are still running."] as [string, string],
   update: { message: "A new version of this site is live", action: "Refresh" },
-  ticker: ["Selected work", "06 projects", "1,050 automated tests", "93% response SLA", "100% availability", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
+  ticker: ["Selected work", `${String(projects.length).padStart(2, "0")} projects`, "1,050 automated tests", "93% response SLA", "100% availability", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
   work: {
     selected: "Selected work",
     deep: "Every project, in depth",
@@ -43,12 +46,13 @@ const en = {
     links: "Links",
     about: "About the project",
     hint: "Scroll, arrow keys or the buttons",
+    hintStatic: "Arrow keys or the buttons",
   },
   playground: {
     title: "Playground",
     description: "Every project in depth: the role, the stack, the numbers and the decisions behind each system.",
     kicker: "Project index",
-    lead: "Six systems I wrote, shipped and still operate. Open one and the whole case opens with it.",
+    lead: "Systems I operate and personal projects I build for the things I enjoy. Open one to explore the full case.",
     hint: "Click a project to read it whole",
     close: "Close",
     projects: "projects",

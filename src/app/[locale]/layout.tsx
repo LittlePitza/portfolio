@@ -12,6 +12,7 @@ import { TabTitle } from "@/components/chrome/TabTitle";
 import { Cursor } from "@/components/ui/Cursor";
 import { PageTransition } from "@/components/chrome/PageTransition";
 import { UpdateWatcher } from "@/components/chrome/UpdateWatcher";
+import { introScript } from "@/components/preloader/intro";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -53,7 +54,12 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
   const t = getDictionary(locale);
 
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} h-full antialiased`}>
+    // The intro mark lands on <html> before React arrives, which hydration is right to notice and wrong to undo.
+    <html lang={locale} suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} h-full antialiased`}>
+      <head>
+        {/* Before the first paint, so the opening curtain is never a second act. */}
+        <script dangerouslySetInnerHTML={{ __html: introScript(locales.map((l) => `/${l}`)) }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <SmoothScroll>
           <PageTransition domain={site.domain}>

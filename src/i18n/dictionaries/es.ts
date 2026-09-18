@@ -1,4 +1,5 @@
 import type en from "./en";
+import { projects } from "@/content/projects";
 
 const es: typeof en = {
   meta: {
@@ -16,6 +17,7 @@ const es: typeof en = {
     copyright: "copyright 2026",
     language: "Idioma",
     loading: "Cargando",
+    skip: "Saltar intro ↗",
   },
   hero: {
     eyebrow: "Desarrollador full-stack y responsable de TI",
@@ -27,7 +29,7 @@ const es: typeof en = {
   },
   tab: ["Vuelve →", "Los sistemas siguen corriendo."],
   update: { message: "Hay una versión nueva del sitio", action: "Actualizar" },
-  ticker: ["Trabajo seleccionado", "06 proyectos", "1,050 pruebas automatizadas", "93% de SLA en respuesta", "100% de disponibilidad", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
+  ticker: ["Trabajo seleccionado", `${String(projects.length).padStart(2, "0")} proyectos`, "1,050 pruebas automatizadas", "93% de SLA en respuesta", "100% de disponibilidad", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
   work: {
     selected: "Trabajo seleccionado",
     deep: "Cada proyecto, a fondo",
@@ -45,12 +47,13 @@ const es: typeof en = {
     links: "Enlaces",
     about: "Sobre el proyecto",
     hint: "Desliza, usa las flechas o los botones",
+    hintStatic: "Usa las flechas o los botones",
   },
   playground: {
     title: "Playground",
     description: "Cada proyecto a fondo: el rol, el stack, las cifras y las decisiones detrás de cada sistema.",
     kicker: "Índice de proyectos",
-    lead: "Seis sistemas que escribí, entregué y sigo operando. Abre uno y se abre el caso completo.",
+    lead: "Sistemas que opero y proyectos personales que construyo para lo que disfruto. Abre uno para conocer el caso completo.",
     hint: "Haz clic en un proyecto para leerlo completo",
     close: "Cerrar",
     projects: "proyectos",

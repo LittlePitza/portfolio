@@ -1,11 +1,14 @@
 .root { position: relative; }
 
-/* The spinning stage only exists where it can spin; everyone else gets the stack. */
+/* The wheel is the layout, not the animation: it stays wherever there is room for it,
+   and reduced motion takes away the spinning, not the stage. Phones get the stack. */
 .stage { display: none; }
 .list { list-style: none; margin: 0; padding: 8.5rem clamp(1rem, 4vw, 2rem) 5rem; display: grid; gap: 3.5rem; }
 
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .stage { display: block; position: relative; height: 100svh; overflow: hidden; }
+@media (min-width: 900px) {
+  /* 100vh first: engines without the small-viewport unit would drop the height and
+     collapse a stage whose contents are all absolutely positioned. */
+  .stage { display: block; position: relative; height: 100vh; height: 100svh; overflow: hidden; }
   .list { display: none; }
 }
 
@@ -55,6 +58,13 @@
 .countNumber { display: block; }
 .total { margin-top: .5rem; font-size: clamp(2.5rem, 4vw, 4rem); color: transparent; -webkit-text-stroke: 1px var(--ink); }
 
+/* Only one of the two hints is ever true, and which one is a media query, not state. */
+.hintStatic { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .hintScroll { display: none; }
+  .hintStatic { display: block; }
+}
+
 .controls { position: absolute; z-index: 60; right: clamp(1rem, 1.8vw, 1.5rem); bottom: 5rem; display: flex; flex-direction: column; align-items: flex-end; gap: .85rem; }
 .buttons { display: flex; gap: .5rem; }
 .arrow { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid var(--ink); border-radius: 50%; background: var(--bg); transition: background-color .25s, color .25s; }
@@ -79,7 +89,7 @@
 .itemOpen { display: flex; align-items: center; justify-content: space-between; min-height: 44px; border-bottom: 1px solid currentColor; font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .06em; text-transform: uppercase; }
 .deepItem { display: flex; justify-content: flex-end; }
 
-@media (min-width: 640px) and (max-width: 1023px) {
+@media (min-width: 640px) and (max-width: 899px) {
   .list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem 1.5rem; }
   .deepItem { grid-column: 1 / -1; }
 }
