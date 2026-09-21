@@ -1,0 +1,262 @@
+{
+  "meta": {
+    "name": "Luis Eduardo Hernández Cruz",
+    "contact": [
+      "Querétaro, México  ·  712 192 1381  ·  lhernandez025cz@gmail.com"
+    ],
+    "links": [
+      {
+        "label": "lhernandez.dev",
+        "href": "https://lhernandez.dev"
+      },
+      {
+        "label": "linkedin.com/in/lhernandez25",
+        "href": "https://www.linkedin.com/in/lhernandez25"
+      },
+      {
+        "label": "github.com/LittlePitza",
+        "href": "https://github.com/LittlePitza"
+      }
+    ]
+  },
+  "es": {
+    "file": "Luis-Hernandez-CV-ES.pdf",
+    "headline": "Responsable de TI · Desarrollador full-stack",
+    "profile": {
+      "heading": "PERFIL",
+      "text": "Responsable de TI y desarrollador full-stack con experiencia en software, infraestructura y soporte a usuarios. Lidero el desarrollo del departamento de sistemas y proyectos de innovación tecnológica, desde el levantamiento de necesidades hasta su puesta en operación. Combino desarrollo web, automatización con Python y administración de servidores, redes y servicios empresariales."
+    },
+    "experience": {
+      "heading": "EXPERIENCIA PROFESIONAL",
+      "roles": [
+        {
+          "company": "Plásticos de Ingeniería Mexicanos (PIMSA)",
+          "place": "Huimilpan, Querétaro",
+          "title": "Responsable de TI · Desarrollo de sistemas internos",
+          "dates": "Junio 2026 - Presente",
+          "bullets": [
+            "Lidero la **reestructuración del departamento de sistemas**: servicios, procesos, presupuesto, proveedores y contratos, con reporte a Dirección General.",
+            "Gestiono proyectos tecnológicos con producción, mantenimiento, comercial y administración, desde el levantamiento hasta la capacitación y el arranque.",
+            "Desarrollo **sistemas internos en producción**: mesa de servicio, control de asistencia, portal de mantenimiento y marketplace B2B, sustituyendo procesos en papel y herramientas externas.",
+            "Administro servidores, redes, respaldos, Microsoft 365 y dispositivos; doy soporte y capacito usuarios en SAP Business One y las aplicaciones internas.",
+            "Documenté procesos y acciones correctivas alineados con **ISO 9001**; optimicé costos mediante desarrollo interno y revisión de proveedores."
+          ]
+        },
+        {
+          "company": "Construcciones SB",
+          "place": "Querétaro, México",
+          "title": "Administrador de Sistemas",
+          "dates": "Diciembre 2025 - Mayo 2026",
+          "bullets": [
+            "Brindé **soporte de primer y segundo nivel a más de 200 usuarios** y administré servidores Windows/Linux, cuentas, permisos y estaciones de trabajo.",
+            "Configuré **Fortinet**: políticas de firewall, VPN y segmentación de red para usuarios de oficina y obra.",
+            "Automaticé la configuración de equipos Windows y Android con **Python y Bash**, reduciendo **50% el tiempo de tareas rutinarias**."
+          ]
+        },
+        {
+          "company": "Foton Querétaro",
+          "place": "Querétaro, México",
+          "title": "Especialista en TI",
+          "dates": "Julio 2025 - Diciembre 2025",
+          "bullets": [
+            "Desarrollé herramientas para ventas, marketing y posventa; automaticé sincronización de datos y reportes con **Python y APIs de Google**.",
+            "Di soporte al **ERP Infor Visual** y elaboré dashboards y macros de Excel para análisis de OEE y desempeño operativo.",
+            "Gestioné accesos, configuración de red y estaciones de trabajo en varios departamentos."
+          ]
+        },
+        {
+          "company": "Centro de Abastos Fany",
+          "place": "Atlacomulco, Estado de México",
+          "title": "Supervisor de Sistemas de Información",
+          "dates": "Enero 2024 - Julio 2025",
+          "bullets": [
+            "Administré la red, el servidor principal y la videovigilancia; realicé mantenimiento de equipos y soporte a usuarios.",
+            "Implementé soluciones para la operación, incluido el **rastreo GPS de la flotilla** y la configuración de hardware y software."
+          ]
+        },
+        {
+          "company": "Mercado Libre",
+          "place": "México (remoto)",
+          "title": "Especialista en Logística",
+          "dates": "Diciembre 2019 - Mayo 2023",
+          "bullets": [
+            "Coordiné pedidos y paqueterías, atendí devoluciones y reembolsos, y analicé datos logísticos para mejorar la operación."
+          ]
+        }
+      ]
+    },
+    "projects": {
+      "heading": "PROYECTOS SELECCIONADOS",
+      "items": [
+        {
+          "name": "TI Hub",
+          "href": "https://lhernandez.dev/es/work/ti-hub",
+          "stack": "Next.js · React · TypeScript · PostgreSQL · Supabase",
+          "text": "Mesa de servicio con motor de SLA, inventario y reportes mensuales. Diseñé el portal para que los usuarios puedan reportar incidencias y el departamento darles seguimiento. En producción."
+        },
+        {
+          "name": "Attendance",
+          "href": "https://lhernandez.dev/es/work/attendance",
+          "stack": "PostgreSQL · PL/pgSQL · pg_cron · Docker",
+          "text": "Control de asistencia con reglas de negocio en la base de datos, registros inmutables y ajustes auditables. Incluye pruebas SQL en una base desechable dentro de CI."
+        },
+        {
+          "name": "B2B Marketplace",
+          "href": "https://lhernandez.dev/es/work/marketplace",
+          "stack": "Next.js · TypeScript · PostgreSQL · Stripe · SPEI",
+          "text": "Comercio de plásticos reciclados con compra directa y cotización. Implementé precios calculados en servidor y pagos con tarjeta o transferencia. En producción desde septiembre de 2026."
+        },
+        {
+          "name": "MeetScribe",
+          "href": "https://lhernandez.dev/es/work/meetscribe",
+          "stack": "Python · Whisper · WASAPI · Windows",
+          "text": "Transcripción de reuniones y minutas con procesamiento local de audio. Separa micrófono y audio del sistema para mantener las conversaciones en el dispositivo. Código abierto, licencia MIT."
+        }
+      ]
+    },
+    "education": {
+      "heading": "EDUCACIÓN Y CERTIFICACIONES",
+      "school": {
+        "company": "Universidad Autónoma del Estado de México",
+        "place": "Atlacomulco, Estado de México",
+        "title": "Ingeniería en Computación",
+        "dates": "titulación en proceso"
+      },
+      "bullets": [
+        "**Google Cybersecurity Certificate** - en curso. Módulos concluidos: Foundations of Cybersecurity y Play It Safe: Manage Security Risks.",
+        "**Google IT Support** - en curso.",
+        "**Git y GitHub · Programación Orientada a Objetos** - cursos de Platzi."
+      ]
+    },
+    "skills": {
+      "heading": "TECNOLOGÍAS Y COMPETENCIAS",
+      "bullets": [
+        "**Desarrollo:** TypeScript, JavaScript, Python, Java, SQL, Bash y PowerShell; React, Next.js, Django, HTML/CSS, Tailwind, Zustand, GSAP y Framer Motion.",
+        "**Datos y calidad:** PostgreSQL, PL/pgSQL, MySQL, Supabase, Drizzle, Git/GitHub, Docker, Vitest, Zod y GitHub Actions.",
+        "**Infraestructura:** Windows Server, Active Directory, Linux, macOS, Android, VMware, Hyper-V, Microsoft 365, Entra ID, Intune, Ubiquiti/UniFi y Fortinet.",
+        "**Negocio y gestión:** SAP Business One, Infor Visual, Jira, Excel, gestión de proyectos, presupuesto y proveedores, procesos ISO 9001 y capacitación de usuarios."
+      ]
+    },
+    "languages": "**Idiomas:** Español nativo · Inglés avanzado"
+  },
+  "en": {
+    "file": "Luis-Hernandez-CV-EN.pdf",
+    "headline": "IT Manager · Full-stack developer",
+    "profile": {
+      "heading": "PROFILE",
+      "text": "IT manager and full-stack developer with experience in software, infrastructure and user support. I lead IT department development and technology innovation projects, from requirements gathering through delivery and operation. My work combines web development, Python automation and administration of servers, networks and business services."
+    },
+    "experience": {
+      "heading": "PROFESSIONAL EXPERIENCE",
+      "roles": [
+        {
+          "company": "Plásticos de Ingeniería Mexicanos (PIMSA)",
+          "place": "Huimilpan, Querétaro",
+          "title": "IT Manager · Internal systems engineering",
+          "dates": "June 2026 - Present",
+          "bullets": [
+            "Lead **IT department restructuring**: services, processes, budget, vendors and contracts, reporting to the General Director.",
+            "Manage technology projects with production, maintenance, sales and administration, from requirements through training and launch.",
+            "Build **internal systems in production**: service desk, time clock, maintenance portal and B2B marketplace, replacing paper processes and external tools.",
+            "Administer servers, networks, backups, Microsoft 365 and devices; support and train users on SAP Business One and internal applications.",
+            "Documented processes and corrective actions aligned with **ISO 9001**; optimised costs through internal development and vendor reviews."
+          ]
+        },
+        {
+          "company": "Construcciones SB",
+          "place": "Querétaro, Mexico",
+          "title": "Systems Administrator",
+          "dates": "December 2025 - May 2026",
+          "bullets": [
+            "Provided **first- and second-line support for over 200 users** and administered Windows/Linux servers, accounts, permissions and workstations.",
+            "Configured **Fortinet** firewall policies, VPN access and network segmentation for office and site users.",
+            "Automated Windows and Android device setup with **Python and Bash**, reducing **routine task time by 50%**."
+          ]
+        },
+        {
+          "company": "Foton Querétaro",
+          "place": "Querétaro, Mexico",
+          "title": "IT Specialist",
+          "dates": "July 2025 - December 2025",
+          "bullets": [
+            "Built tools for sales, marketing and after-sales; automated data synchronisation and reporting with **Python and Google APIs**.",
+            "Supported the **Infor Visual ERP** and built Excel dashboards and macros for OEE and operational performance analysis.",
+            "Managed user access, network configuration and workstations across departments."
+          ]
+        },
+        {
+          "company": "Centro de Abastos Fany",
+          "place": "Atlacomulco, Estado de México",
+          "title": "Information Systems Supervisor",
+          "dates": "January 2024 - July 2025",
+          "bullets": [
+            "Administered the network, main server and video surveillance; maintained computers and provided user support.",
+            "Implemented operational tools, including **GPS tracking for the vehicle fleet** and specialised hardware and software setup."
+          ]
+        },
+        {
+          "company": "Mercado Libre",
+          "place": "Mexico (remote)",
+          "title": "Logistics Specialist",
+          "dates": "December 2019 - May 2023",
+          "bullets": [
+            "Coordinated orders and carriers, handled returns and refunds, and analysed logistics data to improve operations."
+          ]
+        }
+      ]
+    },
+    "projects": {
+      "heading": "SELECTED PROJECTS",
+      "items": [
+        {
+          "name": "TI Hub",
+          "href": "https://lhernandez.dev/en/work/ti-hub",
+          "stack": "Next.js · React · TypeScript · PostgreSQL · Supabase",
+          "text": "Service desk with an SLA engine, inventory and monthly reporting. Built the portal for users to report incidents and the IT department to track them. In production."
+        },
+        {
+          "name": "Attendance",
+          "href": "https://lhernandez.dev/en/work/attendance",
+          "stack": "PostgreSQL · PL/pgSQL · pg_cron · Docker",
+          "text": "Time tracking with database-enforced business rules, immutable records and auditable adjustments. Includes SQL tests against a disposable database in CI."
+        },
+        {
+          "name": "B2B Marketplace",
+          "href": "https://lhernandez.dev/en/work/marketplace",
+          "stack": "Next.js · TypeScript · PostgreSQL · Stripe · SPEI",
+          "text": "Recycled-plastics commerce with direct purchase and quotation requests. Implemented server-calculated pricing and card or bank-transfer payments. In production since September 2026."
+        },
+        {
+          "name": "MeetScribe",
+          "href": "https://lhernandez.dev/en/work/meetscribe",
+          "stack": "Python · Whisper · WASAPI · Windows",
+          "text": "Meeting transcription and minutes with local audio processing. Separates microphone and system audio to keep conversations on the device. Open source under the MIT licence."
+        }
+      ]
+    },
+    "education": {
+      "heading": "EDUCATION & CERTIFICATIONS",
+      "school": {
+        "company": "Universidad Autónoma del Estado de México",
+        "place": "Atlacomulco, Estado de México",
+        "title": "Computer Engineering",
+        "dates": "degree completion in progress"
+      },
+      "bullets": [
+        "**Google Cybersecurity Certificate** - in progress. Completed modules: Foundations of Cybersecurity and Play It Safe: Manage Security Risks.",
+        "**Google IT Support** - in progress.",
+        "**Git & GitHub · Object-Oriented Programming** - Platzi courses."
+      ]
+    },
+    "skills": {
+      "heading": "TECHNOLOGIES & SKILLS",
+      "bullets": [
+        "**Development:** TypeScript, JavaScript, Python, Java, SQL, Bash and PowerShell; React, Next.js, Django, HTML/CSS, Tailwind, Zustand, GSAP and Framer Motion.",
+        "**Data & quality:** PostgreSQL, PL/pgSQL, MySQL, Supabase, Drizzle, Git/GitHub, Docker, Vitest, Zod and GitHub Actions.",
+        "**Infrastructure:** Windows Server, Active Directory, Linux, macOS, Android, VMware, Hyper-V, Microsoft 365, Entra ID, Intune, Ubiquiti/UniFi and Fortinet.",
+        "**Business & management:** SAP Business One, Infor Visual, Jira, Excel, project management, budgets and vendors, ISO 9001 processes and user training."
+      ]
+    },
+    "languages": "**Languages:** Spanish (native) · English (advanced)"
+  }
+}

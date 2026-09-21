@@ -28,7 +28,7 @@ const en = {
   },
   tab: ["Come back →", "The systems are still running."] as [string, string],
   update: { message: "A new version of this site is live", action: "Refresh" },
-  ticker: ["Selected work", `${String(projects.length).padStart(2, "0")} projects`, "1,050 automated tests", "93% response SLA", "100% availability", "Next.js · TypeScript · PostgreSQL", "Querétaro, MX"],
+  ticker: ["Selected work", `${String(projects.length).padStart(2, "0")} projects`, "React · Next.js · TypeScript", "Python · Django", "SQL · PostgreSQL", "Infrastructure & IT operations", "Project management"],
   work: {
     selected: "Selected work",
     deep: "Every project, in depth",
@@ -60,10 +60,9 @@ const en = {
   about: {
     title: "About",
     intro:
-      "I run the IT department of a recycled-plastics plant as sole owner of its cost centre, and I write the software that department runs on. The KPIs I report every month come out of systems I built.",
+      "I build software and work across the data, infrastructure and operations it needs to run. My experience includes building an IT department and managing technology innovation projects, from planning through launch.",
     facts: "Facts",
-    numbersTitle: "Numbers, not awards",
-    capabilities: "Capabilities",
+    capabilities: "Experience & tools",
     process: "How I build",
     experience: "Experience",
     education: "Education & certifications",
@@ -72,8 +71,8 @@ const en = {
     headHint: "Click or tap my head to open it",
     headHintOpen: "Pick an object. Tap my head again to close it",
     headOpen: "Open",
-    headLeft: "systems in production",
-    headRight: "people who depend on them",
+    headLeft: "software development",
+    headRight: "infrastructure & operations",
     close: "Close",
   },
   contact: {

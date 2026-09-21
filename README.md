@@ -12,7 +12,7 @@
 </p>
 
 <h3 align="center"><a href="https://lhernandez.dev">lhernandez.dev</a></h3>
-<p align="center">Full-stack developer and IT lead in Querétaro, Mexico.<br>A site where the recognition column holds numbers, not awards.</p>
+<p align="center">Full-stack developer and IT lead in Querétaro, Mexico.<br>Selected projects, technical capabilities and professional experience.</p>
 
 <br>
 
@@ -20,7 +20,7 @@
 
 Most portfolio sites show screenshots and let you guess. This one treats every
 project like a technical sheet: role, stack, launch date and the figures that
-can be checked. Tests in CI, migrations, SLA held, availability, spend cut.
+can be checked, with context about the problem, implementation and outcome.
 
 The presentation borrows from the best creative portfolios: a character that
 pushes a black curtain off the screen, a name set in a giant serif, a pinned
@@ -163,13 +163,27 @@ npm run dev
   recreates two or three pieces of the app in HTML and CSS with demo data.
   Give it a caption line (`coverCaption`) and a description (`coverAlt`) in
   both languages. Without a drawing, the cover shows the project's name on
-  its colour. The ticker counts projects automatically.
+  its colour. The ticker highlights technologies used across the work.
 - **Facts, capabilities, process and experience** live in
   `src/content/profile.ts`.
 - **UI strings** live in `src/i18n/dictionaries/`. The Spanish file is typed
   against the English one.
 - **Identity** (name, email, links, résumé paths, optional Rive character)
   lives in `src/content/site.ts`.
+
+### Résumés
+
+The Spanish and English PDFs in `public/cv/` are generated from
+`scripts/cv/cv.json`. After editing the content, rebuild both versions:
+
+```bash
+python -m pip install -r scripts/cv/requirements.txt
+python scripts/cv/build_cv.py
+```
+
+The generator uses Georgia fonts from Windows. On other systems, supply
+`--fonts /path/to/fonts` with the four Georgia TTF files. It checks the two-page
+limit; visually review both PDFs after each content change.
 
 <br>
 

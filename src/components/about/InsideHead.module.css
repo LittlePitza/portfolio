@@ -28,7 +28,7 @@
 .signature { position: absolute; bottom: -2.2rem; left: 50%; transform: translateX(-50%); color: var(--muted); white-space: nowrap; }
 .figures { display: flex; flex-direction: column; gap: 2rem; }
 .figure { padding-bottom: 1.3rem; border-bottom: 1px solid var(--line); }
-.number { font-family: var(--font-display); font-size: clamp(5rem, 9vw, 9rem); line-height: 1; }
+.number { font-family: var(--font-display); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1; }
 .number > span { font-family: var(--font-sans); font-size: 1.2rem; color: var(--accent); vertical-align: top; display: inline-block; margin-top: 1.3rem; margin-left: .5rem; }
 .figure > p:last-child { max-width: 19ch; }
 .dialog { position: fixed; inset: 0; margin: auto; width: min(90vw, 480px); max-height: 85svh; padding: 0; color: var(--ink); border: 1px solid var(--ink); overflow: auto; box-shadow: 8px 8px 0 var(--accent); background: var(--paper); }
@@ -45,7 +45,7 @@
   .root { grid-template-columns: 1fr 1.6fr; gap: 2rem; }
   .figures { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; margin-top: 2rem; }
   .figure { display: flex; align-items: center; gap: 1rem; width: 45%; }
-  .number { font-size: 5rem; }
+  .number { font-size: 3rem; }
   .number > span { display: none; }
 }
 @media (max-width: 600px) {
@@ -59,6 +59,6 @@
   .scene { --head-size: min(58vw, 250px); }
   .figures { margin-top: 0; gap: 1rem; }
   .figure { display: block; width: 50%; }
-  .number { font-size: 4.5rem; }
+  .number { font-size: 2.75rem; }
 }
 @media (prefers-reduced-motion: reduce) { .scene *, .toggleIcon { transition: none !important; } .dialog[open] { animation: none; } }
