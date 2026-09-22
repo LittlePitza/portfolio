@@ -10,8 +10,8 @@ import { Cormorant_Garamond, Plus_Jakarta_Sans, Poppins, Space_Grotesk } from "n
 /** TI Hub and the maintenance portal. */
 export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap", preload: false });
 
-/** The marketplace's display face. */
-export const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["500", "700"], display: "swap", preload: false });
+/** The display face of the marketplace and PIMSA Web. */
+export const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], display: "swap", preload: false });
 
 /** Woodland Setup's book-like display face. */
 export const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "600"], style: ["normal", "italic"], display: "swap", preload: false });

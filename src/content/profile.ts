@@ -131,7 +131,7 @@ export const experience: Role[] = [
       en: [
         "Running the IT department: service catalogue, processes, budget, vendors and contracts.",
         "Managing internal technology projects alongside production, maintenance, sales and administration.",
-        "Building the software the company runs on: service desk, time clock, maintenance portal and B2B marketplace.",
+        "Building the software the company runs on: service desk, time clock, maintenance portal, B2B marketplace and public website.",
         "Administering infrastructure, network, backups and Microsoft 365 across the plant.",
         "User support against per-priority SLAs, with monthly KPI reporting to management.",
         "Training new hires on SAP Business One, Microsoft 365 and the company's internal software.",
@@ -139,7 +139,7 @@ export const experience: Role[] = [
       es: [
         "Dirección del departamento de sistemas: catálogo de servicios, procesos, presupuesto, proveedores y contratos.",
         "Gestión de proyectos internos de tecnología junto con producción, mantenimiento, comercial y administración.",
-        "Desarrollo del software con el que opera la empresa: mesa de servicio, control de asistencia, portal de mantenimiento y marketplace B2B.",
+        "Desarrollo del software con el que opera la empresa: mesa de servicio, control de asistencia, portal de mantenimiento, marketplace B2B y sitio web público.",
         "Administración de la infraestructura, la red, los respaldos y Microsoft 365 de toda la planta.",
         "Soporte a usuarios con SLA por prioridad y reporte mensual de KPIs a dirección.",
         "Capacitación de nuevos ingresos en SAP Business One, Microsoft 365 y el software interno de la compañía.",

@@ -1,0 +1,83 @@
+/* PIMSA Web, with the tokens of the app's src/styles/tokens.css: Space Grotesk for display, navy bands, and PIMSA green kept scarce. */
+
+.root { position: absolute; inset: 0; color: #16202c; font-family: var(--font-sans); }
+.eyebrow { display: block; font-family: var(--font-mono); font-size: .38em; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; color: #5f7a2c; }
+
+/* The public site: the hero on navy, over its twelve-column drafting grid, with a corner of pellets. */
+.site {
+  left: 4.5%; top: 15%; width: 57%; overflow: hidden; border-radius: .3em; color: #f7f8f5;
+  background:
+    radial-gradient(circle at 78% 42%, rgb(93 134 185 / 16%), transparent 38%),
+    repeating-linear-gradient(to right, rgb(81 122 173 / 8%) 0 1px, transparent 1px calc(100% / 12)),
+    #0e1b2e;
+  --rest: rotate(-1.5deg); --lift: rotate(-.5deg) translate(-.3em, -.2em);
+}
+.site::before {
+  content: ""; position: absolute; right: 0; top: 0; width: 45%; height: 50%; opacity: .2; pointer-events: none;
+  background: radial-gradient(circle, #b0cd75 .06em, transparent .075em) 0 0 / .45em .45em;
+  mask-image: linear-gradient(215deg, #000 15%, transparent 70%);
+}
+.nav { position: relative; display: flex; align-items: center; gap: .9em; padding: .8em 1.05em; }
+.logo { flex: none; width: auto; height: 1.05em; }
+.links { display: flex; flex: 1; justify-content: center; gap: 1em; font-size: .4em; font-weight: 500; white-space: nowrap; color: rgb(247 248 245 / 85%); }
+.quote { flex: none; padding: .55em .95em; border-radius: .25em; background: #7f9d41; color: #0e1b2e; font-size: .42em; font-weight: 500; }
+.hero { position: relative; display: block; padding: .85em 1.25em 1.3em; }
+.hero .eyebrow { color: #b0cd75; }
+.headline { display: block; margin: .45em 0 .4em; font-size: 2.25em; font-weight: 700; line-height: 1.02; letter-spacing: -.02em; text-wrap: balance; }
+.headline em { font-style: normal; color: #b0cd75; }
+.lead { display: block; max-width: 40em; font-size: .52em; line-height: 1.6; color: rgb(247 248 245 / 80%); }
+.ctas { display: flex; gap: .45em; margin-top: .9em; }
+.accent, .outline { display: grid; place-items: center; height: 3.2em; padding: 0 1.4em; border-radius: .25em; font-size: .5em; font-weight: 500; white-space: nowrap; }
+.accent { background: #7f9d41; color: #0e1b2e; transition: background-color .3s; }
+.outline { border: .1em solid #5d86b9; color: #f7f8f5; }
+.forms { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 1em; padding: .7em 0; border-block: 1px solid rgb(93 134 185 / 30%); }
+.forms span { font-family: var(--font-mono); font-size: .36em; letter-spacing: .16em; text-align: center; text-transform: uppercase; color: #5d86b9; }
+.forms span + span { border-left: 1px solid rgb(93 134 185 / 30%); }
+
+/* The panel, in its day theme: white cards on hairlines, one tone per status. */
+.leads { right: 4.5%; top: 11.5%; width: 36.5%; padding: .85em .95em .45em; border-radius: .4em; background: #fff; --rest: rotate(2.5deg); --lift: rotate(4deg) translate(.35em, -.3em); }
+.cardHead { display: flex; align-items: baseline; justify-content: space-between; gap: .8em; padding-bottom: .55em; }
+.more { font-size: .44em; font-weight: 500; color: #064d79; }
+.note { font-size: .4em; white-space: nowrap; color: #5a6878; }
+
+/* Three rows show; the track holds four and waits one row up, so a new first row pushes the rest down. */
+.window { display: block; height: calc(3 * var(--row)); overflow: hidden; }
+.track { display: block; transform: translateY(calc(-1 * var(--row))); transition: transform .8s var(--ease-out-expo); }
+.track > :first-child { opacity: 0; transition: opacity .6s; }
+
+.leads .window { --row: 2.6em; }
+.leadRow { display: flex; align-items: center; gap: .6em; height: var(--row); border-top: 1px solid #d8dee4; }
+.initials { display: grid; place-items: center; flex: none; width: 3em; height: 3em; border-radius: 50%; background: rgb(127 157 65 / 10%); color: #5f7a2c; font-size: .42em; font-weight: 600; }
+.who { display: grid; flex: 1; min-width: 0; gap: .1em; }
+.name, .line { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.name { font-size: .5em; font-weight: 500; }
+.line { font-size: .4em; color: #5a6878; }
+.pill { flex: none; padding: .2em .8em; border-radius: 99px; font-size: .4em; font-weight: 500; }
+.new { background: rgb(127 157 65 / 15%); color: #5f7a2c; }
+.contacted { background: rgb(6 77 121 / 10%); color: #064d79; }
+.closed { background: rgb(41 68 102 / 10%); color: #294466; }
+
+.log { right: 5%; bottom: 7.5%; z-index: 2; width: 42%; padding: .85em .95em .95em; border-radius: .4em; background: #fff; --rest: rotate(-2deg); --lift: rotate(-3.5deg) translate(.3em, .35em); }
+.table { display: block; overflow: hidden; border: 1px solid #d8dee4; border-radius: .3em; }
+.headRow, .sendRow { display: grid; grid-template-columns: 1.3fr 1fr .8fr; align-items: center; column-gap: .6em; padding: 0 .7em; }
+.headRow { height: 1.7em; background: #f7f8f5; }
+.headRow span { font-family: var(--font-mono); font-size: .36em; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #5a6878; }
+.log .window { --row: 2.2em; }
+.sendRow { height: var(--row); border-top: 1px solid #d8dee4; }
+.sendRow > span { font-size: .44em; white-space: nowrap; }
+.date, .extra { color: #5a6878; }
+.state { display: grid; justify-items: start; gap: .2em; }
+.status { padding: .2em .75em; border-radius: 99px; font-family: var(--font-mono); font-size: .9em; }
+.sent { background: rgb(127 157 65 / 15%); color: #5f7a2c; }
+.skipped { background: rgb(216 222 228 / 60%); color: #5a6878; }
+.failed { background: #fef2f2; color: #991b1b; box-shadow: inset 0 0 0 1px #fecaca; }
+.ms { font-family: var(--font-mono); font-size: .85em; color: #5a6878; }
+
+/* Ask for a quote: the lead lands in the panel first, and only then does the log record its email. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .accent { background: #b0cd75; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .track { transform: none; transition-delay: .25s; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .track > :first-child { opacity: 1; transition-delay: .35s; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .log .track { transition-delay: 1s; }
+  :is([data-art]:hover, [data-art]:focus-visible, [data-plate]:hover) .log .track > :first-child { transition-delay: 1.1s; }
+}

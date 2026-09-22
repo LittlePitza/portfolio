@@ -40,7 +40,7 @@ runtime data layer at all.
     </td>
     <td width="33%" valign="top">
       <strong>Selected work</strong><br>
-      The home opens with the name and then turns into one idea: eight projects on a wheel that spins with the scroll, rolling in from the bottom left and away to the top right like records, with details, names, a counter and controls around it. On phones it becomes a simple stack. Playground is the gallery: every cover at once, and the one you click takes the whole row and unfolds its case in place.
+      The home opens with the name and then turns into one idea: nine projects on a wheel that spins with the scroll, rolling in from the bottom left and away to the top right like records, with details, names, a counter and controls around it. On phones it becomes a simple stack. Playground is the gallery: every cover at once, and the one you click takes the whole row and unfolds its case in place.
     </td>
     <td width="33%" valign="top">
       <strong>Small details</strong><br>

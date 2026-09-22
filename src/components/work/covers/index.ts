@@ -6,6 +6,7 @@ import { Maintenance } from "./Maintenance";
 import { Marketplace } from "./Marketplace";
 import { MeetScribe } from "./MeetScribe";
 import { PasswordVault } from "./PasswordVault";
+import { PimsaWeb } from "./PimsaWeb";
 import { TiHub } from "./TiHub";
 import { Woodland } from "./Woodland";
 
@@ -15,6 +16,7 @@ export const drawings: Record<string, ComponentType<{ locale: Locale }>> = {
   attendance: Attendance,
   maintenance: Maintenance,
   marketplace: Marketplace,
+  "pimsa-web": PimsaWeb,
   meetscribe: MeetScribe,
   "password-vault": PasswordVault,
   "woodland-setup": Woodland,

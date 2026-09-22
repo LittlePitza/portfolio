@@ -174,6 +174,49 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "pimsa-web",
+    name: "PIMSA Web",
+    category: { en: "Corporate website", es: "Sitio corporativo" },
+    role: {
+      en: ["Sole author", "Art direction", "Technical SEO"],
+      es: ["Autor único", "Dirección de arte", "SEO técnico"],
+    },
+    stack: ["Next.js 16", "Drizzle ORM", "MySQL", "Tailwind v4", "Zod v4", "JSON-LD"],
+    launch: { en: "2026", es: "2026" },
+    status: { en: "Public, in production", es: "Público, en producción" },
+    numbers: [
+      { value: "8", label: { en: "schema.org types", es: "tipos de schema.org" } },
+      { value: "3", label: { en: "panel roles", es: "roles en el panel" } },
+      { value: "8", label: { en: "MySQL tables", es: "tablas MySQL" } },
+      { value: "0", label: { en: "animation libraries", es: "librerías de animación" } },
+    ],
+    summary: {
+      en: "Public website of an engineering-plastics recycler, with the panel that runs it: Marketing works the leads and the stock catalogue, HR runs a job board that takes CVs, and neither area sees the other's data.",
+      es: "Sitio público de una recicladora de plásticos de ingeniería, con el panel que lo opera: Marketing atiende leads y catálogo de stock, RRHH lleva una bolsa de trabajo que recibe CVs, y ningún área ve los datos de la otra.",
+    },
+    body: {
+      en: [
+        "The role is read from the database on every request rather than carried in the session token, so moving someone to another area takes effect at once. The same lookup ends a deleted account's sessions, and a password-version claim in the token ends them when a password is reset. Guards run in every page, every server action and the CV download route; a hidden link is only cosmetic.",
+        "A lead or an application is stored before anything is emailed, so a failed SMTP call never loses one. Recipients and the sending account are changed from the panel without a redeploy, and the SMTP password is kept encrypted with AES-256-GCM. Every attempt, test sends included, lands in a delivery log as sent, failed or skipped, and the last two record why.",
+        "A vacancy keeps its place, pay and closing date as separate fields instead of free text, with schema.org values for the job type and pay period, so one record feeds its page, the JobPosting data Google reads and an Indeed-format XML feed for the job boards. Across the site, eight schema.org types describe the company, its services, its FAQs and its openings.",
+        "Built to replace the company's WordPress site, it renders on the server by default and needs no animation library. The ORM stays out of client bundles, and photographs promoted from the camera originals go through a script built on sharp that bakes in the EXIF rotation, caps the long edge at 2000 px and strips GPS data. It runs as a Node app on Hostinger over MySQL, deployed from main.",
+      ],
+      es: [
+        "El rol se lee de la base de datos en cada petición en vez de viajar en el token de sesión, así que cambiar a alguien de área surte efecto al instante. Esa misma consulta corta las sesiones de una cuenta borrada, y un claim del token con la versión de la contraseña las corta cuando se restablece. Los controles de acceso corren en cada página, cada server action y la ruta de descarga de CVs; ocultar un enlace es solo cosmético.",
+        "Un lead o una postulación se guarda antes de enviar cualquier correo, así que, si falla el SMTP, no se pierde ninguno. Los destinatarios y la cuenta de envío se cambian desde el panel sin redesplegar, y la contraseña SMTP se almacena cifrada con AES-256-GCM. Cada intento, incluidos los envíos de prueba, queda registrado en una bitácora como enviado, fallido u omitido, y en los dos últimos casos se anota el motivo.",
+        "Cada vacante guarda lugar, sueldo y fecha de cierre como campos separados en vez de texto libre, con valores de schema.org para la jornada y el periodo de pago, de modo que un solo registro alimenta su página, los datos JobPosting que lee Google y un feed XML en formato Indeed para las bolsas de trabajo. En todo el sitio, ocho tipos de schema.org describen a la empresa, sus servicios, sus preguntas frecuentes y sus vacantes.",
+        "Hecho para reemplazar el sitio en WordPress de la empresa, renderiza en el servidor por defecto y no necesita librería de animación. El ORM queda fuera de los bundles del cliente, y las fotografías que pasan de los originales de cámara al sitio lo hacen por un script con sharp que aplica la rotación EXIF, limita el lado largo a 2000 px y elimina los datos GPS. Corre como app de Node en Hostinger sobre MySQL, desplegada desde main.",
+      ],
+    },
+    links: [{ label: "plasticospimsa.com", href: "https://plasticospimsa.com" }],
+    color: "#7F9D41",
+    coverCaption: { en: "the site and the panel behind it", es: "el sitio y el panel que lo opera" },
+    coverAlt: {
+      en: "The headline of PIMSA Web's public site, the latest leads in its admin panel and its log of emails sent, skipped and failed, recreated with demo data",
+      es: "El titular del sitio público de PIMSA Web, los últimos leads en su panel de administración y su bitácora de correos enviados, no enviados y fallidos, recreados con datos de demostración",
+    },
+  },
+  {
     slug: "meetscribe",
     name: "MeetScribe",
     category: { en: "Open source", es: "Código abierto" },

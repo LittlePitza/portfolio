@@ -70,10 +70,13 @@ year and benefits from type-checking more than from an editor UI.
 - `Project` carries what the gallery columns need: role, stack, launch,
   status, `numbers` — the verifiable figures that stand in for awards — and
   `body`, the case-study paragraphs Playground unfolds in place.
-- `cover` references a local optimized WebP screenshot or editorial
-  illustration. `coverAlt` describes it in both languages. `Cover.tsx` uses
-  `next/image` and preserves the full image across the home wheel, gallery
-  and case studies. Without a cover, it draws a vector illustration.
+- The cover is a drawing, not an image: a component in
+  `src/components/work/covers/`, registered by slug in `covers/index.ts`,
+  recreates two or three pieces of the app in HTML and CSS with demo data,
+  sized from its own box through a container query. `coverCaption` and
+  `coverAlt` describe it in both languages. `Cover.tsx` renders it on the
+  server on the project's colour; without a drawing, the cover shows the
+  project's name.
 - The dictionaries in `src/i18n` hold UI strings only. `es.ts` is typed as
   `typeof en`, which keeps both files in lockstep.
 
@@ -91,8 +94,8 @@ Animation is a client concern and is isolated to four components.
   corner, so each project's cover rolls in from the bottom left, settles in
   front and rolls out to the top right. Every frame places the covers from
   that one number; a change of project swaps the details, rolls the names and
-  ticks the counter. Below `lg` and under `prefers-reduced-motion` it renders
-  a simple stack instead. `ProjectGallery` is Playground: every cover in a
+  ticks the counter. Narrower than 900px it renders a simple stack; under
+  `prefers-reduced-motion` the wheel stays still and only the controls move it. `ProjectGallery` is Playground: every cover in a
   grid, and the one you click takes the whole row while GSAP Flip carries the
   others to their new places. `slides.ts` feeds both from the same content.
 - All GSAP work goes through `useGSAP` with a scope, so selectors stay local
