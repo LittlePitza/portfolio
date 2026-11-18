@@ -5,18 +5,20 @@ import "../globals.css";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/content/site";
-import { SmoothScroll } from "@/components/SmoothScroll";
-import { Frame } from "@/components/chrome/Frame";
-import { Footer } from "@/components/chrome/Footer";
 import { TabTitle } from "@/components/chrome/TabTitle";
-import { Cursor } from "@/components/ui/Cursor";
-import { PageTransition } from "@/components/chrome/PageTransition";
+import { Curtain } from "@/components/chrome/Curtain";
 import { UpdateWatcher } from "@/components/chrome/UpdateWatcher";
 import { introScript } from "@/components/preloader/intro";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const instrument = Instrument_Serif({ variable: "--font-instrument", subsets: ["latin"], weight: "400", style: ["normal", "italic"] });
+// Only the covers and the v1 labels use it, so it is not worth a preload (section 3.2).
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], preload: false });
+const instrument = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  weight: "400",
+  style: "normal",
+});
 
 export const viewport: Viewport = {
   themeColor: "#ecece9",
@@ -60,15 +62,18 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
         {/* Before the first paint, so the opening curtain is never a second act. */}
         <script dangerouslySetInnerHTML={{ __html: introScript(locales.map((l) => `/${l}`)) }} />
       </head>
-      <body className="flex min-h-full flex-col">
-        <SmoothScroll>
-          <PageTransition domain={site.domain}>
-            <Frame locale={locale} t={t} />
-            <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
-            <Footer locale={locale} t={t} />
-          </PageTransition>
-        </SmoothScroll>
-        <Cursor />
+      <body className="min-h-full">
+        {/* The skip link has to sit above the bar it skips; no curtain is up while it has focus. */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-(--margin) focus:left-(--margin)
+            focus:z-(--z-curtain) focus:bg-ink focus:px-4 focus:py-3 focus:text-ui focus:text-bg"
+        >
+          {t.frame.skipToContent}
+        </a>
+        <Curtain domain={site.domain} loadingLabel={t.curtain.label}>
+          {children}
+        </Curtain>
         <TabTitle messages={t.tab} />
         <UpdateWatcher message={t.update.message} action={t.update.action} />
       </body>

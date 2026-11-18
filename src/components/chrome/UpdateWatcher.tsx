@@ -12,7 +12,7 @@ const POLL_MS = 60_000;
  *   back/forward cache: if a newer deployment is live, reload straight away.
  * - While the visitor stays on the page: check every minute and offer a one-tap
  *   refresh instead of pulling the page out from under them.
- * - Internal navigation checks as well and loads the new version (see PageTransition).
+ * - Internal navigation checks as well and loads the new version (see Curtain).
  */
 export function UpdateWatcher({ message, action }: { message: string; action: string }) {
   const [stale, setStale] = useState(false);
@@ -51,10 +51,17 @@ export function UpdateWatcher({ message, action }: { message: string; action: st
   if (!stale) return null;
 
   return (
-    <div role="status" className="pointer-events-none fixed inset-x-0 bottom-16 z-[54] flex justify-center px-4 md:bottom-20">
-      <div className="brutal-accent pointer-events-auto flex items-center gap-4 bg-ink py-2 pl-4 pr-2 text-bg">
-        <span className="label">{message}</span>
-        <button type="button" className="btn btn-accent py-2" onClick={() => window.location.reload()}>
+    <div
+      role="status"
+      className="pointer-events-none fixed inset-x-0 bottom-16 z-(--z-chrome) flex justify-center px-(--margin)"
+    >
+      <div className="pointer-events-auto flex items-center gap-4 bg-ink py-1 pr-2 pl-4 text-ui text-bg">
+        <span>{message}</span>
+        <button
+          type="button"
+          className="min-h-11 px-2 underline underline-offset-4"
+          onClick={() => window.location.reload()}
+        >
           {action} <span aria-hidden>↻</span>
         </button>
       </div>

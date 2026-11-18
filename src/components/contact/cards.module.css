@@ -1,0 +1,190 @@
+@reference "../../app/globals.css";
+
+/*
+ * Contact's cards (docs/02-diseno-v2.md, section 6.3). Stacked they are four full-width
+ * cards, tilted a degree each way. On the stage they lie on a table that centres itself
+ * in the region and scales with it: the region is a size container, and the cards are
+ * 220 x 280 px (ratio 0.7857) whenever the region has the room for them. The rows
+ * overlap by 6% of a card, which is less than the bottom padding, so no action is covered.
+ */
+
+/* ---------- stacked ---------- */
+
+.stack {
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  transition:
+    rotate var(--dur-base) var(--ease),
+    translate var(--dur-base) var(--ease),
+    opacity var(--dur-fast) var(--ease),
+    filter var(--dur-fast) var(--ease);
+}
+
+.stack > .card:nth-child(odd) {
+  rotate: -1deg;
+}
+
+.stack > .card:nth-child(even) {
+  rotate: 1deg;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: var(--text-heading);
+  line-height: var(--text-heading--line-height);
+  letter-spacing: var(--text-heading--letter-spacing);
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--dur-fast) var(--ease);
+}
+
+.download:hover {
+  text-decoration-color: var(--color-ink);
+}
+
+.credits {
+  gap: 12px;
+}
+
+.credit {
+  max-width: 34ch;
+}
+
+/* The character stands on the card's lower edge and leans a little past it. */
+.character {
+  position: absolute;
+  right: 12px;
+  bottom: -8px;
+  height: 96px;
+  width: auto;
+  aspect-ratio: 340 / 420;
+  pointer-events: none;
+}
+
+.creditsAction {
+  max-width: calc(100% - 88px);
+}
+
+/* ---------- stage ---------- */
+
+@variant stage {
+  .region {
+    position: relative;
+    container-type: size;
+  }
+
+  .stack {
+    --h: min(280px, 47cqh, 62cqw);
+    --w: calc(var(--h) * 0.7857);
+
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: calc(1.92 * var(--w));
+    height: calc(2 * var(--h));
+    margin: auto;
+    translate: calc(var(--px, 0) * 1px) calc(var(--py, 0) * 1px);
+    transition: translate var(--dur-base) var(--ease);
+  }
+
+  .stack > .card {
+    position: absolute;
+    width: var(--w);
+    height: var(--h);
+    container-type: size;
+  }
+
+  .stack > .card:nth-child(1) {
+    top: 0;
+    left: 0;
+    rotate: -4deg;
+  }
+
+  .stack > .card:nth-child(2) {
+    top: calc(0.06 * var(--h));
+    left: calc(0.92 * var(--w));
+    rotate: 3deg;
+  }
+
+  .stack > .card:nth-child(3) {
+    top: calc(0.94 * var(--h));
+    left: calc(0.08 * var(--w));
+    rotate: -2deg;
+  }
+
+  .stack > .card:nth-child(4) {
+    top: var(--h);
+    left: calc(0.92 * var(--w));
+    rotate: 5deg;
+  }
+
+  .download {
+    min-height: 24px;
+  }
+
+  /* A card too short for 48 px names takes the 24 px size, and the credits lose the character. */
+  .name {
+    font-size: var(--text-lead);
+    line-height: var(--text-lead--line-height);
+    letter-spacing: var(--text-lead--letter-spacing);
+  }
+
+  @container (min-height: 226px) {
+    .name {
+      font-size: var(--text-heading);
+      line-height: var(--text-heading--line-height);
+      letter-spacing: var(--text-heading--letter-spacing);
+    }
+  }
+
+  @container (max-height: 225px) {
+    .character {
+      display: none;
+    }
+
+    .creditsAction {
+      max-width: none;
+    }
+  }
+}
+
+/* ---------- pointing and focus: last, so they win over each card's resting tilt ---------- */
+
+@media (hover: hover) {
+  .stack > .card:hover {
+    rotate: 0deg;
+    translate: 0 -8px;
+  }
+}
+
+.stack > .card:has(:focus-visible),
+.stack > .card:focus-visible {
+  rotate: 0deg;
+  translate: 0 -8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack > .card:hover,
+  .stack > .card:has(:focus-visible),
+  .stack > .card:focus-visible {
+    translate: none;
+  }
+}

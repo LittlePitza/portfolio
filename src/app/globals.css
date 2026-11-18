@@ -1,38 +1,171 @@
 @import "tailwindcss";
 
-:root {
-  --bg: #ecece9;
-  --paper: #f6f6f3;
-  --ink: #141414;
-  --muted: #65655f;
-  --line: rgba(20, 20, 20, 0.14);
-  --accent: #ff4a1c;
+/* ---------- tokens (docs/02-diseno-v2.md, section 3) ---------- */
+
+/* The one breakpoint. A composed screen needs both the width and the height to fit;
+   anything smaller stacks and scrolls. Mirrored by MQ.stage in src/lib/motion.ts. */
+@custom-variant stage {
+  @media (min-width: 64rem) and (min-height: 40rem) {
+    @slot;
+  }
+}
+
+@theme static {
+  --color-bg: #ecece9;
+  --color-paper: #f6f6f3;
+  --color-ink: #141414;
+  --color-muted: #65655f;
+  --color-line: rgb(20 20 20 / 0.14);
+  --color-accent: #f04010;
+
+  /* Phone values; the stage values are set below. Size / line height in px: 12/16, 16/26,
+     24/32, 32/36 (48/52), 56/56 (96/92). */
+  --text-ui: 0.75rem;
+  --text-ui--line-height: 1rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.625rem;
+  --text-lead: 1.5rem;
+  --text-lead--line-height: 2rem;
+  --text-lead--letter-spacing: -0.01em;
+  --text-heading: 2rem;
+  --text-heading--line-height: 2.25rem;
+  --text-heading--letter-spacing: -0.01em;
+  --text-title: 3.5rem;
+  --text-title--line-height: 3.5rem;
+  --text-title--letter-spacing: -0.02em;
+  --text-display: 19.5vw;
+  --text-display--line-height: 0.82;
+  --text-display--letter-spacing: -0.02em;
+  --text-figure: 34vw;
+  --text-figure--line-height: 0.82;
+  --text-figure--letter-spacing: -0.02em;
+
+  --margin: 16px;
+  --gap: 16px;
+  --radius: 8px;
+
+  --z-content: 0;
+  --z-chrome: 10;
+  --z-curtain: 30;
+  --z-preloader: 40;
+
+  /* Mirrored in src/lib/motion.ts for GSAP. */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 200ms;
+  --dur-base: 450ms;
+  --dur-slow: 900ms;
+  --stagger: 60ms;
+  --blur: 8px;
+  --blur-rest: 2px;
 }
 
 @theme inline {
-  --color-bg: var(--bg);
-  --color-paper: var(--paper);
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-line: var(--line);
-  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-display: var(--font-instrument), "Times New Roman", serif;
+}
+
+:root {
+  @variant stage {
+    --text-heading: 3rem;
+    --text-heading--line-height: 3.25rem;
+    --text-title: 6rem;
+    --text-title--line-height: 5.75rem;
+    --text-display: min(18.4vw, 30svh);
+    --text-figure: min(15vw, 26svh);
+    --margin: 20px;
+    --gap: 20px;
+  }
+
+  /* Short names read by the covers, the portrait and the v1 modules, which predate the
+     tokens; they always follow the tokens above. */
+  --bg: var(--color-bg);
+  --paper: var(--color-paper);
+  --ink: var(--color-ink);
+  --muted: var(--color-muted);
+  --line: var(--color-line);
+  --accent: var(--color-accent);
+  /* The covers are drawn with this curve; nothing new uses it. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* The single grid: 4 columns on a phone, 8 on the stage, at most 1920 px wide. */
+@utility page-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--gap);
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: var(--margin);
+
+  @variant stage {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+/* A full-screen modal <dialog> on the page colour with its own scroll: the menu and the
+   detail layers (sections 5.3 and 6.2). */
+@utility layer-sheet {
+  @apply fixed inset-0 m-0 size-full max-h-none max-w-none overflow-y-auto border-0 bg-bg p-0 text-ink
+    backdrop:bg-bg;
+}
+
+/* ---------- base ---------- */
+
 html {
-  background: var(--bg);
-  color: var(--ink);
+  background: var(--color-bg);
+  color: var(--color-ink);
   scroll-behavior: auto;
+}
+
+/* Reading pages always scroll, so their grid keeps the scrollbar's room from the start.
+   Screen pages hold one viewport and get the full width. */
+html:has([data-scroll-shell]) {
   scrollbar-gutter: stable;
+}
+
+/* A screen page composed to fit (data-fit) holds the document to exactly one viewport.
+   Only with scripts: without them the same page stacks and scrolls. */
+html[data-js] [data-stage-shell]:has([data-fit]) {
+  @variant stage {
+    height: 100svh;
+    overflow: clip;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+}
+
+/* The page itself then fills exactly the room between the frame's two rows, never more,
+   and lays itself out inside it. */
+html[data-js] [data-fit] {
+  @variant stage {
+    height: 100%;
+  }
+}
+
+/* Without scripts a detail layer cannot open, so it reads as a plain section where it
+   stands, without its close button (section 7.6). */
+html:not([data-js]) dialog[data-layer] {
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+html:not([data-js]) [data-layer-close] {
+  display: none;
 }
 
 /* The curtain is painted by the stylesheet, so it is already on screen when the
    document first shows. Only the head script marks a load as an intro, which is
    why nothing covers the page when scripts never run. */
 html[data-intro] {
+  overflow: hidden;
+}
+
+/* A modal layer covers the whole page, so the page behind it holds still. */
+html:has(dialog[open]) {
   overflow: hidden;
 }
 
@@ -44,14 +177,8 @@ html[data-intro] [data-preloader] {
   visibility: visible;
 }
 
-/* The custom cursor replaces the native one only on fine pointers. */
-html.has-cursor,
-html.has-cursor a,
-html.has-cursor button {
-  cursor: none;
-}
-
 body {
+  background: var(--color-bg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -65,185 +192,75 @@ main:focus, #work:focus { outline: none; }
 section[id], #work { scroll-margin-top: 7rem; }
 
 ::selection {
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--color-accent);
+  color: var(--color-bg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
 
-/* ---------- type ---------- */
+/* ---------- entrance and neighbours (section 7.1) ---------- */
 
-/* Small uppercase mono labels used across the chrome and metadata columns. */
-.label {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  line-height: 1.3;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+@keyframes enter {
+  from { opacity: 0; filter: blur(var(--blur)); translate: 0 8px; }
 }
 
-/* Giant serif display type. */
-.display {
-  font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 0.82;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+@keyframes enter-fade {
+  from { opacity: 0; }
 }
 
-/* Hollow display type, for the big index numbers. */
-.outline {
-  color: transparent;
-  -webkit-text-stroke: 2px var(--ink);
-}
-.outline-bg {
-  color: transparent;
-  -webkit-text-stroke: 2px var(--bg);
+[data-enter] {
+  animation: enter var(--dur-base) var(--ease) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
 }
 
-.hairline {
-  border-color: var(--line);
+/* Below the fold, EnterOnView adds data-enter on arrival; until then it waits unseen. */
+html[data-js] [data-enter-view]:not([data-enter]) {
+  opacity: 0;
 }
 
-/* ---------- brutalist kit ---------- */
-
-/* Hard border and offset shadow. */
-.brutal {
-  border: 2px solid var(--ink);
-  box-shadow: 6px 6px 0 var(--ink);
-}
-.brutal-accent {
-  border: 2px solid var(--ink);
-  box-shadow: 6px 6px 0 var(--accent);
-}
-
-/* Buttons: mono, uppercase, hard shadow that reacts to hover and press. */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  border: 2px solid var(--ink);
-  padding: 0.85rem 1.15rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: var(--paper);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
-  transition:
-    transform 0.15s var(--ease-out-expo),
-    box-shadow 0.15s var(--ease-out-expo),
-    background-color 0.15s,
-    color 0.15s;
-}
-.btn:hover,
-.btn:focus-visible {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--ink);
-}
-.btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-.btn-accent {
-  background: var(--accent);
-}
-.btn-ink {
-  background: var(--ink);
-  color: var(--bg);
-  box-shadow: 4px 4px 0 var(--accent);
-}
-.btn-ink:hover,
-.btn-ink:focus-visible {
-  box-shadow: 6px 6px 0 var(--accent);
-}
-.btn-ink:active {
-  box-shadow: 2px 2px 0 var(--accent);
-}
-.btn-square {
-  padding: 0;
-  width: 2.75rem;
-  height: 2.75rem;
-  justify-content: center;
-  font-size: 1rem;
-}
-.btn[disabled] {
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-/* Rotated stamp badge. */
-.stamp {
-  display: inline-block;
-  border: 2px solid currentColor;
-  padding: 0.3rem 0.55rem;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transform: rotate(-2deg);
-}
-
-/* Faint engineering grid behind sections. */
-.grid-paper {
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* Underline that draws in from the left on hover. */
-.link-draw {
-  position: relative;
-  text-decoration: none;
-}
-.link-draw::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.15em;
-  height: 2px;
-  width: 100%;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.45s var(--ease-out-expo);
-}
-.link-draw:hover::after,
-.link-draw:focus-visible::after,
-.link-draw[aria-current="page"]::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* ---------- motion ---------- */
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee var(--marquee-duration, 40s) linear infinite;
-}
-.marquee:hover .marquee-track {
+/* Nothing enters while a curtain is on screen. */
+html:is([data-intro], [data-curtain]) [data-enter] {
   animation-play-state: paused;
 }
 
-@keyframes blink {
-  50% {
-    opacity: 0;
+/* Except what the page curtain itself shows: its title and route. */
+html [data-curtain-panel] [data-enter] {
+  animation-play-state: running;
+}
+
+/* Hovering one item, or reaching it with the keyboard, softly blurs the rest. Only an
+   item counts: the pointer in the list's empty space blurs nothing. */
+[data-siblings] > * {
+  transition:
+    opacity var(--dur-fast) var(--ease),
+    filter var(--dur-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  [data-siblings]:has(> :hover) > :not(:hover) {
+    opacity: 0.45;
+    filter: blur(var(--blur-rest));
   }
 }
-.blink {
-  animation: blink 1s steps(1) infinite;
+
+[data-siblings]:has(:focus-visible) > :not(:focus-within) {
+  opacity: 0.45;
+  filter: blur(var(--blur-rest));
+}
+
+/* While About's portrait is open, only the head stays sharp (section 6.2). */
+[data-head-dim] {
+  transition:
+    opacity var(--dur-base) var(--ease),
+    filter var(--dur-base) var(--ease);
+}
+
+:has([data-head-scene][data-open="true"]) > [data-head-dim] {
+  opacity: 0.25;
+  filter: blur(var(--blur));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -255,36 +272,10 @@ section[id], #work { scroll-margin-top: 7rem; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .marquee-track {
-    animation: none;
+
+  /* Section 7.6: the entrance shrinks to a 150 ms fade, with no blur and no travel. */
+  [data-enter] {
+    animation-name: enter-fade !important;
+    animation-duration: 150ms !important;
   }
-}
-
-/* ---------- navigation ---------- */
-
-/* Hovering one item softly blurs the rest; the current page carries an arrow. */
-.nav-item {
-  transition:
-    filter 0.35s var(--ease-out-expo),
-    opacity 0.35s var(--ease-out-expo);
-}
-.nav:hover .nav-item:not(:hover):not(:focus-visible) {
-  opacity: 0.7;
-}
-.nav-arrow {
-  display: inline-block;
-  max-width: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    max-width 0.35s var(--ease-out-expo),
-    opacity 0.35s var(--ease-out-expo),
-    margin 0.35s var(--ease-out-expo);
-}
-.nav-item:hover .nav-arrow,
-.nav-item:focus-visible .nav-arrow,
-.nav-item[aria-current="page"] .nav-arrow {
-  max-width: 1.4em;
-  opacity: 1;
-  margin-right: 0.3em;
 }

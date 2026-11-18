@@ -14,6 +14,4 @@ export const site = {
     source: "https://github.com/LittlePitza/portfolio",
   },
   cv: { en: "/cv/Luis-Hernandez-CV-EN.pdf", es: "/cv/Luis-Hernandez-CV-ES.pdf" },
-  /** Set to a file under /public/rive to replace the SVG placeholder character. */
-  riveCharacter: null as string | null,
 } as const;

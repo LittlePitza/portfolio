@@ -2,69 +2,60 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { scrollTo } from "@/lib/scroll";
-import { useTransition } from "./PageTransition";
-import { openContact } from "./ContactOverlay";
-import { prefersReducedMotion } from "@/lib/gsap";
 import { shouldHandleNavigation } from "@/lib/navigation";
+import { enterStep } from "@/components/ui/enterStep";
+import { useCurtain } from "./Curtain";
+import type { NavItem } from "./navItems";
 
-interface Item {
-  href: string;
-  label: string;
-  /** Element id to scroll to when the link points at the current page. */
-  anchor?: string;
-  /** Open the contact cards instead of navigating. */
-  overlay?: "contact";
+interface Props {
+  items: NavItem[];
+  /** The home path, which is current only on itself, not on every page below it. */
+  home: string;
+  /** Serif 24/28 in the frame; title size in the menu layer, where the links also enter in turn. */
+  size: "frame" | "layer";
+  /** Runs before navigating, e.g. to close the layer that holds the links. */
+  onNavigate?: () => void;
 }
 
+const LINK_SIZE = {
+  frame: "min-h-7 text-lead leading-7",
+  layer: "min-h-11 text-title",
+} as const;
+
 /**
- * Primary navigation. The current page carries an arrow; hovering one item
- * softly blurs the others; the Work link scrolls in place on the home page;
- * Contact opens the floating cards; everything else goes through the curtain.
+ * The four links of the menu. The current page carries an arrow and aria-current;
+ * hovering or focusing one blurs the others (the data-siblings rule in globals.css).
+ * Every link goes through the curtain, which handles same-page links on its own.
  */
-export function NavLinks({ items, home }: { items: Item[]; home: string }) {
+export function NavLinks({ items, home, size, onNavigate }: Props) {
   const pathname = usePathname();
-  const { go } = useTransition();
+  const { go } = useCurtain();
+  const entersInTurn = size === "layer";
 
   return (
-    <ul className="nav grid grid-cols-2 gap-x-4 md:block md:space-y-1">
-      {items.map((item) => {
-        const path = item.href.split("#")[0]!;
-        const isHome = path === home;
-        const current = !item.overlay && (isHome ? pathname === home : pathname.startsWith(path));
+    // Each item hugs its link, so only the words are a target and blur their neighbours.
+    <ul data-siblings className="grid justify-items-start">
+      {items.map((item, index) => {
+        const [path] = item.href.split("#");
+        const isCurrent = path === home ? pathname === home : pathname.startsWith(path);
         return (
-          <li key={item.href} className="nav-item" aria-current={current ? "page" : undefined}>
+          <li
+            key={item.href}
+            data-enter={entersInTurn ? "" : undefined}
+            style={entersInTurn ? enterStep(index) : undefined}
+          >
             <Link
               href={item.href}
-              aria-current={current ? "page" : undefined}
-              aria-haspopup={item.overlay ? "dialog" : undefined}
-              aria-controls={item.overlay ? "contact-dialog" : undefined}
-              className="display flex min-h-11 items-center whitespace-nowrap text-xl leading-none md:min-h-7 md:text-2xl"
-              onClick={(e) => {
-                if (!shouldHandleNavigation(e)) return;
-                if (item.overlay === "contact") {
-                  e.preventDefault();
-                  openContact();
-                  return;
-                }
-                if (item.anchor && pathname === home) {
-                  const el = document.getElementById(item.anchor);
-                  if (el) {
-                    e.preventDefault();
-                    window.history.replaceState(window.history.state, "", item.href);
-                    scrollTo(el, { immediate: prefersReducedMotion() });
-                    el.tabIndex = -1;
-                    el.focus({ preventScroll: true });
-                  }
-                  return;
-                }
-                e.preventDefault();
+              aria-current={isCurrent ? "page" : undefined}
+              className={`flex items-center font-display ${LINK_SIZE[size]}`}
+              onClick={(event) => {
+                if (!shouldHandleNavigation(event)) return;
+                event.preventDefault();
+                onNavigate?.();
                 go(item.href, item.label);
               }}
             >
-              <span aria-hidden className="nav-arrow">
-                →
-              </span>
+              {isCurrent && <span aria-hidden>→&nbsp;</span>}
               {item.label}
             </Link>
           </li>

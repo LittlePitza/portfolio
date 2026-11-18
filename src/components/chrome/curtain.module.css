@@ -1,0 +1,48 @@
+/* Hidden until a navigation raises it. GSAP sets and moves its transform, so no
+   transform is ever declared here. */
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-curtain);
+  display: grid;
+  place-items: center;
+  padding-inline: var(--margin);
+  background: var(--color-paper);
+  border-top: 1px solid var(--color-line);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Section 7.3: a 1 px line, margin to margin, 56 px above the bottom edge. */
+.track {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: 56px;
+  height: 1px;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* A zero-width anchor at the end of the line; the character stands behind it, so
+   moving the anchor in pixels is all the walking needs. */
+.walker {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+}
+
+.runner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: 64px;
+}

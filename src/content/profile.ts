@@ -16,6 +16,25 @@ export const facts: Localized<string[]> = {
   ],
 };
 
+/**
+ * The two figures on About (section 6.2), counted by hand from src/content/projects.ts:
+ * change them when a project's status or its test count changes.
+ */
+export const figures: { value: string; label: Localized }[] = [
+  {
+    // Projects whose status is in production or on sale: TI Hub, Attendance, the
+    // maintenance portal, the B2B marketplace and PIMSA Web.
+    value: "5",
+    label: { en: "systems in production, sole author", es: "sistemas en producción, autor único" },
+  },
+  {
+    // 160 tests (TI Hub) + 329 (MeetScribe) + 216 (Password Vault) and 345 SQL
+    // assertions (Attendance), from each project's numbers.
+    value: "1,050",
+    label: { en: "automated tests and assertions", es: "pruebas y aserciones automatizadas" },
+  },
+];
+
 interface Capability {
   id: string;
   title: Localized;

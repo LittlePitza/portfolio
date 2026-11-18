@@ -1,0 +1,468 @@
+@reference "../../app/globals.css";
+
+/*
+ * Home (docs/02-diseno-v2.md, sections 6.1 and 7.4). One DOM, two layouts. Stacked is
+ * the default: phone, short window, no scripts. On the stage the canvas becomes one
+ * viewport, but only with html[data-js], because only the carousel can move it. The
+ * carousel writes each cover's transform and opacity inline; no rule here declares
+ * either on a cover, so the two never fight.
+ */
+
+/* ---------- stacked ---------- */
+
+.canvas {
+  container-type: inline-size;
+}
+
+/* One column of the page grid, measured on the canvas itself. */
+.canvas > * {
+  --col: calc((100cqw - 2 * var(--margin) - 3 * var(--gap)) / 4);
+}
+
+.portada {
+  padding: 32px var(--margin) 48px;
+  margin-bottom: 48px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.eyebrow {
+  margin-bottom: 16px;
+}
+
+.nameFirst,
+.nameLast {
+  display: block;
+}
+
+.intro {
+  display: grid;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.sub {
+  max-width: 46ch;
+}
+
+.cta,
+.open {
+  display: inline-flex;
+  align-items: center;
+  /* A flex container drops the space before the arrow, so the gap stands in for it. */
+  gap: 0.25em;
+  min-height: 44px;
+}
+
+.list {
+  display: grid;
+  gap: 96px;
+  padding: 0 var(--margin) 96px;
+}
+
+.article {
+  display: grid;
+  gap: 16px;
+}
+
+.cover {
+  display: block;
+  aspect-ratio: 4 / 3;
+  /* Off-screen covers are not drawn, so their typefaces load as they come near. */
+  content-visibility: auto;
+}
+
+/* A long value shrinks to fit three columns (section 6.1); --chars comes from ProjectItem. */
+.figures {
+  --figure-size: min(var(--text-figure), calc((3 * var(--col) + 2 * var(--gap)) / (var(--chars) * 0.5)));
+
+  display: grid;
+  gap: 16px;
+}
+
+.counter {
+  display: none;
+}
+
+.figureValue {
+  font-size: var(--figure-size);
+}
+
+.more {
+  display: grid;
+}
+
+.summary {
+  max-width: 68ch;
+}
+
+.names {
+  display: none;
+}
+
+/* ---------- stage ---------- */
+
+@variant stage {
+  html[data-js] .canvas {
+    position: absolute;
+    inset: 0;
+    max-width: 1920px;
+    margin-inline: auto;
+    overflow: clip;
+  }
+
+  html[data-js] .canvas > * {
+    --col: calc((100cqw - 2 * var(--margin) - 7 * var(--gap)) / 8);
+  }
+
+  /* Position 0. The name sits 48 px above the frame's bottom row, which is 24 px tall
+     (the résumé link in ChromeBottom); the text block's base meets the base of LUIS. */
+  html[data-js] .portada {
+    position: absolute;
+    left: var(--margin);
+    right: var(--margin);
+    bottom: calc(var(--margin) + 24px + 48px);
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    column-gap: var(--gap);
+    align-items: end;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    transition:
+      opacity var(--dur-base) var(--ease),
+      filter var(--dur-base) var(--ease);
+  }
+
+  html[data-js] .canvas[data-position]:not([data-position="0"]) .portada {
+    opacity: 0;
+    filter: blur(var(--blur));
+    transition-duration: var(--dur-fast);
+  }
+
+  /* A reload or a back to a saved project (the head script marks <html>): the cover screen
+     is never painted, so nothing fades out. The carousel clears the mark once it has
+     placed itself, and the rule above takes over without a change to transition. */
+  html[data-js][data-home-position] .canvas:not([data-position]) .portada {
+    opacity: 0;
+    filter: blur(var(--blur));
+    transition: none;
+  }
+
+  html[data-js] .eyebrow {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  html[data-js] .name {
+    grid-column: 1 / -1;
+    grid-row: 2 / 4;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+  }
+
+  html[data-js] .nameFirst {
+    grid-column: 1 / 5;
+    grid-row: 1;
+  }
+
+  html[data-js] .nameLast {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  html[data-js] .intro {
+    grid-column: 5 / -1;
+    grid-row: 2;
+    margin: 0 0 calc(var(--text-display) * 0.12);
+  }
+
+  html[data-js] .cta {
+    min-height: 0;
+  }
+
+  /* Positions 1 to 9: every item fills the canvas and places its parts on the grid. */
+  html[data-js] .list {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  /* The carousel shows the items; the entrance on scroll is for the stacked list. */
+  html[data-js] .canvas .list > .item {
+    position: absolute;
+    inset: 0;
+    opacity: 1;
+    animation: none;
+  }
+
+  html[data-js] .article {
+    display: block;
+  }
+
+  html[data-js] .kicker {
+    display: none;
+  }
+
+  /* The name and the summary are in the names list; here they stay for screen readers. */
+  html[data-js] :is(.title, .summary) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Columns 4 and 5, 4:3, placed by the carousel; drawn only near the active slot. */
+  html[data-js] .cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(2 * var(--col) + var(--gap));
+    height: calc((2 * var(--col) + var(--gap)) * 0.75);
+    aspect-ratio: auto;
+    visibility: hidden;
+    content-visibility: hidden;
+  }
+
+  html[data-js] .cover[data-near] {
+    visibility: visible;
+    content-visibility: visible;
+  }
+
+  html[data-js] .item[data-active] :is(.cover, .open) {
+    pointer-events: auto;
+  }
+
+  /* Metadata: columns 1 and 2, from 180 px below the top (24 px under the menu). */
+  html[data-js] .meta {
+    position: absolute;
+    top: 180px;
+    left: var(--margin);
+    width: calc(2 * var(--col) + var(--gap));
+    grid-template-columns: none;
+  }
+
+  /* The figure: columns 1 to 3, 56 px above the bottom, the rest of the numbers on
+     column 4's line with their base on the figure's. */
+  html[data-js] .figures {
+    position: absolute;
+    bottom: 56px;
+    left: var(--margin);
+    display: block;
+    width: calc(3 * var(--col) + 2 * var(--gap));
+  }
+
+  html[data-js] .counter {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* Measured: Instrument Serif at line-height 0.82 sits its baseline 0.074em above the
+     line's bottom, and text-ui sits its own 4 px above, so this puts the bases level. */
+  html[data-js] .more {
+    position: absolute;
+    bottom: calc(var(--figure-size) * 0.074 - 4px);
+    left: calc(3 * (var(--col) + var(--gap)));
+    width: calc(var(--col) + var(--gap));
+  }
+
+  /* 12 px under the active cover, on column 4's line. */
+  html[data-js] .open {
+    position: absolute;
+    top: calc(50% + (2 * var(--col) + var(--gap)) * 0.375 + 12px);
+    left: calc(var(--margin) + 3 * (var(--col) + var(--gap)));
+    min-height: 0;
+  }
+
+  /* Text leaves with the exit (fast, no travel) and enters with the entrance primitive,
+     staggered: metadata, then the figure, then the rest. */
+  html[data-js] :is(.meta, .counter, .figureLabel, .more, .open) {
+    opacity: 0;
+    filter: blur(var(--blur));
+    translate: 0 8px;
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      filter var(--dur-fast) var(--ease),
+      translate 0s var(--dur-fast);
+  }
+
+  html[data-js] .item[data-active] :is(.meta, .counter, .figureLabel, .more, .open) {
+    opacity: 1;
+    filter: none;
+    translate: none;
+    transition:
+      opacity var(--dur-base) var(--ease),
+      filter var(--dur-base) var(--ease),
+      translate var(--dur-base) var(--ease);
+    transition-delay: calc(var(--step) * var(--stagger));
+  }
+
+  html[data-js] .meta { --step: 0; }
+  html[data-js] .counter { --step: 1; }
+  html[data-js] .figureLabel { --step: 3; }
+  html[data-js] :is(.more, .open) { --step: 4; }
+
+  /* The figure rolls: each character rises from below into a clipped window, and leaves
+     through the top, 40 ms apart. The window reaches 0.1em past the 0.82 line box on
+     both sides, for the digits' tops and a comma's tail, without moving the layout. */
+  html[data-js] .figureValue {
+    padding-block: 0.1em;
+    margin-block: -0.1em;
+    overflow: clip;
+  }
+
+  html[data-js] .figureChar {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(var(--blur));
+    translate: 0 100%;
+    transition:
+      translate var(--dur-base) var(--ease),
+      filter var(--dur-base) var(--ease),
+      opacity var(--dur-fast) var(--ease);
+    transition-delay: calc(var(--i) * 40ms);
+  }
+
+  html[data-js] .item[data-past] .figureChar {
+    translate: 0 -100%;
+  }
+
+  html[data-js] .item[data-active] .figureChar {
+    opacity: 1;
+    filter: none;
+    translate: none;
+    transition-delay: calc(2 * var(--stagger) + var(--i) * 40ms);
+  }
+
+  /* The names: columns 7 and 8, the active one centred on the canvas. A collapsed name
+     is 44 px (category 16 + name 28) and 32 px apart, so each step is 76 px; the active
+     one's rule and summary take 81 px more (8 + 1 + 8 + four lines of 16). */
+  html[data-js] .names {
+    --name-step: 76px;
+    --summary-room: 81px;
+
+    position: absolute;
+    top: 50%;
+    right: var(--margin);
+    display: block;
+    width: calc(2 * var(--col) + var(--gap));
+    transition:
+      opacity var(--dur-base) var(--ease),
+      visibility 0s;
+  }
+
+  html[data-js] .canvas:not([data-position]) .names,
+  html[data-js] .canvas[data-position="0"] .names {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      visibility 0s var(--dur-fast);
+  }
+
+  html[data-js] .namesList {
+    translate: 0 calc(-22px - (var(--pos, 1) - 1) * var(--name-step));
+    transition: translate var(--dur-base) var(--ease);
+  }
+
+  html[data-js] .nameItem {
+    position: relative;
+    margin-bottom: 32px;
+    opacity: 0.35;
+    filter: blur(var(--blur-rest));
+    transition:
+      opacity var(--dur-base) var(--ease),
+      filter var(--dur-base) var(--ease),
+      translate var(--dur-base) var(--ease),
+      visibility 0s;
+  }
+
+  html[data-js] .nameItem[data-active] {
+    opacity: 1;
+    filter: none;
+  }
+
+  html[data-js] .nameItem[data-after] {
+    translate: 0 var(--summary-room);
+  }
+
+  /* More than two away: gone, and out of the tab order once it has faded. */
+  html[data-js] .nameItem[data-far] {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-base) var(--ease),
+      filter var(--dur-base) var(--ease),
+      translate var(--dur-base) var(--ease),
+      visibility 0s var(--dur-base);
+  }
+
+  html[data-js] .nameButton {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+
+  html[data-js] .nameSummary {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: -webkit-box;
+    padding-top: 17px;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease);
+  }
+
+  html[data-js] .nameSummary::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 16px;
+    height: 1px;
+    background: var(--color-ink);
+  }
+
+  html[data-js] .nameItem[data-active] .nameSummary {
+    opacity: 1;
+    transition-duration: var(--dur-base);
+    transition-delay: calc(4 * var(--stagger));
+  }
+}
+
+/* Pointing at a name brings it forward while the others soften (the data-siblings rule). */
+@media (hover: hover) {
+  @variant stage {
+    html[data-js] .nameItem:hover {
+      opacity: 1;
+      filter: none;
+    }
+  }
+}
+
+/* Section 7.6: the same carousel, every change a 150 ms fade, with no travel and no blur. */
+@media (prefers-reduced-motion: reduce) {
+  @variant stage {
+    html[data-js] :is(.portada, .meta, .counter, .figureLabel, .more, .open, .figureChar),
+    html[data-js] :is(.nameItem, .nameSummary) {
+      filter: none !important;
+      transition: opacity 150ms var(--ease) !important;
+    }
+
+    html[data-js] :is(.meta, .counter, .figureLabel, .more, .open, .figureChar) {
+      translate: none !important;
+    }
+
+    html[data-js] .namesList {
+      transition: none !important;
+    }
+  }
+}

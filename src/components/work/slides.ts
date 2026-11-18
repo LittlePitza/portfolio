@@ -1,7 +1,6 @@
 import type { Locale } from "@/i18n/config";
-import type { Dictionary } from "@/i18n/get-dictionary";
 import { projects, type Project } from "@/content/projects";
-import type { Detail, GalleryLabels, Slide, WorkLabels } from "./types";
+import type { Detail, Slide } from "./types";
 
 function toSlide(p: Project, locale: Locale): Slide {
   return {
@@ -19,46 +18,12 @@ function toSlide(p: Project, locale: Locale): Slide {
   };
 }
 
-/** Projects resolved to one language, ready for the home discs. */
+/** Projects resolved to one language, ready for Home's list and carousel and for the index. */
 export function projectSlides(locale: Locale): Slide[] {
   return projects.map((p) => toSlide(p, locale));
 }
 
-/** The same projects with their full copy, for the Playground gallery. */
-export function projectDetails(locale: Locale): Detail[] {
-  return projects.map((p) => ({ ...toSlide(p, locale), body: p.body[locale], links: p.links ?? [] }));
-}
-
-export function workLabels(t: Dictionary): WorkLabels {
-  return {
-    selected: t.work.selected,
-    role: t.work.role,
-    stack: t.work.stack,
-    launch: t.work.launch,
-    numbers: t.work.numbers,
-    view: t.work.view,
-    open: t.work.open,
-    prev: t.work.prev,
-    next: t.work.next,
-    hint: t.work.hint,
-    hintStatic: t.work.hintStatic,
-  };
-}
-
-export function galleryLabels(t: Dictionary): GalleryLabels {
-  return {
-    role: t.work.role,
-    stack: t.work.stack,
-    launch: t.work.launch,
-    numbers: t.work.numbers,
-    status: t.work.status,
-    about: t.work.about,
-    links: t.work.links,
-    view: t.work.view,
-    open: t.work.open,
-    close: t.playground.close,
-    prev: t.work.prev,
-    next: t.work.next,
-    hint: t.playground.hint,
-  };
+/** One project with its full copy, for its case study. */
+export function projectDetail(project: Project, locale: Locale): Detail {
+  return { ...toSlide(project, locale), body: project.body[locale], links: project.links ?? [] };
 }
