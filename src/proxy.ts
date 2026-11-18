@@ -25,6 +25,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals, static files and anything with an extension.
-  matcher: ["/((?!_next|api|cv|rive|covers|.*\..*).*)"],
+  // Skip Next internals, the API, the CV files, the generated Apple icon (served without an
+  // extension) and anything with an extension. In a plain string a single backslash before
+  // the dot is dropped, which would exclude every path, so it is doubled.
+  matcher: ["/((?!_next/|api/|cv/|apple-icon|.*\\..*).*)"],
 };
