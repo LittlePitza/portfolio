@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta v2 · Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Geist+Mono:wght@400&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mock.css">
+<script>if (sessionStorage.getItem("mock:nav")) document.documentElement.dataset.curtain = "in";</script>
+<style>
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* ---------- apilado (teléfono) ---------- */
+.portada { padding: 32px var(--margin) 48px; border-bottom: 1px solid var(--line); margin-bottom: 48px; }
+.portada .eyebrow { margin-bottom: 16px; }
+.portada .intro { margin-top: 32px; display: grid; gap: 16px; }
+.portada .intro .t-body { max-width: 46ch; }
+.project { padding-inline: var(--margin); margin-bottom: 96px; display: grid; gap: 16px; }
+.cover { display: block; order: 2; }
+.p-head { order: 1; display: grid; gap: 8px; }
+.fig { order: 3; }
+.fig > .muted { display: none; }
+.fig-row { display: flex; gap: 12px; align-items: flex-start; }
+.fig-value { font: 400 var(--figure)/.82 var(--serif); letter-spacing: -.02em; display: inline-flex; }
+.fig-more { margin-top: 16px; display: grid; gap: 0; }
+.summary { order: 4; max-width: 68ch; }
+.meta { order: 5; display: grid; grid-template-columns: 5.5rem 1fr; row-gap: 16px; }
+.meta dt { color: var(--muted); }
+.open { order: 6; min-height: 44px; display: flex; align-items: center; }
+.names { display: none; }
+
+/* ---------- modo Pantalla ---------- */
+@media (min-width: 1024px) and (min-height: 640px) {
+  .canvas { position: absolute; inset: 0; }
+  .portada { position: absolute; left: var(--margin); right: var(--margin); bottom: 84px; padding: 0; margin: 0; border: 0;
+    display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: var(--gap); align-items: end;
+    transition: opacity var(--dur-base) var(--ease), filter var(--dur-base) var(--ease); }
+  .portada .eyebrow { grid-column: 1 / -1; }
+  .portada .l1 { grid-column: 1 / 5; grid-row: 2; }
+  .portada .l2 { grid-column: 1 / -1; grid-row: 3; }
+  .portada .intro { grid-column: 5 / 9; grid-row: 2; margin: 0 0 calc(var(--display) * .12); }
+  .stage:not([data-pos="0"]) .portada { opacity: 0; filter: blur(var(--blur)); pointer-events: none; transition-duration: var(--dur-fast); }
+
+  .projects { position: absolute; inset: 0; }
+  .project { position: absolute; inset: 0; margin: 0; padding: 0; display: block; pointer-events: none; }
+  .p-head, .summary { display: none; }
+  .cover { position: absolute; left: 0; top: 0; width: calc(2 * var(--col) + var(--gap)); will-change: transform; }
+  .project[data-active] .cover, .project[data-active] .open { pointer-events: auto; }
+
+  .meta, .fig > .muted, .fig-label, .fig-more, .open {
+    opacity: 0; filter: blur(var(--blur));
+    transition: opacity var(--dur-fast) var(--ease), filter var(--dur-fast) var(--ease);
+  }
+  .project[data-active] :is(.meta, .fig > .muted, .fig-label, .fig-more, .open) {
+    opacity: 1; filter: none; transition-duration: var(--dur-base); transition-delay: calc(var(--i, 0) * var(--stagger));
+  }
+  .meta { position: absolute; left: var(--margin); top: 200px; width: calc(2 * var(--col) + var(--gap)); --i: 1; }
+  .fig { position: absolute; left: var(--margin); bottom: 56px; width: calc(5 * var(--col) + 4 * var(--gap)); }
+  .fig > .muted { display: block; margin-bottom: 8px; --i: 2; }
+  .fig-value {
+    overflow: clip;
+    font-size: min(var(--figure), calc((3 * var(--col) + 2 * var(--gap)) / (var(--chars) * .5)));
+  }
+  .fig-value span { display: inline-block; translate: 0 105%; opacity: 0; filter: blur(var(--blur));
+    transition: translate var(--dur-base) var(--ease), filter var(--dur-base) var(--ease), opacity var(--dur-fast) var(--ease);
+    transition-delay: calc(var(--i) * 40ms); }
+  .project[data-past] .fig-value span { translate: 0 -105%; }
+  .project[data-active] .fig-value span { translate: 0 0; opacity: 1; filter: none; }
+  .fig-label { --i: 3; }
+  .fig-more { position: absolute; left: calc(3 * (var(--col) + var(--gap))); bottom: 0; margin: 0; --i: 4; }
+  .open { position: absolute; left: calc(var(--margin) + 3 * (var(--col) + var(--gap)));
+    top: calc(50% + 16px + (2 * var(--col) + var(--gap)) * .375 + 12px); min-height: 0; --i: 3; }
+
+  .names { display: block; position: absolute; right: var(--margin); top: calc(50% + 16px); width: calc(2 * var(--col) + var(--gap));
+    transition: opacity var(--dur-base) var(--ease); }
+  .stage[data-pos="0"] .names { opacity: 0; pointer-events: none; }
+  .names ol { position: absolute; left: 0; right: 0; top: 0; transition: translate var(--dur-base) var(--ease); }
+  .names li { margin-bottom: 32px; opacity: .35; filter: blur(var(--blur-rest));
+    transition: opacity var(--dur-base) var(--ease), filter var(--dur-base) var(--ease); }
+  .names li[data-far] { opacity: 0; }
+  .names li[aria-current] { opacity: 1; filter: none; }
+  .names button { display: block; width: 100%; }
+  .names button .muted { display: block; }
+  .names .n { display: block; font: 400 24px/28px var(--serif); }
+  .names .sum { display: block; max-height: 0; overflow: hidden; opacity: 0; transition: max-height var(--dur-base) var(--ease), opacity var(--dur-base) var(--ease); }
+  .names .sum::before { content: ""; display: block; width: 16px; height: 1px; background: var(--ink); margin: 10px 0; }
+  .names li[aria-current] .sum { max-height: 120px; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .15s !important; transition-delay: 0s !important; animation-duration: .15s !important; }
+}
+</style>
+</head>
+<body data-page="home" data-hint="Desliza ↓">
+<div class="stage" data-pos="0">
+  <main class="canvas">
+    <section class="portada">
+      <h1 class="sr">Luis Hernández</h1>
+      <p class="eyebrow muted" data-enter style="--i:1">Desarrollador full-stack y responsable de TI</p>
+      <p class="t-display accent l1" aria-hidden="true">Luis</p>
+      <p class="t-display accent l2" aria-hidden="true">Hernández</p>
+      <div class="intro">
+        <p class="t-heading" data-enter style="--i:2">Construyo los sistemas que opero.</p>
+        <p class="t-body muted" data-enter style="--i:3">La mayoría de los responsables de TI compran sus herramientas. Yo escribo las que usa mi departamento y respondo por su disponibilidad en el mismo reporte.</p>
+        <p data-enter style="--i:4"><button type="button" data-go="1">Ver el trabajo ↓</button></p>
+      </div>
+    </section>
+    <ol class="projects"></ol>
+    <nav class="names" aria-label="Proyectos"><ol></ol></nav>
+    <p class="sr" aria-live="polite" data-announce></p>
+  </main>
+</div>
+<p class="mock-note">Maqueta de composición. Las portadas son esquemas: en el sitio van las portadas reales dibujadas en código. En escritorio, esta misma página es una sola pantalla y la rueda cambia de proyecto.</p>
+
+<script src="mock.js"></script>
+<script>
+const PROJECTS = [
+  { slug: "ti-hub", name: "TI Hub", cat: "Plataforma interna", color: "#FF4A1C", cap: "portal + motor de SLA",
+    role: ["Autor único", "Arquitectura", "Dueño del producto"], stack: ["Next.js 15", "React 19", "TypeScript", "Supabase", "PostgreSQL"],
+    launch: "2026", status: "En producción", nums: [["160", "pruebas"], ["19", "políticas RLS"], ["23", "rutas"], ["5", "etapas de CI"]],
+    sum: "Mesa de ayuda con motor de SLA, inventario, mantenimiento, cartas responsiva y KPIs mensuales, más un portal sin fricción para que cualquier trabajador reporte." },
+  { slug: "attendance", name: "Attendance", cat: "Sistema interno", color: "#1FA37A", cap: "las reglas viven en PostgreSQL",
+    role: ["Autor único", "Diseño de base de datos"], stack: ["PostgreSQL", "PL/pgSQL", "pg_cron", "Supabase", "Docker"],
+    launch: "2026", status: "En producción", nums: [["345", "aserciones SQL"], ["27", "migraciones"], ["12,990", "líneas de SQL"], ["0", "servidores de app"]],
+    sum: "Checador para personal en home office sin servidor de aplicación: toda regla de negocio vive en PostgreSQL y el cliente no tiene privilegio de escritura sobre ninguna tabla." },
+  { slug: "maintenance", name: "Maintenance portal", cat: "Plataforma interna", color: "#2757FF", cap: "PWA para piso de planta",
+    role: ["Autor único", "PWA"], stack: ["Next.js 16", "Tailwind v4", "Supabase", "Serwist"],
+    launch: "2026", status: "En producción", nums: [["5", "plantas"], ["3", "centros en sitio de cliente"], ["PWA", "instalable"]],
+    sum: "Órdenes de trabajo con asignación, bitácora, historial por máquina y estadísticas, con alcance multiempresa sobre cinco plantas." },
+  { slug: "marketplace", name: "B2B Marketplace", cat: "Comercio electrónico", color: "#8B3DFF", cap: "el precio lo pone el servidor",
+    role: ["Autor único", "Auditoría de seguridad"], stack: ["Next.js 16", "Zod v4", "Stripe", "SPEI", "PostgreSQL"],
+    launch: "Septiembre 2026", status: "En venta, multivendedor", nums: [["100%", "precios derivados en servidor"], ["0", "privilegios de escritura del cliente"]],
+    sum: "Comercio de plásticos reciclados con compra directa y cotización. En venta a clientes invitados desde el 1 de septiembre de 2026." },
+  { slug: "pimsa-web", name: "PIMSA Web", cat: "Sitio corporativo", color: "#7F9D41", cap: "el sitio y el panel que lo opera",
+    role: ["Autor único", "Dirección de arte", "SEO técnico"], stack: ["Next.js 16", "Drizzle ORM", "MySQL", "Tailwind v4", "Zod v4", "JSON-LD"],
+    launch: "2026", status: "Público, en producción", nums: [["8", "tipos de schema.org"], ["3", "roles en el panel"], ["8", "tablas MySQL"], ["0", "librerías de animación"]],
+    sum: "Sitio público de una recicladora de plásticos de ingeniería, con el panel que lo opera: Marketing atiende leads y catálogo, RRHH lleva una bolsa de trabajo." },
+  { slug: "meetscribe", name: "MeetScribe", cat: "Código abierto", color: "#0FA3B1", cap: "dos pistas, todo local",
+    role: ["Autor", "Pipeline de audio"], stack: ["Python", "Whisper", "WASAPI", "Windows"],
+    launch: "2026", status: "Licencia MIT", nums: [["329", "pruebas"], ["2", "pistas de audio"], ["0", "bytes salen del equipo"]],
+    sum: "Transcripción de reuniones y minutas en tiempo real, 100% local en Windows: captura WASAPI en dos pistas, Whisper en CPU y diarización en el dispositivo." },
+  { slug: "password-vault", name: "Password Vault", cat: "Extensión de navegador", color: "#E0245E", cap: "cifrado por sobres",
+    role: ["Autor", "Criptografía"], stack: ["Manifest V3", "AES-256-GCM", "scrypt", "TypeScript"],
+    launch: "2026", status: "Chrome y Edge", nums: [["216", "pruebas"], ["2×", "mínimo OWASP de scrypt"]],
+    sum: "Gestor de contraseñas local para Chrome y Edge. Cifrado por sobres con AES-256-GCM y derivación scrypt al doble del mínimo OWASP." },
+  { slug: "woodland-setup", name: "Woodland Setup", cat: "Asistente de juego de mesa", color: "#95643F", cap: "partidas de Root balanceadas",
+    role: ["Autor", "Lógica de juego", "Diseño de interfaz"], stack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Zustand", "Framer Motion", "Vitest"],
+    launch: "2026", status: "Demo pública", nums: [["14", "opciones de facción"], ["3", "modos de selección"], ["2–6", "jugadores"]],
+    sum: "Asistente para preparar partidas equilibradas de Root, con selección de facciones, draft por turnos, validación de Reach e historial local." },
+  { slug: "dnd-companion", name: "D&D Companion", cat: "Asistente de rol de mesa", color: "#A63F35", cap: "las reglas dentro de cada tirada",
+    role: ["Autor", "Modelado de reglas", "Diseño de interfaz"], stack: ["React 19", "TypeScript", "Vite", "Zustand", "CSS Modules", "Vitest"],
+    launch: "2026", status: "Proyecto personal", nums: [["5", "vistas de juego"], ["8", "categorías de bitácora"], ["2024", "edición de reglas de D&D"]],
+    sum: "Consola para partidas de D&D 2024 con hoja de personaje, tiradas de ataque, conjuros que validan reglas y recursos, y bitácora de campaña." },
+];
+const TOTAL = PROJECTS.length;
+const two = (n) => String(n).padStart(2, "0");
+const FRAGS = [
+  [[8, 22, 46, 56, -3], [50, 30, 40, 34, 2], [44, 62, 34, 24, -1]],
+  [[10, 26, 34, 50, 2], [40, 20, 50, 40, -2], [52, 58, 36, 28, 3]],
+  [[12, 20, 76, 36, -1], [8, 54, 40, 30, 3], [54, 60, 34, 24, -3]],
+];
+
+function inkOn(hex) {
+  const [r, g, b] = [1, 3, 5].map((at) => {
+    const c = parseInt(hex.slice(at, at + 2), 16) / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b >= 0.185 ? "#141414" : "#f6f6f3";
+}
+
+function plate(p, i) {
+  const frags = FRAGS[i % 3].map(([l, t, w, h, r]) =>
+    `<div class="frag" style="left:${l}%;top:${t}%;width:${w}%;height:${h}%;rotate:${r}deg;--r:${-r / 2}deg">
+      <i style="top:18%;width:60%"></i><i style="top:40%;width:40%"></i><i style="top:62%;width:52%"></i></div>`).join("");
+  return `<div class="plate" role="img" aria-label="Portada de ${p.name}" style="--mat:${p.color};--mat-ink:${inkOn(p.color)}">
+    <div class="plate-in"><div class="plate-cap"><span>${p.slug} · ${p.cap}</span><span>Fig. ${two(i + 1)}</span></div>${frags}</div></div>`;
+}
+
+function projectItem(p, i) {
+  const [value, label] = p.nums[0];
+  const chars = [...value].map((c, n) => `<span style="--i:${n}">${c}</span>`).join("");
+  const rows = (items) => items.map((x) => `<div>${x}</div>`).join("");
+  const more = p.nums.slice(1).map(([v, l]) => `<li><span class="num">${v}</span> <span class="muted">${l}</span></li>`).join("");
+  return `<li class="project" data-i="${i + 1}">
+    <a class="cover" href="#" tabindex="-1">${plate(p, i)}</a>
+    <div class="p-head"><p class="muted num">${two(i + 1)} / ${two(TOTAL)} · ${p.cat}</p><h2 class="t-heading">${p.name}</h2></div>
+    <dl class="meta"><dt>Rol</dt><dd>${rows(p.role)}</dd><dt>Stack</dt><dd>${rows(p.stack)}</dd>
+      <dt>Lanz.</dt><dd>${p.launch}</dd><dt>Estado</dt><dd>${p.status}</dd></dl>
+    <div class="fig"><p class="muted num">${two(i + 1)} / ${two(TOTAL)} · Trabajo seleccionado</p>
+      <p class="fig-row"><span class="fig-value" style="--chars:${value.length}" aria-label="${value}">${chars}</span>
+        <span class="fig-label">${label}</span></p>
+      <ul class="fig-more">${more}</ul></div>
+    <p class="summary t-body">${p.sum}</p>
+    <a class="open" href="#">Ver caso de estudio →</a></li>`;
+}
+
+const stage = document.querySelector(".stage");
+const list = document.querySelector(".projects");
+const names = document.querySelector(".names ol");
+list.innerHTML = PROJECTS.map(projectItem).join("");
+names.innerHTML = PROJECTS.map((p, i) =>
+  `<li><button type="button" data-go="${i + 1}"><span class="muted">${p.cat}</span><span class="n">${p.name}</span>
+    <span class="sum">${p.sum}</span></button></li>`).join("");
+
+const items = [...list.children];
+const covers = items.map((li) => li.querySelector(".cover"));
+const nameItems = [...names.children];
+const stageMQ = matchMedia("(min-width: 1024px) and (min-height: 640px)");
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let pos = 0;
+let shown = 0;
+let frame = 0;
+let lockedUntil = 0;
+
+/** The five slots a cover travels through, for the current viewport. */
+function slots() {
+  const W = innerWidth, H = innerHeight;
+  const css = getComputedStyle(document.documentElement);
+  const margin = parseFloat(css.getPropertyValue("--margin"));
+  const gap = parseFloat(css.getPropertyValue("--gap"));
+  const col = (W - 2 * margin - 7 * gap) / 8;
+  const line = (n) => margin + (n - 1) * (col + gap);
+  const h = (2 * col + gap) * 0.75;
+  const peek = 70 - (h * 0.8) / 2;
+  return [
+    { x: line(3), y: -H * 0.6, r: -14, s: 0.7, o: 0 },
+    { x: line(4), y: peek, r: -7, s: 0.8, o: 1 },
+    { x: W / 2, y: H / 2 + 16, r: 0, s: 1, o: 1 },
+    { x: line(6), y: H - peek, r: 7, s: 0.8, o: 1 },
+    { x: line(7), y: H * 1.6, r: 14, s: 0.7, o: 0 },
+  ];
+}
+
+/** Places every cover from one continuous number. */
+function place(value) {
+  const table = slots();
+  covers.forEach((cover, index) => {
+    const i = index + 1;
+    // Between the title screen and the first project nothing peeks: the first cover comes from off screen.
+    const raw = value < 1 ? i - 1 + 2 * (1 - value) : i - value;
+    const d = Math.max(-2, Math.min(2, raw)) + 2;
+    const a = table[Math.floor(d)], b = table[Math.min(4, Math.floor(d) + 1)], t = d - Math.floor(d);
+    const mix = (k) => a[k] + (b[k] - a[k]) * t;
+    cover.style.transform = `translate(${mix("x")}px, ${mix("y")}px) translate(-50%, -50%) rotate(${mix("r")}deg) scale(${mix("s")})`;
+    cover.style.opacity = mix("o");
+    cover.style.visibility = Math.abs(raw) > 2 ? "hidden" : "visible";
+  });
+}
+
+function sync() {
+  stage.dataset.pos = pos;
+  items.forEach((li, index) => {
+    const i = index + 1;
+    li.toggleAttribute("data-active", i === pos);
+    li.toggleAttribute("data-past", i < pos);
+    li.inert = stageMQ.matches && i !== pos;
+    li.querySelector(".cover").tabIndex = !stageMQ.matches || i === pos ? 0 : -1;
+  });
+  nameItems.forEach((li, index) => {
+    const i = index + 1;
+    if (i === pos) li.setAttribute("aria-current", "true");
+    else li.removeAttribute("aria-current");
+    li.toggleAttribute("data-far", Math.abs(i - Math.max(1, pos)) > 2);
+  });
+  names.style.translate = `0 ${-((Math.max(1, pos) - 1) * 76 + 22)}px`;
+  if (pos > 0) document.querySelector("[data-announce]").textContent = `Proyecto ${pos} de ${TOTAL}: ${PROJECTS[pos - 1].name}`;
+  sessionStorage.setItem("mock:pos", pos);
+}
+
+function go(next) {
+  next = Math.max(0, Math.min(TOTAL, next));
+  if (next === pos) return;
+  pos = next;
+  sync();
+  const from = shown, start = performance.now(), duration = reduced ? 0 : 900;
+  cancelAnimationFrame(frame);
+  const step = (now) => {
+    const t = duration ? Math.min(1, (now - start) / duration) : 1;
+    shown = from + (pos - from) * (1 - (1 - t) ** 5);
+    place(shown);
+    if (t < 1) frame = requestAnimationFrame(step);
+  };
+  frame = requestAnimationFrame(step);
+}
+
+/** One step per gesture: trackpad inertia must not skip projects. */
+function stepBy(direction) {
+  const now = performance.now();
+  if (now < lockedUntil) return;
+  lockedUntil = now + 700;
+  go(pos + direction);
+}
+
+function layout() {
+  if (stageMQ.matches) {
+    place(shown);
+    return;
+  }
+  covers.forEach((cover) => cover.removeAttribute("style"));
+}
+
+addEventListener("wheel", (event) => {
+  if (!stageMQ.matches || document.querySelector("dialog[open]")) return;
+  event.preventDefault();
+  if (Math.abs(event.deltaY) >= 12) stepBy(Math.sign(event.deltaY));
+}, { passive: false });
+
+addEventListener("keydown", (event) => {
+  if (!stageMQ.matches || document.querySelector("dialog[open]")) return;
+  const moves = { ArrowDown: 1, ArrowRight: 1, PageDown: 1, ArrowUp: -1, ArrowLeft: -1, PageUp: -1 };
+  if (event.key in moves) { event.preventDefault(); go(pos + moves[event.key]); }
+  if (event.key === "Home") go(0);
+  if (event.key === "End") go(TOTAL);
+});
+
+let touchY = null;
+addEventListener("touchstart", (event) => (touchY = event.touches[0].clientY), { passive: true });
+addEventListener("touchend", (event) => {
+  if (!stageMQ.matches || touchY === null) return;
+  const delta = touchY - event.changedTouches[0].clientY;
+  if (Math.abs(delta) > 40) stepBy(Math.sign(delta));
+  touchY = null;
+});
+
+document.addEventListener("click", (event) => {
+  const trigger = event.target.closest("[data-go]");
+  if (trigger) go(Number(trigger.dataset.go));
+});
+addEventListener("resize", layout);
+stageMQ.addEventListener("change", () => { sync(); layout(); });
+
+pos = shown = Number(sessionStorage.getItem("mock:pos")) || 0;
+sync();
+layout();
+</script>
+</body>
+</html>

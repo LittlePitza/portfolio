@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta v2 · lhernandez.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mock.css">
+<style>
+body { padding: 48px var(--margin) 96px; }
+header { display: grid; gap: 16px; max-width: 68ch; margin-bottom: 48px; }
+.links { display: flex; flex-wrap: wrap; gap: 32px; margin-bottom: 48px; }
+.links a { font: 400 var(--heading)/1.08 var(--serif); border-bottom: 1px solid var(--ink); }
+ol.todo { list-style: decimal; padding-left: 20px; display: grid; gap: 8px; max-width: 68ch; margin-bottom: 96px; }
+.phones { display: flex; flex-wrap: wrap; gap: 48px; }
+.phones figure { display: grid; gap: 8px; }
+.phones iframe { width: 390px; height: 760px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+</style>
+</head>
+<body>
+<header>
+  <p class="muted">Maqueta v2 · lhernandez.dev · para aprobar la composición antes de construir</p>
+  <h1 class="t-title">Dos pantallas, un sistema</h1>
+  <p class="t-body">Home y Sobre mí con los tokens, la retícula y el movimiento de <code>docs/02-diseno-v2.md</code>. Las portadas son esquemas; en el sitio van las reales. Ábrelas en una ventana de escritorio (1024 px de ancho o más).</p>
+</header>
+
+<nav class="links" data-siblings>
+  <a href="home.html">Home →</a>
+  <a href="about.html">Sobre mí →</a>
+</nav>
+
+<ol class="todo t-body">
+  <li>En Home, gira la rueda o usa las flechas: cada gesto cambia un proyecto y la cifra gigante rueda. La página no hace scroll.</li>
+  <li>Pasa el cursor por el menú: los demás enlaces se desenfocan.</li>
+  <li>Haz clic en "Sobre mí" en el menú: telón de papel con el destino y el personaje empujando la línea.</li>
+  <li>En Sobre mí, haz clic en la cabeza, elige un objeto y cierra con Escape.</li>
+  <li>Abre "Cómo construyo +", "Trayectoria +" o "Capacidades +": el detalle es una capa.</li>
+  <li>Estrecha la ventana por debajo de 1024 px (o mira abajo): las mismas páginas, apiladas y con scroll nativo.</li>
+</ol>
+
+<section>
+  <p class="muted" style="margin-bottom:16px">Teléfono (390 px)</p>
+  <div class="phones">
+    <figure><iframe src="home.html" title="Home en teléfono" loading="lazy"></iframe><figcaption class="muted">Home</figcaption></figure>
+    <figure><iframe src="about.html" title="Sobre mí en teléfono" loading="lazy"></iframe><figcaption class="muted">Sobre mí</figcaption></figure>
+  </div>
+</section>
+</body>
+</html>

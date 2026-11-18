@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta v2 · Sobre mí</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Geist+Mono:wght@400&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mock.css">
+<script>if (sessionStorage.getItem("mock:nav")) document.documentElement.dataset.curtain = "in";</script>
+<style>
+.about { --fade: opacity var(--dur-base) var(--ease), filter var(--dur-base) var(--ease); }
+.a-title, .a-statement, .a-fig, .a-lists { transition: var(--fade); }
+.about.open :is(.a-title, .a-statement, .a-fig, .a-lists) { opacity: .25; filter: blur(var(--blur)); }
+
+/* ---------- apilado (teléfono) ---------- */
+.about { padding: 32px var(--margin) 0; display: grid; gap: 32px; }
+.a-statement { max-width: 30ch; }
+.a-figs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+.a-fig b { display: block; font: 400 30vw/.82 var(--serif); letter-spacing: -.02em; margin-bottom: 8px; }
+.a-fig:last-child b { font-size: 22vw; }
+.a-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 32px var(--gap); }
+.a-lists h2 { font: inherit; color: var(--muted); margin-bottom: 8px; }
+.a-lists h2 button { color: inherit; min-height: 24px; }
+.a-lists h2 button:hover { color: var(--ink); }
+.a-lists li { display: flex; justify-content: space-between; gap: 12px; }
+
+.portrait { position: relative; justify-self: center; text-align: center; }
+.head { display: block; height: 300px; margin-inline: auto; overflow: visible; cursor: pointer; }
+.head [data-lid] { transform-box: view-box; transform-origin: 126px 208px; transition: transform var(--dur-slow) var(--ease); }
+.head :is([data-inside], [data-lines], [data-spark], [data-grin], [data-underside]) { opacity: 0; transition: opacity var(--dur-fast); }
+.head :is([data-calm], [data-smile]) { transition: opacity var(--dur-fast); }
+.about.open .head [data-lid] { transform: translate(-16px, -118px) rotate(-12deg); }
+.about.open .head :is([data-inside], [data-lines], [data-spark], [data-grin], [data-underside]) { opacity: 1; }
+.about.open .head :is([data-calm], [data-smile]) { opacity: 0; }
+.portrait > p { margin-top: 12px; }
+
+.objects { position: absolute; inset: 0; pointer-events: none; }
+.objects button { position: absolute; left: 50%; top: 22%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper);
+  white-space: nowrap; opacity: 0; translate: -50% 0; scale: .6;
+  transition: translate var(--dur-slow) var(--ease), opacity var(--dur-base) var(--ease), scale var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i) * var(--stagger)); }
+.about.open .objects button { opacity: 1; scale: 1; pointer-events: auto; translate: calc(-50% + var(--x)) var(--y); }
+
+.card { position: absolute; z-index: 1; left: 50%; top: 58%; width: min(320px, 86vw); translate: -50% 0; rotate: -2deg; padding: 20px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); text-align: left; }
+.card[hidden] { display: none; }
+.card:not([hidden]) { animation: enter var(--dur-base) var(--ease) both; }
+.card h3 { font: 400 24px/28px var(--serif); margin-bottom: 8px; }
+.card p + p { margin-top: 12px; }
+
+.layer-body { padding: 48px var(--margin) 96px; display: grid; gap: 48px; }
+.layer-body .row { display: grid; gap: 8px; padding-top: 16px; border-top: 1px solid var(--line); }
+.layer-body .row p.t-body { max-width: 68ch; }
+
+/* ---------- modo Pantalla ---------- */
+@media (min-width: 1024px) and (min-height: 640px) {
+  .about { position: absolute; inset: 0; padding: 0; display: block; }
+  .a-title { position: absolute; left: var(--margin); top: 196px; }
+  .a-statement { position: absolute; right: var(--margin); top: 200px; width: calc(3 * var(--col) + 2 * var(--gap)); max-width: none; }
+  .a-figs { display: contents; }
+  .a-fig { position: absolute; top: calc(50% + 24px); width: calc(2 * var(--col) + var(--gap)); }
+  .a-fig b, .a-fig:last-child b { font-size: min(11vw, 20svh); }
+  .a-fig:first-child { left: var(--margin); }
+  .a-fig:last-child { right: var(--margin); text-align: right; }
+  .portrait { position: absolute; left: 50%; top: 188px; translate: -50% 0; width: calc(4 * var(--col) + 3 * var(--gap)); }
+  .head { height: min(40svh, 370px); }
+  .a-lists { position: absolute; left: var(--margin); right: var(--margin); bottom: 56px; grid-template-columns: repeat(4, 1fr); gap: var(--gap); align-items: start; }
+  .card { left: 84%; top: 46%; translate: 0 0; }
+  .layer-body { grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: var(--gap); }
+  .layer-body .row { grid-column: 1 / -1; grid-template-columns: subgrid; }
+  .layer-body .row > :nth-child(1) { grid-column: 1 / 3; }
+  .layer-body .row > :nth-child(2) { grid-column: 3 / 6; }
+  .layer-body .row > :nth-child(3) { grid-column: 6 / 9; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .15s !important; transition-delay: 0s !important; animation-duration: .15s !important; }
+}
+</style>
+</head>
+<body data-page="about">
+<div class="stage">
+  <main class="about">
+    <h1 class="t-title a-title" data-enter>Sobre mí</h1>
+    <p class="t-lead accent a-statement" data-enter style="--i:1">La mayoría de los responsables de TI compran sus herramientas. Yo escribo las que usa mi departamento y respondo por su disponibilidad en el mismo reporte.</p>
+
+    <div class="portrait" data-enter style="--i:2">
+      <svg class="head" viewBox="0 0 420 520" role="button" tabindex="0" aria-label="Abrir la cabeza de Luis" aria-expanded="false"
+        fill="none" stroke="var(--ink)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M156 414 L156 458 M264 410 L264 456"/>
+        <path d="M52 520 C68 468 112 448 170 444 L150 520 Z" fill="var(--accent)"/>
+        <path d="M368 520 C352 468 308 448 250 444 L270 520 Z" fill="var(--accent)"/>
+        <path d="M150 520 L170 444 C186 468 234 468 250 444 L270 520 Z" fill="var(--ink)"/>
+        <path d="M186 460 C196 500 224 500 234 460" stroke="var(--bg)" stroke-width="3"/>
+        <g data-lines stroke-width="6"><path d="M40 150 L74 178 M28 210 L66 214 M380 140 L350 170 M396 200 L356 206 M120 22 L136 52 M300 20 L286 52"/></g>
+        <path d="M104 262 C86 250 76 274 88 292 C96 304 110 298 110 286" fill="var(--bg)"/>
+        <path d="M318 256 C336 246 344 270 332 288 C326 298 314 294 314 282" fill="var(--bg)"/>
+        <path d="M104 208 C98 262 96 320 114 358 C132 402 168 430 212 430 C258 430 294 400 308 356 C322 318 320 262 316 208 Z" fill="var(--bg)"/>
+        <path d="M104 218 C102 256 100 300 112 346 C128 396 166 430 212 430 C258 430 296 396 310 348 C320 304 318 258 316 218 C314 252 308 298 294 324 C278 338 258 332 246 322 C236 314 226 314 214 318 C202 314 192 314 180 322 C166 334 148 338 132 324 C116 298 108 252 104 218 Z" fill="var(--ink)"/>
+        <g data-inside><ellipse cx="210" cy="208" rx="106" ry="18" fill="var(--ink)"/><ellipse cx="210" cy="205" rx="84" ry="9" fill="#3a3a3a" stroke="none"/></g>
+        <path d="M134 236 C152 224 180 224 196 232 L196 242 C180 236 154 236 138 246 Z" fill="var(--ink)" stroke="none"/>
+        <path d="M226 231 C242 223 270 223 288 235 L284 245 C268 235 242 235 226 241 Z" fill="var(--ink)" stroke="none"/>
+        <g data-calm><path d="M150 272 C160 262 178 262 188 272" stroke-width="6"/><path d="M234 270 C244 260 262 260 272 270" stroke-width="6"/>
+          <circle cx="169" cy="274" r="6" fill="var(--ink)" stroke="none"/><circle cx="253" cy="272" r="6" fill="var(--ink)" stroke="none"/></g>
+        <g data-spark fill="var(--ink)" stroke="none"><path d="M169 254 L174 267 L187 272 L174 277 L169 290 L164 277 L151 272 L164 267 Z"/>
+          <path d="M253 252 L258 265 L271 270 L258 275 L253 288 L248 275 L235 270 L248 265 Z"/></g>
+        <path d="M212 280 C218 294 224 304 212 310" stroke-width="6"/>
+        <g data-smile><path d="M176 336 C196 352 232 352 252 334" stroke="var(--bg)" stroke-width="7"/><path d="M176 336 C196 352 232 352 252 334" stroke-width="3"/></g>
+        <g data-grin><path d="M170 330 C190 372 240 372 260 328 C238 340 190 342 170 330 Z" fill="var(--bg)"/>
+          <path d="M180 334 C200 342 232 342 250 332 L246 346 C226 354 200 354 184 346 Z" fill="#fff" stroke="none"/></g>
+        <g data-lid>
+          <ellipse data-underside cx="210" cy="210" rx="106" ry="17" fill="#2a2a2a"/>
+          <path d="M104 208 C102 150 148 112 210 112 C272 112 318 150 316 208 Z" fill="var(--bg)"/>
+          <path d="M96 214 C86 170 94 118 130 94 C162 74 204 68 244 78 C292 90 324 132 324 192 C325 200 324 208 322 214 C304 202 282 194 262 198 C248 202 238 190 224 194 C210 178 186 178 168 192 C150 202 126 206 96 214 Z" fill="var(--ink)"/>
+          <path d="M138 150 C166 118 208 106 250 114 M116 198 C126 168 146 144 176 132" stroke="var(--bg)" stroke-width="5"/>
+          <path d="M100 209 L320 209" stroke-width="7"/>
+        </g>
+      </svg>
+      <div class="objects"></div>
+      <div class="card" hidden aria-live="polite"></div>
+      <p class="muted" data-head-hint>¿Qué pasa dentro de mi cabeza? Haz clic para abrirla</p>
+    </div>
+
+    <div class="a-figs">
+      <p class="a-fig" data-enter style="--i:3"><b>5</b><span class="muted">sistemas en producción, autor único</span></p>
+      <p class="a-fig" data-enter style="--i:3"><b>1,050</b><span class="muted">pruebas y aserciones automatizadas</span></p>
+    </div>
+
+    <div class="a-lists" data-enter style="--i:4">
+      <section><h2>Datos</h2><ul>
+        <li>En Querétaro, México</li><li>Desarrollo de software con experiencia en operación de TI</li>
+        <li>Juegos de mesa, ajedrez y videojuegos</li><li>Pizza, café y música, sin orden particular</li></ul></section>
+      <section><h2><button type="button" data-layer="capacidades">Capacidades +</button></h2><ul>
+        <li>Desarrollo de software</li><li>Bases de datos</li><li>Integraciones y plataformas</li>
+        <li>Infraestructura y operación de TI</li><li>Seguridad</li><li>Proyectos y gestión tecnológica</li></ul></section>
+      <section><h2><button type="button" data-layer="trayectoria">Trayectoria +</button></h2><ul class="num">
+        <li>PIMSA <span class="muted">2026–hoy</span></li><li>Construcciones SB <span class="muted">2025–26</span></li>
+        <li>Foton Querétaro <span class="muted">2025</span></li><li>Centro de Abastos Fany <span class="muted">2024–25</span></li>
+        <li>Mercado Libre <span class="muted">2019–23</span></li></ul></section>
+      <section><h2><button type="button" data-layer="proceso">Cómo construyo +</button></h2><ul>
+        <li>P1 Diagnosticar por escrito</li><li>P2 Reglas en la base de datos</li><li>P3 Pruebas en CI</li>
+        <li>P4 Entregar a usuarios reales</li><li>P5 Reportar los KPIs</li><li>P6 Iterar</li></ul></section>
+    </div>
+  </main>
+</div>
+<p class="mock-note">Maqueta de composición. En escritorio esta página es una sola pantalla; el detalle se abre como capa desde cada "+".</p>
+
+<script src="mock.js"></script>
+<script>
+const OBJECTS = [
+  ["Juegos de mesa", "Le encanta aprender uno nuevo casi tanto como jugarlo: primero el reglamento, luego la mesa.", "Un meeple, esperando su turno", -190, -40],
+  ["Ajedrez", "Todo en el tablero es información pública y aun así le encanta que lo superen pensando.", "El caballo, dos casillas y una de lado", -120, -110],
+  ["Pizza", "La recompensa al final de un arranque y lo único en esta cabeza que no necesita justificación.", "La última rebanada", -20, -150],
+  ["Café", "Presente en cada migración. Soy la única dependencia de este portafolio sin suite de pruebas.", "La taza, rellenada", 90, -120],
+  ["Música", "Puesta en cada sesión larga de depuración y cada migración nocturna.", "Los audífonos, siempre cerca", 180, -50],
+  ["Videojuegos", "Su otra forma de desconectar. Lee los sistemas de un juego como lee los de trabajo.", "El control, cargado", -230, 40],
+  ["Código y diseño", "Dibuja la interfaz y escribe la base de datos, y se niega a elegir solo una.", "El editor, siempre abierto", 220, 30],
+];
+const LAYERS = {
+  proceso: ["Cómo construyo", [
+    ["P1", "Diagnosticar por escrito", "Antes de tocar nada, la brecha va en papel. Mi propio diagnóstico ISO 9001 señaló el peor hallazgo de mi departamento."],
+    ["P2", "Reglas en la base de datos", "Las reglas de negocio viven en PostgreSQL. El cliente no recibe ningún privilegio de escritura que no necesite."],
+    ["P3", "Pruebas en CI", "Aserciones SQL contra una base desechable, Vitest en la app, pipeline de cinco etapas antes de publicar."],
+    ["P4", "Entregar a usuarios reales", "Las herramientas internas salen a producción para quien las pidió, en piso, la misma semana."],
+    ["P5", "Reportar los KPIs", "Las cifras que reporto salen de los sistemas que escribí, incluidas las que no favorecen."],
+    ["P6", "Iterar", "Anulaciones desde el panel, no desde un redespliegue. El sistema cambia con la operación."]]],
+  trayectoria: ["Trayectoria", [
+    ["2026 – hoy · Huimilpan, Querétaro", "PIMSA", "Responsable de TI y desarrollo de sistemas internos. Responsable único de la función de TI de una planta de reciclado de plásticos: su centro de costo, su infraestructura, su mesa de servicio y el software con el que opera."],
+    ["2025 – 2026 · Querétaro", "Construcciones SB", "Administrador de Sistemas. Servidores, red, seguridad perimetral y soporte a más de 200 usuarios de oficina y obra."],
+    ["2025 · Querétaro", "Foton Querétaro", "Especialista en TI. Soporte y herramientas internas para la distribuidora: ERP, datos y los equipos de cada área."],
+    ["2024 – 2025 · Atlacomulco", "Centro de Abastos Fany", "Supervisor de Sistemas de Información. Red, servidor principal, videovigilancia y soporte a todas las áreas."],
+    ["2019 – 2023 · Remoto", "Mercado Libre", "Especialista en Logística. Coordinación con paqueterías, atención al cliente e inventario."]]],
+  capacidades: ["Capacidades", [
+    ["TypeScript · React · Next.js · Python", "Desarrollo de software", "Aplicaciones web, herramientas internas e interfaces pensadas para quienes las usan."],
+    ["PostgreSQL · MySQL · Supabase · Drizzle", "Bases de datos", "Modelado de datos, reglas de negocio, control de acceso y tareas programadas."],
+    ["Microsoft Graph · Stripe · SPEI · PWA", "Integraciones y plataformas", "Pagos, servicios empresariales, aplicaciones instalables y procesamiento local de audio."],
+    ["Windows Server · Linux · Fortinet · UniFi", "Infraestructura y operación de TI", "Administración de servidores, redes y dispositivos para sostener la operación diaria."],
+    ["OAuth 2.0 · AES-256-GCM · scrypt · CSP", "Seguridad", "Control de acceso y protección de datos, desde el diseño de aplicaciones hasta la respuesta a incidentes."],
+    ["SAP Business One · Microsoft 365 · Jira", "Proyectos y gestión tecnológica", "Reestructuración de un departamento de TI y los proyectos que pasan por él, de la planeación a la operación."]]],
+};
+
+const about = document.querySelector(".about");
+const head = document.querySelector(".head");
+const card = document.querySelector(".card");
+const hint = document.querySelector("[data-head-hint]");
+
+document.querySelector(".objects").innerHTML = OBJECTS.map(([title, , , x, y], i) =>
+  `<button type="button" data-object="${i}" style="--i:${i};--x:${x}px;--y:${y}px">${title}</button>`).join("");
+
+function setOpen(open) {
+  about.classList.toggle("open", open);
+  head.setAttribute("aria-expanded", open);
+  hint.textContent = open ? "Elige un objeto. Vuelve a tocar mi cabeza para cerrarla" : "¿Qué pasa dentro de mi cabeza? Haz clic para abrirla";
+  if (!open) card.hidden = true;
+}
+head.addEventListener("click", () => setOpen(!about.classList.contains("open")));
+head.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") { event.preventDefault(); head.click(); }
+});
+addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !document.querySelector("dialog[open]")) { setOpen(false); head.focus(); }
+});
+
+document.addEventListener("click", (event) => {
+  const object = event.target.closest("[data-object]");
+  if (object) {
+    const [title, story, signature] = OBJECTS[object.dataset.object];
+    card.hidden = true;
+    card.innerHTML = `<h3>${title}</h3><p class="t-body">${story}</p><p class="muted">${signature}</p>`;
+    void card.offsetHeight;
+    card.hidden = false;
+  }
+  const opener = event.target.closest("[data-layer]");
+  if (opener) document.getElementById(opener.dataset.layer).showModal();
+});
+
+for (const [id, [title, rows]] of Object.entries(LAYERS)) {
+  document.body.insertAdjacentHTML("beforeend", `<dialog class="layer" id="${id}" aria-labelledby="${id}-title">
+    <div class="layer-head"><h2 class="t-title" id="${id}-title">${title}</h2><button type="button" data-close>Cerrar</button></div>
+    <div class="layer-body">${rows.map(([a, b, c]) =>
+      `<div class="row"><p class="muted">${a}</p><h3 class="t-heading">${b}</h3><p class="t-body">${c}</p></div>`).join("")}</div></dialog>`);
+}
+</script>
+</body>
+</html>

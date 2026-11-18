@@ -1,0 +1,114 @@
+/* Maqueta v2: tokens y piezas compartidas. No es código de producción. */
+:root {
+  --bg: #ecece9; --paper: #f6f6f3; --ink: #141414; --muted: #65655f;
+  --line: rgb(20 20 20 / .14); --accent: #f04010;
+  --margin: 16px; --gap: 16px;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --dur-fast: .2s; --dur-base: .45s; --dur-slow: .9s; --stagger: 60ms;
+  --blur: 8px; --blur-rest: 2px; --radius: 8px;
+  --serif: "Instrument Serif", "Times New Roman", serif;
+  --sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --mono: "Geist Mono", ui-monospace, monospace;
+  --title: 56px; --heading: 32px;
+  --display: 19.5vw; --figure: 34vw;
+  --col: calc((100vw - 2 * var(--margin) - 3 * var(--gap)) / 4);
+}
+@media (min-width: 1024px) and (min-height: 640px) {
+  :root {
+    --margin: 20px; --gap: 20px; --title: 96px; --heading: 48px;
+    --display: min(18.4vw, 30svh); --figure: min(15vw, 26svh);
+    --col: calc((100vw - 2 * var(--margin) - 7 * var(--gap)) / 8);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); color: var(--ink); }
+body { font: 400 12px/16px var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: inherit; }
+ol, ul { list-style: none; }
+::selection { background: var(--accent); color: var(--bg); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.muted { color: var(--muted); }
+.num { font-variant-numeric: tabular-nums; }
+.t-body { font-size: 16px; line-height: 26px; }
+.t-lead { font-size: 24px; line-height: 32px; letter-spacing: -.01em; }
+.t-heading { font: 400 var(--heading)/1.08 var(--serif); letter-spacing: -.01em; }
+.t-title { font: 400 var(--title)/.96 var(--serif); letter-spacing: -.02em; }
+.t-display { font: 400 var(--display)/.82 var(--serif); letter-spacing: -.02em; text-transform: uppercase; }
+.accent { color: var(--accent); }
+
+/* ---------- primitiva de entrada y vecinos ---------- */
+@keyframes enter { from { opacity: 0; filter: blur(var(--blur)); translate: 0 8px; } }
+[data-enter] { animation: enter var(--dur-base) var(--ease) both; animation-delay: calc(var(--i, 0) * var(--stagger)); }
+html[data-curtain] [data-enter] { animation-play-state: paused; }
+
+[data-siblings] > * { transition: opacity var(--dur-fast) var(--ease), filter var(--dur-fast) var(--ease); }
+@media (hover: hover) {
+  [data-siblings]:hover > :not(:hover) { opacity: .45; filter: blur(var(--blur-rest)); }
+}
+
+/* ---------- retícula ---------- */
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); padding-inline: var(--margin); }
+
+/* ---------- marco ---------- */
+.chrome-top, .chrome-bottom { display: none; }
+.bar { position: sticky; top: 0; z-index: 10; height: 56px; display: flex; align-items: center; justify-content: space-between;
+  padding-inline: var(--margin); background: var(--bg); border-bottom: 1px solid var(--line); }
+.brand { display: flex; gap: 10px; align-items: center; }
+.mark { width: 28px; height: 28px; display: grid; place-items: center; background: var(--ink); color: var(--bg); font: 400 15px/1 var(--serif); letter-spacing: -.02em; }
+.bar button { min-height: 44px; padding-inline: 8px; }
+.nav a { display: block; font: 400 24px/28px var(--serif); }
+.nav a[aria-current]::before { content: "→ "; }
+.mock-note { padding: 32px var(--margin); color: var(--muted); border-top: 1px solid var(--line); margin-top: 96px; }
+
+/* ---------- capas ---------- */
+dialog.layer { width: 100vw; height: 100dvh; max-width: none; max-height: none; border: 0; background: var(--bg); color: var(--ink); overflow-y: auto; }
+dialog.layer[open] { animation: enter var(--dur-base) var(--ease) both; }
+dialog.layer::backdrop { background: var(--bg); }
+.layer-head { display: flex; justify-content: space-between; align-items: flex-start; padding: var(--margin); }
+.layer-head button { min-height: 44px; }
+.menu-layer .nav a { font: 400 var(--title)/1 var(--serif); letter-spacing: -.02em; }
+.menu-layer .nav { padding: 48px var(--margin); }
+
+/* ---------- telón de página ---------- */
+.curtain { position: fixed; inset: 0; z-index: 30; background: var(--paper); border-top: 1px solid var(--line);
+  display: grid; place-items: center; transform: translateY(100%); transition: transform var(--dur-base) var(--ease); pointer-events: none; }
+html[data-curtain] .curtain { transform: none; }
+html[data-curtain="in"] .curtain { transition: none; }
+html[data-curtain="out"] .curtain { transform: translateY(-100%); }
+.curtain-title { text-align: center; }
+.curtain-title p { margin-top: 12px; }
+.curtain-track { position: absolute; left: var(--margin); right: var(--margin); bottom: 56px; height: 1px; }
+.curtain-line { position: absolute; inset: 0; background: var(--ink); transform-origin: left; transform: scaleX(0); transition: transform 1.6s linear; }
+.curtain-runner { position: absolute; bottom: 0; left: 0; width: 52px; translate: -100% 0; transition: left 1.6s linear; }
+html[data-curtain] .curtain-line { transform: scaleX(.7); }
+html[data-curtain] .curtain-runner { left: 70%; }
+html[data-curtain="out"] .curtain-line { transform: scaleX(1); transition: transform var(--dur-fast) var(--ease); }
+html[data-curtain="out"] .curtain-runner { left: 100%; transition: left var(--dur-fast) var(--ease); }
+
+/* ---------- portadas esquemáticas (en el sitio van las reales, dibujadas en código) ---------- */
+.plate { position: relative; aspect-ratio: 4 / 3; width: 100%; overflow: hidden; background: var(--mat); color: var(--mat-ink); container-type: size; }
+.plate-in { position: absolute; inset: 0; font-size: calc(100cqw / 46); }
+.plate-cap { position: absolute; left: 4.5%; right: 4.5%; top: 4.2%; display: flex; justify-content: space-between; padding-bottom: .55em;
+  border-bottom: 1px solid currentColor; font: 400 .66em/1.3 var(--mono); letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
+.frag { position: absolute; background: #f6f6f3; border: .15em solid #141414; box-shadow: .45em .45em 0 #141414; transition: transform var(--dur-slow) var(--ease); }
+.frag i { position: absolute; left: 8%; height: .5em; background: #141414; opacity: .8; }
+.plate:hover .frag { transform: translate(-.3em, -.3em) rotate(var(--r, 0deg)); }
+
+/* ============ modo Pantalla (escritorio) ============ */
+@media (min-width: 1024px) and (min-height: 640px) {
+  .grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .bar { display: none; }
+  .stage { position: relative; height: 100svh; overflow: hidden; }
+  .chrome-top { display: grid; position: absolute; z-index: 10; top: var(--margin); left: 0; right: 0; align-items: start; }
+  .chrome-top .brand { grid-column: 1; align-items: flex-start; }
+  .chrome-top .menu { grid-column: 2 / span 2; }
+  .chrome-top .menu > p { margin-bottom: 8px; }
+  .chrome-top .clock { grid-column: 5 / span 2; }
+  .chrome-top .mail { grid-column: 7 / span 2; text-align: right; }
+  .chrome-bottom { display: flex; justify-content: space-between; position: absolute; z-index: 10; bottom: var(--margin); left: var(--margin); right: var(--margin); }
+  .chrome-bottom div { display: flex; gap: 24px; }
+  .mock-note { display: none; }
+}
