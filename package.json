@@ -30,6 +30,6 @@
   },
   "description": "Personal portfolio of Luis Hernández. Next.js 16, TypeScript, Tailwind v4, GSAP.",
   "engines": {
-    "node": ">=24"
+    "node": "24.x"
   }
 }
