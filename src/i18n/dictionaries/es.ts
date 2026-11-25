@@ -38,6 +38,7 @@ const es: typeof en = {
     tagline: "Construyo los sistemas que opero.",
     sub: "La mayoría de los responsables de TI compran sus herramientas. Yo escribo las que usa mi departamento y respondo por su disponibilidad en el mismo reporte.",
     ctaWork: "Ver el trabajo ↓",
+    portrait: "Detrás del código",
   },
   tab: ["Vuelve →", "Los sistemas siguen corriendo."],
   update: { message: "Hay una versión nueva del sitio", action: "Actualizar" },

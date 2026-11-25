@@ -36,6 +36,7 @@ const en = {
     tagline: "I build the systems I operate.",
     sub: "Most IT managers buy their tools. I write the ones my department runs on, and answer for their uptime on the same report.",
     ctaWork: "See the work ↓",
+    portrait: "Behind the code",
   },
   tab: ["Come back →", "The systems are still running."] as [string, string],
   update: { message: "A new version of this site is live", action: "Refresh" },

@@ -1,0 +1,165 @@
+/*
+ * The portrait plate (docs/02-diseno-v2.md, section 6.1): v1's hero card at v1's
+ * proportions, scaled from its width W. The card is 0.88 wide to tall and tilted 7°;
+ * tilted, its box is 1.131 W wide and 1.25 W tall, so it reaches 0.066 W past its sides
+ * and 0.057 W past its top and bottom. Everything inside scales with W: the type is set
+ * in em from a 16 px base at v1's 180 px, and the shadow is W / 36 (5 px at 180 px).
+ */
+
+.plate {
+  --plate-w: clamp(128px, 46vw, 220px);
+  --shadow: calc(var(--plate-w) / 36);
+
+  position: relative;
+  width: var(--plate-w);
+  aspect-ratio: 0.88;
+  margin: calc(var(--plate-w) * 0.085 + 1px) calc(var(--plate-w) * 0.094 + 1px)
+    calc(var(--plate-w) * 0.085 + 1px) auto;
+}
+
+/* v1's wheel: 1.092 W across, starting 0.816 W before the card. */
+.wheel {
+  position: absolute;
+  top: 0;
+  left: -81.6%;
+  width: 109.2%;
+  height: auto;
+  color: var(--color-accent);
+}
+
+/* Positioned, so it paints over the wheel that comes before it. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: calc(var(--plate-w) / 11.25);
+  box-shadow: var(--shadow) var(--shadow) 0 var(--color-ink);
+  transform: rotate(7deg);
+  pointer-events: auto;
+  transition:
+    transform var(--dur-base) var(--ease),
+    box-shadow var(--dur-base) var(--ease);
+}
+
+/* Half the card's base: v1's 8 px at 180 px, and never smaller than that. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: max(8px, 0.5em);
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.index {
+  padding: 0.6em 0.7em;
+}
+
+.head {
+  flex: 1;
+  align-self: center;
+  width: 67%;
+  height: auto;
+  min-height: 0;
+  margin-top: -15%;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45em 0.65em;
+  border-top: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+/* v1's hover: the card straightens a little and lifts off an orange shadow. A pointer
+   that hovers, or the keyboard; a tap on a touch screen leaves nothing stuck. */
+.card:focus-visible {
+  transform: rotate(-3deg) translateY(calc(var(--plate-w) * -0.033));
+  box-shadow: calc(var(--plate-w) / 22.5) calc(var(--plate-w) / 18) 0 var(--color-accent);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: rotate(-3deg) translateY(calc(var(--plate-w) * -0.033));
+    box-shadow: calc(var(--plate-w) / 22.5) calc(var(--plate-w) / 18) 0 var(--color-accent);
+  }
+}
+
+/* Section 7.6: nothing moves; only the shadow answers. */
+@media (prefers-reduced-motion: reduce) {
+  .card:is(:hover, :focus-visible) {
+    transform: rotate(7deg);
+  }
+}
+
+/*
+ * On the stage the plate's room (the container named plate, carousel.module.css) is
+ * columns 5 to 8, from under the text block to just above the frame's bottom row. The
+ * card takes the top right of it at the largest size that fits columns 7 and 8, stays
+ * clear of the end of HERNÁNDEZ (4.24 × the display size from the cover's left edge,
+ * which is the room's left edge minus its own width and a gap) and fits the room's
+ * height. Tilt and shadow add 0.159 W across and 0.306 W down.
+ */
+@container plate (width >= 0px) {
+  .plate {
+    --pair: calc((100cqw - var(--gap)) / 2);
+    --beside: calc(200cqw - var(--text-display) * 4.24);
+    --plate-w: min((min(var(--pair), var(--beside)) - 1px) / 1.159, (100cqh - 2px) / 1.306);
+    --card-left: calc(100cqw - var(--plate-w) * 1.094 - 1px);
+    --name-end: calc(var(--text-display) * 4.24 - 100cqw - var(--gap));
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: calc(var(--plate-w) * 0.085 + 1px) calc(var(--plate-w) * 0.094 + 1px) 0 0;
+  }
+
+  /* A short window: the wheel sits right of HERNÁNDEZ, 16 px clear of its end, and shows
+     three quarters of itself left of the card, as in v1. */
+  .wheel {
+    --wheel: max(0px, min(var(--plate-w) * 1.092, (var(--card-left) - var(--name-end) - 16px) / 0.747));
+
+    left: calc(var(--wheel) * -0.747);
+    width: var(--wheel);
+  }
+}
+
+/* A tall window: there is room above HERNÁNDEZ (its row is 0.82 × the display size,
+   48 px above the room's bottom with the gap), so the wheel rises from the room's top. */
+@media (height >= 760px) {
+  @container plate (width >= 0px) {
+    .wheel {
+      --wheel: max(0px, min(var(--plate-w) * 1.092, 100cqh - 48px - var(--text-display) * 0.82));
+
+      top: calc(var(--plate-w) * -0.085 - 1px);
+    }
+  }
+}
+
+/* A short, narrow window: the card already reaches the end of the name and leaves the
+   wheel no room worth drawing. */
+@media (height < 760px) and (width < 1200px) {
+  @container plate (width >= 0px) {
+    .wheel {
+      display: none;
+    }
+  }
+}
+
+/* Past 1920 px the cover stops widening while the name keeps growing with the height;
+   from about 1350 px tall the room beside its end drops under v1's smallest card. */
+@media (width > 1920px) and (height >= 1350px) {
+  @container plate (width >= 0px) {
+    .plate {
+      display: none;
+    }
+  }
+}

@@ -47,7 +47,13 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
     <PreloaderProvider>
       <Preloader label={t.frame.loading} skipLabel={t.frame.skip} />
       <Canvas announce={t.work.announce} names={slides.map((slide) => slide.name)}>
-        <Portada eyebrow={t.hero.eyebrow} tagline={t.hero.tagline} sub={t.hero.sub} cta={t.hero.ctaWork} />
+        <Portada
+          eyebrow={t.hero.eyebrow}
+          tagline={t.hero.tagline}
+          sub={t.hero.sub}
+          cta={t.hero.ctaWork}
+          portrait={{ href: `/${locale}/about`, label: t.hero.portrait, destination: t.nav.about }}
+        />
         <h2 id="work-title" className="sr-only">
           {t.work.selected}
         </h2>

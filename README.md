@@ -122,7 +122,7 @@ src/
 ├── components/
 │   ├── chrome/          StageShell, ScrollShell, ChromeTop, ChromeBottom, CompactBar, MenuLayer, Curtain, StageHint, NotFoundScreen, TabTitle, Clock, LocaleSwitch, UpdateWatcher
 │   ├── preloader/       Preloader, Character, PreloaderContext
-│   ├── home/            Portada, Canvas, Carousel, useCarousel, placeCovers, ProjectItem, NamesList
+│   ├── home/            Portada, PortraitPlate, Canvas, Carousel, useCarousel, placeCovers, ProjectItem, NamesList
 │   ├── work/            IndexTable, IndexPreview, CaseHeader, CaseNumbers, CaseNav, Cover, covers/ (one drawing per project)
 │   ├── about/           InsideHead, AboutColumns, CapabilitiesLayer, JourneyLayer, ProcessLayer
 │   ├── contact/         ContactEmail, ContactCards, ParallaxStack

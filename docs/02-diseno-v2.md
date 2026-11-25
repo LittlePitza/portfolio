@@ -55,7 +55,7 @@ Todos viven en `src/app/globals.css` dentro de `@theme static` (así Tailwind em
 | `--color-line` | `rgb(20 20 20 / 0.14)` | Líneas finas de 1 px |
 | `--color-accent` | `#F04010` | Nombre, declaración de About, foco, `::selection` |
 
-Reglas: sin sombras ni degradados fuera de las portadas. Los colores de proyecto (`project.color`) solo existen dentro de su portada. Tema claro único; no hay modo oscuro en v2 (las portadas y el personaje están dibujados para papel).
+Reglas: sin sombras ni degradados fuera de las portadas. La única excepción es la placa del retrato de la portada de Home (6.1): es una lámina de Luis enmarcada como las portadas de proyecto, y para estas reglas, la Geist Mono (3.2) y los criterios S1, S3 y S4 cuenta como una portada más. Los colores de proyecto (`project.color`) solo existen dentro de su portada. Tema claro único; no hay modo oscuro en v2 (las portadas y el personaje están dibujados para papel).
 
 ### 3.2 Tipografía
 
@@ -172,24 +172,25 @@ Home tiene diez posiciones: la **portada** (posición 0) y los nueve proyectos (
 
 ```
 [marco superior]
-
- Desarrollador full-stack y responsable de TI
-
-
- L U I S                        Construyo los sistemas
- (exhibición, acento)           que opero.                      (encabezado, col 5-8)
+                                Construyo los sistemas que opero.   (encabezado, col 5-8)
                                 La mayoría de los responsables de TI compran sus
                                 herramientas. Yo escribo las que usa mi departamento…
-                                Ver el trabajo ↓                (cuerpo muted, máx. 46 car.)
- H E R N Á N D E Z
+                                Ver el trabajo ↓                    (cuerpo muted, máx. 46 car.)
+                                                     ╱‾‾‾‾‾‾‾‾‾╲
+ Desarrollador full-stack y responsable de TI   ◯   │  placa    │
+                                                     │  del      │  (col 7-8)
+ L U I S                                             │  retrato  │
+ (exhibición, acento)                                │           │
+ H E R N Á N D E Z                                   ╲_________╱
  (exhibición, acento, ancho completo)
 
  Desliza ↓                                                              CV ↓   EN / ES
 ```
 
 - El nombre se ancla abajo a la izquierda, 48 px por encima de la fila inferior del marco. Es un `<h1>` con las dos líneas.
-- El bloque de texto ocupa las columnas 5 a 8 y su base se alinea con la base de "LUIS"; crece hacia arriba.
+- Las columnas 5 a 8 forman una columna lateral que va de 32 px bajo el marco superior hasta 16 px sobre el inferior: arriba el bloque de texto, debajo el hueco de la placa.
 - "Ver el trabajo ↓" avanza a la posición 1.
+- **Placa del retrato** (la tarjeta de v1): inclinada 7°, línea `ink` y sombra dura, "LH — 01" arriba, el retrato de `Head` y el pie "Detrás del código ↗", con la rueda en acento asomando por la izquierda; enlaza a About por el telón y, con cursor o foco, se endereza a −3° sobre una sombra en acento (con movimiento reducido solo cambia la sombra). Ocupa las columnas 7 y 8 con el mayor tamaño que quepa en el alto del hueco y sin acercarse a menos de un margen del final de "HERNÁNDEZ" (unos 290 px a 1440 × 800). Todo lo de dentro escala con su ancho W: la tipografía parte de 16 px a los 180 px de v1 (la etiqueta mono nunca baja de 8 px) y la sombra mide W / 36. La rueda mide 1.092 W como en v1 o lo que quepa: con ventana alta (760 px o más) sale por arriba del hueco y termina 16 px antes de la fila de "HERNÁNDEZ"; con ventana baja se coloca a la derecha del final del nombre; con ventana baja y estrecha (menos de 1200 px) no se pinta. Por encima de 1920 px de ancho y 1350 px de alto la placa no se pinta. Entra con la primitiva tras el enlace y sale con la portada.
 - Ninguna portada es visible en la posición 0.
 
 **Posiciones 1 a 9, trabajo:**
@@ -235,6 +236,8 @@ LUIS
 HERNÁNDEZ            (exhibición 19.5vw, acento)
 Construyo los sistemas que opero.     (encabezado)
 La mayoría de los responsables…       (cuerpo muted)
+Ver el trabajo ↓
+               ◯╱placa del retrato╱   (a la derecha, 46vw, de 128 a 220 px)
 ───────────────────────────────
 01 / 09 · Plataforma interna
 ┌──────────────────────────┐
@@ -585,6 +588,7 @@ src/components/ui/useAnchorLayer.ts         mantiene un <dialog> y el #id de la 
 src/components/ui/CopyEmail.tsx, Icons.tsx, Mark.tsx   se conservan, con tokens
 
 src/components/home/Portada.tsx             nombre, eyebrow, lema, texto
+src/components/home/PortraitPlate.tsx       placa del retrato: tarjeta, rueda, enlace a About (servidor)
 src/components/home/ProjectItem.tsx         un proyecto: portada, metadatos, cifra, resumen (servidor)
 src/components/home/NamesList.tsx           lista de nombres
 src/components/home/Canvas.tsx              el DOM que comparten los dos layouts de Home
@@ -692,7 +696,7 @@ Observables en el navegador, a 1440 × 800 y a 390 × 844, en `/es` y `/en`.
 
 - S1. En los estilos computados de cualquier página solo aparecen las tallas 12, 16, 24, 32, 48, 56, 96 px y las de exhibición (fuera de las portadas).
 - S2. Todo bloque de texto empieza en una línea de la retícula (20, 197.5, 375, 552.5, 730, 907.5, 1085, 1262.5 a 1440 px).
-- S3. No hay `box-shadow` fuera de `[data-plate]`. No hay `mix-blend-mode`. Ningún `z-index` distinto de los cuatro tokens.
+- S3. No hay `box-shadow` fuera de `[data-plate]` y de la placa del retrato (`[data-portrait-plate]`). No hay `mix-blend-mode`. Ningún `z-index` distinto de los cuatro tokens.
 - S4. El acento solo aparece en el nombre, la declaración de About, el foco, la selección y el personaje.
 - S5. `npm run check` y `npm run build` pasan. `lenis` y `@rive-app/react-canvas` no están en `package.json`.
 

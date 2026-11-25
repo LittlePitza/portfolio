@@ -53,6 +53,10 @@
   min-height: 44px;
 }
 
+.plateSlot {
+  margin-top: 16px;
+}
+
 .list {
   display: grid;
   gap: 96px;
@@ -115,14 +119,18 @@
   }
 
   /* Position 0. The name sits 48 px above the frame's bottom row, which is 24 px tall
-     (the résumé link in ChromeBottom); the text block's base meets the base of LUIS. */
+     (the résumé link in ChromeBottom). The cover reaches up to 32 px under the frame's top
+     row (two 16 px lines), so the side column (.side) can run the full height: the text
+     block at the top, the portrait plate under it. The first row takes what is left. */
   html[data-js] .portada {
     position: absolute;
+    top: calc(var(--margin) + 32px + 32px);
     left: var(--margin);
     right: var(--margin);
     bottom: calc(var(--margin) + 24px + 48px);
     display: grid;
     grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: 1fr auto auto auto;
     column-gap: var(--gap);
     align-items: end;
     padding: 0;
@@ -149,13 +157,13 @@
   }
 
   html[data-js] .eyebrow {
-    grid-column: 1 / -1;
-    grid-row: 1;
+    grid-column: 1 / 5;
+    grid-row: 2;
   }
 
   html[data-js] .name {
     grid-column: 1 / -1;
-    grid-row: 2 / 4;
+    grid-row: 3 / 5;
     display: grid;
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
@@ -171,14 +179,34 @@
     grid-row: 2;
   }
 
-  html[data-js] .intro {
+  /* Columns 5 to 8, top to bottom: the text block, then the plate's room. */
+  html[data-js] .side {
     grid-column: 5 / -1;
-    grid-row: 2;
-    margin: 0 0 calc(var(--text-display) * 0.12);
+    grid-row: 1 / -1;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  html[data-js] .intro {
+    margin: 0;
   }
 
   html[data-js] .cta {
     min-height: 0;
+  }
+
+  /* The portrait plate's room: from 16 px under the text block to 16 px above the frame's
+     bottom row, 48 px under the name. It overlaps the end of the name, so it lets the
+     pointer through; the plate keeps clear of the letters (portraitPlate.module.css). */
+  html[data-js] .plateSlot {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    margin: 16px 0 -32px;
+    container: plate / size;
+    pointer-events: none;
   }
 
   /* Positions 1 to 9: every item fills the canvas and places its parts on the grid. */
